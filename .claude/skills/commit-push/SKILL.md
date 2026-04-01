@@ -16,6 +16,7 @@ allowed-tools: Bash, Read, Grep, Glob
    - .docs/, mission.txt, notice.txt 등 비공개 파일은 절대 커밋 금지
    - 불필요한 임시 파일은 제외
 4. Conventional Commits 형식으로 커밋 메시지를 작성하세요.
+   - Co-Authored-By 라인을 절대 추가하지 마세요. 커밋 작성자는 사용자 본인만 표시되어야 합니다.
 5. 현재 브랜치를 원격 저장소에 푸시하세요.
 6. 커밋 해시와 푸시 결과를 나에게 알려주세요.
 

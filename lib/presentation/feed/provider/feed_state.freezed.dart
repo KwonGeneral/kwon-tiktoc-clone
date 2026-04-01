@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FeedState {
 
- List<Video> get videos; int get currentIndex; int get currentPage; bool get hasMore;
+ List<Video> get videos; int get currentIndex; int get currentPage; bool get hasMore; Set<String> get followedUserIds;
 /// Create a copy of FeedState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $FeedStateCopyWith<FeedState> get copyWith => _$FeedStateCopyWithImpl<FeedState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FeedState&&const DeepCollectionEquality().equals(other.videos, videos)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FeedState&&const DeepCollectionEquality().equals(other.videos, videos)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other.followedUserIds, followedUserIds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(videos),currentIndex,currentPage,hasMore);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(videos),currentIndex,currentPage,hasMore,const DeepCollectionEquality().hash(followedUserIds));
 
 @override
 String toString() {
-  return 'FeedState(videos: $videos, currentIndex: $currentIndex, currentPage: $currentPage, hasMore: $hasMore)';
+  return 'FeedState(videos: $videos, currentIndex: $currentIndex, currentPage: $currentPage, hasMore: $hasMore, followedUserIds: $followedUserIds)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $FeedStateCopyWith<$Res>  {
   factory $FeedStateCopyWith(FeedState value, $Res Function(FeedState) _then) = _$FeedStateCopyWithImpl;
 @useResult
 $Res call({
- List<Video> videos, int currentIndex, int currentPage, bool hasMore
+ List<Video> videos, int currentIndex, int currentPage, bool hasMore, Set<String> followedUserIds
 });
 
 
@@ -62,13 +62,14 @@ class _$FeedStateCopyWithImpl<$Res>
 
 /// Create a copy of FeedState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? videos = null,Object? currentIndex = null,Object? currentPage = null,Object? hasMore = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? videos = null,Object? currentIndex = null,Object? currentPage = null,Object? hasMore = null,Object? followedUserIds = null,}) {
   return _then(_self.copyWith(
 videos: null == videos ? _self.videos : videos // ignore: cast_nullable_to_non_nullable
 as List<Video>,currentIndex: null == currentIndex ? _self.currentIndex : currentIndex // ignore: cast_nullable_to_non_nullable
 as int,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,followedUserIds: null == followedUserIds ? _self.followedUserIds : followedUserIds // ignore: cast_nullable_to_non_nullable
+as Set<String>,
   ));
 }
 
@@ -150,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FeedState() when $default != null:
-return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore);case _:
+return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds);case _:
   return orElse();
 
 }
@@ -171,10 +172,10 @@ return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore)
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds)  $default,) {final _that = this;
 switch (_that) {
 case _FeedState():
-return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore);}
+return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -188,10 +189,10 @@ return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore)
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds)?  $default,) {final _that = this;
 switch (_that) {
 case _FeedState() when $default != null:
-return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore);case _:
+return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds);case _:
   return null;
 
 }
@@ -203,7 +204,7 @@ return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore)
 
 
 class _FeedState implements FeedState {
-  const _FeedState({final  List<Video> videos = const [], this.currentIndex = 0, this.currentPage = 0, this.hasMore = false}): _videos = videos;
+  const _FeedState({final  List<Video> videos = const [], this.currentIndex = 0, this.currentPage = 0, this.hasMore = false, final  Set<String> followedUserIds = const {}}): _videos = videos,_followedUserIds = followedUserIds;
   
 
  final  List<Video> _videos;
@@ -216,6 +217,13 @@ class _FeedState implements FeedState {
 @override@JsonKey() final  int currentIndex;
 @override@JsonKey() final  int currentPage;
 @override@JsonKey() final  bool hasMore;
+ final  Set<String> _followedUserIds;
+@override@JsonKey() Set<String> get followedUserIds {
+  if (_followedUserIds is EqualUnmodifiableSetView) return _followedUserIds;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableSetView(_followedUserIds);
+}
+
 
 /// Create a copy of FeedState
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +235,16 @@ _$FeedStateCopyWith<_FeedState> get copyWith => __$FeedStateCopyWithImpl<_FeedSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FeedState&&const DeepCollectionEquality().equals(other._videos, _videos)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FeedState&&const DeepCollectionEquality().equals(other._videos, _videos)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._followedUserIds, _followedUserIds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_videos),currentIndex,currentPage,hasMore);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_videos),currentIndex,currentPage,hasMore,const DeepCollectionEquality().hash(_followedUserIds));
 
 @override
 String toString() {
-  return 'FeedState(videos: $videos, currentIndex: $currentIndex, currentPage: $currentPage, hasMore: $hasMore)';
+  return 'FeedState(videos: $videos, currentIndex: $currentIndex, currentPage: $currentPage, hasMore: $hasMore, followedUserIds: $followedUserIds)';
 }
 
 
@@ -247,7 +255,7 @@ abstract mixin class _$FeedStateCopyWith<$Res> implements $FeedStateCopyWith<$Re
   factory _$FeedStateCopyWith(_FeedState value, $Res Function(_FeedState) _then) = __$FeedStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<Video> videos, int currentIndex, int currentPage, bool hasMore
+ List<Video> videos, int currentIndex, int currentPage, bool hasMore, Set<String> followedUserIds
 });
 
 
@@ -264,13 +272,14 @@ class __$FeedStateCopyWithImpl<$Res>
 
 /// Create a copy of FeedState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? videos = null,Object? currentIndex = null,Object? currentPage = null,Object? hasMore = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? videos = null,Object? currentIndex = null,Object? currentPage = null,Object? hasMore = null,Object? followedUserIds = null,}) {
   return _then(_FeedState(
 videos: null == videos ? _self._videos : videos // ignore: cast_nullable_to_non_nullable
 as List<Video>,currentIndex: null == currentIndex ? _self.currentIndex : currentIndex // ignore: cast_nullable_to_non_nullable
 as int,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,followedUserIds: null == followedUserIds ? _self._followedUserIds : followedUserIds // ignore: cast_nullable_to_non_nullable
+as Set<String>,
   ));
 }
 

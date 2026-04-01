@@ -4,10 +4,12 @@ import 'package:video_player/video_player.dart';
 
 import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/widget/like_animation.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/widget/video_overlay.dart';
 
-class VideoCard extends ConsumerWidget {
+class VideoCard extends ConsumerStatefulWidget {
   const VideoCard({
     required this.video,
     required this.index,
@@ -18,15 +20,32 @@ class VideoCard extends ConsumerWidget {
   final int index;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<VideoCard> createState() => _VideoCardState();
+}
+
+class _VideoCardState extends ConsumerState<VideoCard> {
+  bool _showLikeAnimation = false;
+
+  void _handleDoubleTap() {
+    if (!widget.video.isLiked) {
+      ref.read(feedNotifierProvider.notifier).toggleLike(widget.video.id);
+    }
+    setState(() => _showLikeAnimation = true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Manager의 state를 watch하여 controller 변경 시 rebuild
     final controllers = ref.watch(videoPlayerManagerProvider);
-    final controller = controllers[index];
+    final controller = controllers[widget.index];
 
     return GestureDetector(
       onTap: () {
-        ref.read(videoPlayerManagerProvider.notifier).togglePlayPause(index);
+        ref
+            .read(videoPlayerManagerProvider.notifier)
+            .togglePlayPause(widget.index);
       },
+      onDoubleTap: _handleDoubleTap,
       child: Container(
         color: AppColors.black,
         child: _buildContent(controller),
@@ -71,8 +90,18 @@ class VideoCard extends ConsumerWidget {
 
         // 오버레이 UI
         Positioned.fill(
-          child: VideoOverlay(video: video),
+          child: VideoOverlay(video: widget.video),
         ),
+
+        // 더블탭 좋아요 애니메이션
+        if (_showLikeAnimation)
+          LikeAnimation(
+            onCompleted: () {
+              if (mounted) {
+                setState(() => _showLikeAnimation = false);
+              }
+            },
+          ),
       ],
     );
   }

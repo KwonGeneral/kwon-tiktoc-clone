@@ -11,5 +11,6 @@ sealed class FeedState with _$FeedState {
     @Default(0) int currentIndex,
     @Default(0) int currentPage,
     @Default(false) bool hasMore,
+    @Default({}) Set<String> followedUserIds,
   }) = _FeedState;
 }

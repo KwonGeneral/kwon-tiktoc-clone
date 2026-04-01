@@ -1,6 +1,7 @@
 # Miscellaneous
 *.class
 *.lock
+!pubspec.lock
 *.log
 *.pyc
 *.swp
@@ -117,3 +118,17 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+.DS_Store
+
+# ===== Flutter 자동 생성 =====
+.metadata
+
+# ===== 비공개 파일 (외부 노출 금지) =====
+mission.txt
+notice.txt
+.docs/
+.claude/settings.local.json
+
+# IDE
+.idea/
+*.iml

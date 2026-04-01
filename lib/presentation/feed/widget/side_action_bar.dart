@@ -6,9 +6,20 @@ import 'package:supersent_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
 
 class SideActionBar extends StatelessWidget {
-  const SideActionBar({required this.video, super.key});
+  const SideActionBar({
+    required this.video,
+    this.isFollowing = false,
+    this.onLikeTap,
+    this.onBookmarkTap,
+    this.onFollowTap,
+    super.key,
+  });
 
   final Video video;
+  final bool isFollowing;
+  final VoidCallback? onLikeTap;
+  final VoidCallback? onBookmarkTap;
+  final VoidCallback? onFollowTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +29,11 @@ class SideActionBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // 프로필 아바타 + 팔로우 뱃지
-          _ProfileAvatar(userId: video.userId),
+          _ProfileAvatar(
+            userId: video.userId,
+            isFollowing: isFollowing,
+            onTap: onFollowTap,
+          ),
           const SizedBox(height: 20),
 
           // 좋아요
@@ -26,6 +41,7 @@ class SideActionBar extends StatelessWidget {
             icon: Icons.favorite,
             count: video.likeCount,
             color: video.isLiked ? AppColors.like : AppColors.white,
+            onTap: onLikeTap,
           ),
           const SizedBox(height: 16),
 
@@ -41,6 +57,7 @@ class SideActionBar extends StatelessWidget {
             icon: Icons.bookmark,
             count: video.bookmarkCount,
             color: video.isBookmarked ? AppColors.bookmark : AppColors.white,
+            onTap: onBookmarkTap,
           ),
           const SizedBox(height: 16),
 
@@ -57,40 +74,68 @@ class SideActionBar extends StatelessWidget {
 }
 
 class _ProfileAvatar extends StatelessWidget {
-  const _ProfileAvatar({required this.userId});
+  const _ProfileAvatar({
+    required this.userId,
+    this.isFollowing = false,
+    this.onTap,
+  });
 
   final String userId;
+  final bool isFollowing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.bottomCenter,
-      children: [
-        Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.white, width: 2),
-            color: AppColors.gray,
-          ),
-          child: const Icon(Icons.person, color: AppColors.white, size: 24),
-        ),
-        // 팔로우 + 뱃지
-        Positioned(
-          bottom: -8,
-          child: Container(
-            width: 20,
-            height: 20,
-            decoration: const BoxDecoration(
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primary,
+              border: Border.all(
+                color: isFollowing ? AppColors.primary : AppColors.white,
+                width: 2,
+              ),
+              color: AppColors.gray,
             ),
-            child: const Icon(Icons.add, color: AppColors.white, size: 14),
+            child: const Icon(Icons.person, color: AppColors.white, size: 24),
           ),
-        ),
-      ],
+          // 팔로우 + 뱃지
+          if (!isFollowing)
+            Positioned(
+              bottom: -8,
+              child: Container(
+                width: 20,
+                height: 20,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary,
+                ),
+                child:
+                    const Icon(Icons.add, color: AppColors.white, size: 14),
+              ),
+            ),
+          if (isFollowing)
+            Positioned(
+              bottom: -8,
+              child: Container(
+                width: 20,
+                height: 20,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.gray,
+                ),
+                child:
+                    const Icon(Icons.check, color: AppColors.white, size: 14),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -101,30 +146,35 @@ class _ActionItem extends StatelessWidget {
     required this.count,
     this.color = AppColors.white,
     this.isMirrored = false,
+    this.onTap,
   });
 
   final IconData icon;
   final int count;
   final Color color;
   final bool isMirrored;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final iconWidget = Icon(icon, color: color, size: 32);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (isMirrored)
-          Transform.flip(flipX: true, child: iconWidget)
-        else
-          iconWidget,
-        const SizedBox(height: 2),
-        Text(
-          FormatUtils.compactNumber(count),
-          style: AppTextStyles.count,
-        ),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isMirrored)
+            Transform.flip(flipX: true, child: iconWidget)
+          else
+            iconWidget,
+          const SizedBox(height: 2),
+          Text(
+            FormatUtils.compactNumber(count),
+            style: AppTextStyles.count,
+          ),
+        ],
+      ),
     );
   }
 }

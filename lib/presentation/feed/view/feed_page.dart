@@ -17,6 +17,9 @@ class FeedPage extends ConsumerStatefulWidget {
 class _FeedPageState extends ConsumerState<FeedPage> {
   bool _initialized = false;
 
+  /// 무한 스크롤 트리거: 끝에서 이 값만큼 남았을 때 loadMore 호출
+  static const _loadMoreThreshold = 3;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +36,15 @@ class _FeedPageState extends ConsumerState<FeedPage> {
       ref
           .read(videoPlayerManagerProvider.notifier)
           .initializeForIndex(0, feedState.videos);
+    }
+  }
+
+  void _onPageChanged(int index, int totalVideos) {
+    ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
+
+    // 끝에서 threshold 이내면 다음 페이지 로드
+    if (index >= totalVideos - _loadMoreThreshold) {
+      ref.read(feedNotifierProvider.notifier).loadMore();
     }
   }
 
@@ -63,18 +75,71 @@ class _FeedPageState extends ConsumerState<FeedPage> {
             });
           }
 
-          return PageView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: feedState.videos.length,
-            onPageChanged: (index) {
-              ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
-            },
-            itemBuilder: (context, index) {
-              return VideoCard(
-                video: feedState.videos[index],
-                index: index,
-              );
-            },
+          return Stack(
+            children: [
+              PageView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: feedState.videos.length,
+                onPageChanged: (index) =>
+                    _onPageChanged(index, feedState.videos.length),
+                itemBuilder: (context, index) {
+                  return VideoCard(
+                    video: feedState.videos[index],
+                    index: index,
+                  );
+                },
+              ),
+
+              // 추가 로딩 인디케이터
+              if (feedState.isLoadingMore)
+                const Positioned(
+                  bottom: 16,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        color: AppColors.white,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  ),
+                ),
+
+              // 로드 에러 표시
+              if (feedState.loadMoreError != null)
+                Positioned(
+                  bottom: 16,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        ref.read(feedNotifierProvider.notifier).loadMore();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.black.withValues(alpha: 0.7),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          AppStrings.feedLoadMoreError,
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           );
         },
         loading: () => const Center(
@@ -83,10 +148,35 @@ class _FeedPageState extends ConsumerState<FeedPage> {
             strokeWidth: 2,
           ),
         ),
-        error: (_, _) => const Center(
-          child: Text(
-            AppStrings.feedError,
-            style: TextStyle(color: AppColors.white),
+        error: (_, _) => Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                AppStrings.feedError,
+                style: TextStyle(color: AppColors.white),
+              ),
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  ref.invalidate(feedNotifierProvider);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.whiteSecondary),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    AppStrings.feedRetry,
+                    style: TextStyle(color: AppColors.white, fontSize: 14),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

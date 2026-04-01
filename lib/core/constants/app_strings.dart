@@ -16,6 +16,8 @@ abstract final class AppStrings {
   // 빈 상태
   static const feedEmpty = '영상이 없습니다';
   static const feedError = '영상을 불러올 수 없습니다';
+  static const feedRetry = '다시 시도';
+  static const feedLoadMoreError = '탭하여 다시 불러오기';
 
   // 프로필
   static const profileEdit = '편집';

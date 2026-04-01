@@ -17,6 +17,25 @@ class _FeedPageState extends ConsumerState<FeedPage> {
   bool _initialized = false;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _tryInitialize();
+    });
+  }
+
+  void _tryInitialize() {
+    if (_initialized) return;
+    final feedState = ref.read(feedNotifierProvider).valueOrNull;
+    if (feedState != null && feedState.videos.isNotEmpty) {
+      _initialized = true;
+      ref
+          .read(videoPlayerManagerProvider.notifier)
+          .initializeForIndex(0, feedState.videos);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final feedAsync = ref.watch(feedNotifierProvider);
 
@@ -33,7 +52,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
             );
           }
 
-          // 최초 1회 Manager 초기화
+          // 데이터 도착 후 초기화 (initState 시점에 아직 로딩 중이었을 경우)
           if (!_initialized) {
             _initialized = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {

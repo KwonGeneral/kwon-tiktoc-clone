@@ -90,6 +90,8 @@ class VideoPlayerManager extends _$VideoPlayerManager {
       }
     } catch (e) {
       debugPrint('VideoPlayerManager: controller init failed for index $index: $e');
+      _controllers[index]?.dispose();
+      _controllers.remove(index);
     } finally {
       _initializing.remove(index);
       state = Map.unmodifiable(_controllers);

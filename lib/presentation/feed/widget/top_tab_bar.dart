@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:supersent_tiktoc_clone/app/theme/app_text_styles.dart';
+import 'package:supersent_tiktoc_clone/core/constants/app_strings.dart';
 
 class TopTabBar extends StatefulWidget {
   const TopTabBar({super.key});
@@ -13,7 +14,11 @@ class TopTabBar extends StatefulWidget {
 class _TopTabBarState extends State<TopTabBar> {
   int _selectedIndex = 2; // 기본: 추천
 
-  static const _tabs = ['탐색', '팔로잉', '추천'];
+  static const _tabs = [
+    AppStrings.feedTabExplore,
+    AppStrings.feedTabFollowing,
+    AppStrings.feedTabRecommend,
+  ];
 
   @override
   Widget build(BuildContext context) {

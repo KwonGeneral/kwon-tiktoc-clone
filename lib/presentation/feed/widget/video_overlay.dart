@@ -32,8 +32,11 @@ class VideoOverlay extends ConsumerWidget {
           child: SideActionBar(
             video: video,
             isFollowing: ref
-                .read(feedNotifierProvider.notifier)
-                .isFollowing(video.userId),
+                    .watch(feedNotifierProvider)
+                    .valueOrNull
+                    ?.followedUserIds
+                    .contains(video.userId) ??
+                false,
             onLikeTap: () {
               ref
                   .read(feedNotifierProvider.notifier)

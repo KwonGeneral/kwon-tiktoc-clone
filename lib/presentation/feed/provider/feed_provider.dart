@@ -93,7 +93,4 @@ class FeedNotifier extends _$FeedNotifier {
     );
   }
 
-  bool isFollowing(String userId) {
-    return state.valueOrNull?.followedUserIds.contains(userId) ?? false;
-  }
 }

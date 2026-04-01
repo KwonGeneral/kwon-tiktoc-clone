@@ -106,34 +106,22 @@ class _ProfileAvatar extends StatelessWidget {
             child: const Icon(Icons.person, color: AppColors.white, size: 24),
           ),
           // 팔로우 + 뱃지
-          if (!isFollowing)
-            Positioned(
-              bottom: -8,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary,
-                ),
-                child:
-                    const Icon(Icons.add, color: AppColors.white, size: 14),
+          Positioned(
+            bottom: -8,
+            child: Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isFollowing ? AppColors.gray : AppColors.primary,
+              ),
+              child: Icon(
+                isFollowing ? Icons.check : Icons.add,
+                color: AppColors.white,
+                size: 14,
               ),
             ),
-          if (isFollowing)
-            Positioned(
-              bottom: -8,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.gray,
-                ),
-                child:
-                    const Icon(Icons.check, color: AppColors.white, size: 14),
-              ),
-            ),
+          ),
         ],
       ),
     );

@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'feed_provider.dart';
+part of 'profile_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$feedNotifierHash() => r'd38f58db9e83dd74608de1f9ce4a88d8cb675e6d';
+String _$currentUserHash() => r'2120f3d7bf86b1deb552c9d0b4986a583a383580';
 
-/// See also [FeedNotifier].
-@ProviderFor(FeedNotifier)
-final feedNotifierProvider =
-    AsyncNotifierProvider<FeedNotifier, FeedState>.internal(
-      FeedNotifier.new,
-      name: r'feedNotifierProvider',
+/// See also [CurrentUser].
+@ProviderFor(CurrentUser)
+final currentUserProvider =
+    AutoDisposeNotifierProvider<CurrentUser, User>.internal(
+      CurrentUser.new,
+      name: r'currentUserProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$feedNotifierHash,
+          : _$currentUserHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$FeedNotifier = AsyncNotifier<FeedState>;
+typedef _$CurrentUser = AutoDisposeNotifier<User>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

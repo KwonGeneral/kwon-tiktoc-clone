@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:supersent_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/widget/video_card.dart';
@@ -46,7 +47,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
           if (feedState.videos.isEmpty) {
             return const Center(
               child: Text(
-                '영상이 없습니다',
+                AppStrings.feedEmpty,
                 style: TextStyle(color: AppColors.white),
               ),
             );
@@ -84,7 +85,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
         ),
         error: (_, _) => const Center(
           child: Text(
-            '영상을 불러올 수 없습니다',
+            AppStrings.feedError,
             style: TextStyle(color: AppColors.white),
           ),
         ),

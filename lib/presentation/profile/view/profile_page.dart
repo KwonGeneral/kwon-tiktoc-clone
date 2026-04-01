@@ -22,26 +22,37 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserProvider);
+    final userAsync = ref.watch(currentUserProvider);
 
     return Scaffold(
       backgroundColor: AppColors.black,
       appBar: _buildAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ProfileHeader(user: user),
-            const SizedBox(height: 16),
-            ProfileStats(user: user),
-            const SizedBox(height: 16),
-            _buildBioRow(),
-            const SizedBox(height: 16),
-            ProfileTabBar(
-              selectedIndex: _selectedTabIndex,
-              onTap: (index) => setState(() => _selectedTabIndex = index),
-            ),
-            const ProfileEmptyState(),
-          ],
+      body: userAsync.when(
+        loading: () => const Center(
+          child: CircularProgressIndicator(color: AppColors.white),
+        ),
+        error: (error, _) => const Center(
+          child: Text(
+            AppStrings.feedError,
+            style: AppTextStyles.description,
+          ),
+        ),
+        data: (user) => SingleChildScrollView(
+          child: Column(
+            children: [
+              ProfileHeader(user: user),
+              const SizedBox(height: 16),
+              ProfileStats(user: user),
+              const SizedBox(height: 16),
+              _buildBioRow(),
+              const SizedBox(height: 16),
+              ProfileTabBar(
+                selectedIndex: _selectedTabIndex,
+                onTap: (index) => setState(() => _selectedTabIndex = index),
+              ),
+              const ProfileEmptyState(),
+            ],
+          ),
         ),
       ),
     );
@@ -52,30 +63,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       backgroundColor: AppColors.black,
       elevation: 0,
       leadingWidth: 80,
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 16),
+      leading: const Padding(
+        padding: EdgeInsets.only(left: 16),
         child: Row(
           children: [
-            const Icon(
+            Icon(
               Icons.person_add_outlined,
               color: AppColors.white,
               size: 24,
-            ),
-            const SizedBox(width: 4),
-            Container(
-              padding: const EdgeInsets.all(2),
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-              ),
-              child: const Text(
-                '2',
-                style: TextStyle(
-                  color: AppColors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
             ),
           ],
         ),

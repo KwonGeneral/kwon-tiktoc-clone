@@ -1,21 +1,13 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/di/providers.dart';
 import '../../../domain/entity/user.dart';
 
 part 'profile_provider.g.dart';
 
 @riverpod
-class CurrentUser extends _$CurrentUser {
-  @override
-  User build() {
-    return const User(
-      id: 'user96170612283663',
-      nickname: '권태완',
-      avatarUrl: '',
-      isVerified: false,
-      followingCount: 0,
-      followerCount: 0,
-      likeCount: 0,
-    );
-  }
+Future<User> currentUser(Ref ref) async {
+  final repository = ref.watch(userRepositoryProvider);
+  return repository.getCurrentUser();
 }

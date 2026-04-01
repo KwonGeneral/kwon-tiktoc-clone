@@ -26,7 +26,6 @@ abstract final class AppStrings {
   static const profileInterests = '제 관심사는...';
   static const profileEmptyVideos = '추억의 동영상을 공유하세요';
   static const profileUpload = '업로드';
-  static const profileThoughts = '생각 작성';
 
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';

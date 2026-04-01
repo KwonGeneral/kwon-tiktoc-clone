@@ -12,5 +12,7 @@ sealed class FeedState with _$FeedState {
     @Default(0) int currentPage,
     @Default(false) bool hasMore,
     @Default({}) Set<String> followedUserIds,
+    @Default(false) bool isLoadingMore,
+    String? loadMoreError,
   }) = _FeedState;
 }

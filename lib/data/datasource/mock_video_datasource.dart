@@ -87,18 +87,32 @@ class MockVideoDataSource implements VideoDataSource {
     '다음 영상도 기대할게요 ❤️',
   ];
 
+  /// 총 제공할 최대 비디오 수 (순환하여 생성)
+  static const _maxTotalVideos = 50;
+
   @override
   Future<List<VideoModel>> getVideoFeed({int page = 0}) async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
 
     final start = page * AppConstants.videoPageSize;
-    if (start >= _videos.length) return [];
+    if (start >= _maxTotalVideos) return [];
 
-    final end = start + AppConstants.videoPageSize;
-    return _videos.sublist(
-      start,
-      end > _videos.length ? _videos.length : end,
-    );
+    final end =
+        (start + AppConstants.videoPageSize).clamp(0, _maxTotalVideos);
+    final result = <VideoModel>[];
+
+    for (var i = start; i < end; i++) {
+      final sourceIndex = i % _videos.length;
+      final source = _videos[sourceIndex];
+      result.add(
+        source.copyWith(
+          id: 'video_${i + 1}',
+          createdAt: source.createdAt.subtract(Duration(hours: i * 3)),
+        ),
+      );
+    }
+
+    return result;
   }
 
   @override

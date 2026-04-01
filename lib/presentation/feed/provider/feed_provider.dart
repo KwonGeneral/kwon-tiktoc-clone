@@ -78,6 +78,45 @@ class FeedNotifier extends _$FeedNotifier {
     await toggleBookmark(videoId);
   }
 
+  Future<void> loadMore() async {
+    final currentState = state.valueOrNull;
+    if (currentState == null) return;
+    if (currentState.isLoadingMore || !currentState.hasMore) return;
+
+    state = AsyncData(
+      currentState.copyWith(isLoadingMore: true, loadMoreError: null),
+    );
+
+    try {
+      final repository = ref.read(videoRepositoryProvider);
+      final getVideoFeed = GetVideoFeed(repository);
+      final nextPage = currentState.currentPage + 1;
+      final newVideos = await getVideoFeed(page: nextPage);
+
+      final updatedState = state.valueOrNull;
+      if (updatedState == null) return;
+
+      state = AsyncData(
+        updatedState.copyWith(
+          videos: [...updatedState.videos, ...newVideos],
+          currentPage: nextPage,
+          hasMore: newVideos.length >= AppConstants.videoPageSize,
+          isLoadingMore: false,
+        ),
+      );
+    } on Exception catch (e) {
+      final updatedState = state.valueOrNull;
+      if (updatedState == null) return;
+
+      state = AsyncData(
+        updatedState.copyWith(
+          isLoadingMore: false,
+          loadMoreError: e.toString(),
+        ),
+      );
+    }
+  }
+
   void toggleFollow(String userId) {
     final currentState = state.valueOrNull;
     if (currentState == null) return;

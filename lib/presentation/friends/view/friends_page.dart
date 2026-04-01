@@ -1,11 +1,10 @@
-// Phase 8에서 본격 구현 예정
 import 'package:flutter/material.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class FriendsPage extends StatelessWidget {
+  const FriendsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +12,7 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: AppColors.black,
       body: Center(
         child: Text(
-          AppStrings.placeholderProfile,
+          AppStrings.placeholderFriends,
           style: TextStyle(
             color: AppColors.whiteSecondary,
             fontSize: 16,

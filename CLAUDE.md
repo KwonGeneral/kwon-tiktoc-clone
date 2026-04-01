@@ -65,17 +65,16 @@ lib/
 ```
 /phase-start    → 계획 확인 + 브랜치 생성
 (코드 구현)     → 사용자 검토
-/phase-complete → 체크리스트 검증
-/commit-push    → 커밋 + 푸시
-/pr-create      → PR 생성
-/pr-review      → 코드 리뷰 (code-reviewer 에이전트)
-/pr-merge       → 머지 (사용자 승인 후)
+/phase-done     → 전체 자동 수행:
+                   검증 → 로그 저장 → 문서 업데이트 → 커밋 → PR → 리뷰 → 머지
 ```
+개별 실행도 가능: /phase-complete, /commit-push, /pr-create, /pr-review, /pr-merge
 
 ### 보조 스킬
 - `/test` — flutter test 실행 + 결과 분석
 - `/analyze` — dart analyze 실행 + 에러 수정
 - `/update-docs` — 코드 변경에 맞춰 문서 업데이트
+- `/save-log` — 현재 세션 AI 대화 로그 저장 (.docs/ai_logs/)
 
 ### Agent
 - `code-reviewer` — PR 코드 리뷰 전용 에이전트 (코드 작성 맥락과 분리된 독립적 리뷰)

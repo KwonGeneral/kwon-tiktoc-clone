@@ -20,4 +20,6 @@ abstract final class AppStrings {
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';
+  static const placeholderProfile = '프로필';
+  static const placeholderCreate = '촬영 기능 준비 중';
 }

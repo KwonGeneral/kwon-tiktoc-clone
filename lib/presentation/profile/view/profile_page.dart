@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/theme/app_colors.dart';
+import '../../../core/constants/app_strings.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -12,7 +13,7 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: AppColors.black,
       body: Center(
         child: Text(
-          '프로필',
+          AppStrings.placeholderProfile,
           style: TextStyle(
             color: AppColors.whiteSecondary,
             fontSize: 16,

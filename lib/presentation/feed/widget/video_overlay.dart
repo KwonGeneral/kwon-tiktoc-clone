@@ -1,1 +1,51 @@
-// Phase 5에서 구현 예정
+import 'package:flutter/material.dart';
+
+import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/widget/music_info.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/widget/side_action_bar.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/widget/top_tab_bar.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/widget/video_description.dart';
+
+class VideoOverlay extends StatelessWidget {
+  const VideoOverlay({required this.video, super.key});
+
+  final Video video;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // 상단 탭바
+        const Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: TopTabBar(),
+        ),
+
+        // 우측 사이드 액션바
+        Positioned(
+          right: 0,
+          bottom: 100,
+          child: SideActionBar(video: video),
+        ),
+
+        // 하단 영역 (유저 정보 + 음악 정보)
+        Positioned(
+          left: 12,
+          right: 72,
+          bottom: 16,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              VideoDescription(video: video),
+              const SizedBox(height: 8),
+              MusicInfo(musicName: video.musicName),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}

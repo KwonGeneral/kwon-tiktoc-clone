@@ -5,6 +5,7 @@ import 'package:video_player/video_player.dart';
 import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/widget/video_overlay.dart';
 
 class VideoCard extends ConsumerWidget {
   const VideoCard({
@@ -67,6 +68,11 @@ class VideoCard extends ConsumerWidget {
             color: AppColors.whiteSecondary,
             size: 72,
           ),
+
+        // 오버레이 UI
+        Positioned.fill(
+          child: VideoOverlay(video: video),
+        ),
       ],
     );
   }

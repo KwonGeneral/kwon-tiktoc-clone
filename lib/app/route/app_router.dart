@@ -2,33 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../presentation/feed/view/feed_page.dart';
+import '../../presentation/friends/view/friends_page.dart';
 import '../../presentation/main/main_shell.dart';
+import '../../presentation/notifications/view/notifications_page.dart';
+import '../../presentation/profile/view/profile_page.dart';
 import 'route_paths.dart';
 
 GoRouter createRouter() {
   return GoRouter(
     initialLocation: RoutePaths.feed,
     routes: [
-      ShellRoute(
-        builder: (context, state, child) => MainShell(child: child),
-        routes: [
-          GoRoute(
-            path: RoutePaths.feed,
-            builder: (context, state) => const FeedPage(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            MainShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RoutePaths.feed,
+                builder: (context, state) => const FeedPage(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: RoutePaths.discover,
-            builder: (context, state) => const _PlaceholderPage(title: '탐색'),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RoutePaths.friends,
+                builder: (context, state) => const FriendsPage(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: RoutePaths.notifications,
-            builder: (context, state) =>
-                const _PlaceholderPage(title: '알림'),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RoutePaths.discover,
+                builder: (context, state) => const _CreatePlaceholder(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: RoutePaths.profile,
-            builder: (context, state) =>
-                const _PlaceholderPage(title: '프로필'),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RoutePaths.notifications,
+                builder: (context, state) => const NotificationsPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RoutePaths.profile,
+                builder: (context, state) => const ProfilePage(),
+              ),
+            ],
           ),
         ],
       ),
@@ -36,20 +62,13 @@ GoRouter createRouter() {
   );
 }
 
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({required this.title});
-
-  final String title;
+class _CreatePlaceholder extends StatelessWidget {
+  const _CreatePlaceholder();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          title,
-          style: const TextStyle(color: Colors.white, fontSize: 24),
-        ),
-      ),
+    return const Scaffold(
+      body: SizedBox.shrink(),
     );
   }
 }

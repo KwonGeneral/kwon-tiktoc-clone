@@ -15,18 +15,18 @@ import 'package:supersent_tiktoc_clone/domain/usecase/toggle_like.dart';
 part 'providers.g.dart';
 
 // DataSource
-@riverpod
+@Riverpod(keepAlive: true)
 VideoDataSource videoDataSource(Ref ref) {
   return MockVideoDataSource();
 }
 
 // Repositories
-@riverpod
+@Riverpod(keepAlive: true)
 VideoRepository videoRepository(Ref ref) {
   return VideoRepositoryImpl(ref.watch(videoDataSourceProvider));
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 UserRepository userRepository(Ref ref) {
   return UserRepositoryImpl();
 }

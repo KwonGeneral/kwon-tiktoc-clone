@@ -6,11 +6,11 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$videoDataSourceHash() => r'87173e1d43ca68c9d1edb6949979815fdaebc7f6';
+String _$videoDataSourceHash() => r'67f61fe5c03741f275c7c0bd09b0b6b27b942c5f';
 
 /// See also [videoDataSource].
 @ProviderFor(videoDataSource)
-final videoDataSourceProvider = AutoDisposeProvider<VideoDataSource>.internal(
+final videoDataSourceProvider = Provider<VideoDataSource>.internal(
   videoDataSource,
   name: r'videoDataSourceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,12 +22,12 @@ final videoDataSourceProvider = AutoDisposeProvider<VideoDataSource>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef VideoDataSourceRef = AutoDisposeProviderRef<VideoDataSource>;
-String _$videoRepositoryHash() => r'667b5ab17c5be4bc5e04535304f25720e7123935';
+typedef VideoDataSourceRef = ProviderRef<VideoDataSource>;
+String _$videoRepositoryHash() => r'6f329e5b4203035a1bb8d24f406786bf025c756e';
 
 /// See also [videoRepository].
 @ProviderFor(videoRepository)
-final videoRepositoryProvider = AutoDisposeProvider<VideoRepository>.internal(
+final videoRepositoryProvider = Provider<VideoRepository>.internal(
   videoRepository,
   name: r'videoRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -39,12 +39,12 @@ final videoRepositoryProvider = AutoDisposeProvider<VideoRepository>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef VideoRepositoryRef = AutoDisposeProviderRef<VideoRepository>;
-String _$userRepositoryHash() => r'7590ba170054990920bcb45f8a3d409d878972f4';
+typedef VideoRepositoryRef = ProviderRef<VideoRepository>;
+String _$userRepositoryHash() => r'f85bcb6cd5eadec39ff05f02dcffe78a37ff8eba';
 
 /// See also [userRepository].
 @ProviderFor(userRepository)
-final userRepositoryProvider = AutoDisposeProvider<UserRepository>.internal(
+final userRepositoryProvider = Provider<UserRepository>.internal(
   userRepository,
   name: r'userRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -56,7 +56,7 @@ final userRepositoryProvider = AutoDisposeProvider<UserRepository>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef UserRepositoryRef = AutoDisposeProviderRef<UserRepository>;
+typedef UserRepositoryRef = ProviderRef<UserRepository>;
 String _$getVideoFeedHash() => r'83206837b7bcb601c30c3b6d976a0fe89d43751a';
 
 /// See also [getVideoFeed].

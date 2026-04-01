@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:supersent_tiktoc_clone/core/constants/app_constants.dart';
 import 'package:supersent_tiktoc_clone/core/di/providers.dart';
+import 'package:supersent_tiktoc_clone/domain/usecase/get_video_feed.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_state.dart';
 
 part 'feed_provider.g.dart';
@@ -14,7 +15,8 @@ class FeedNotifier extends _$FeedNotifier {
   }
 
   Future<FeedState> _loadInitial() async {
-    final getVideoFeed = ref.read(getVideoFeedProvider);
+    final repository = ref.read(videoRepositoryProvider);
+    final getVideoFeed = GetVideoFeed(repository);
     final videos = await getVideoFeed(page: 0);
 
     return FeedState(

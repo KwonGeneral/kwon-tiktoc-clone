@@ -42,10 +42,10 @@ class FeedPage extends ConsumerWidget {
             strokeWidth: 2,
           ),
         ),
-        error: (error, _) => Center(
+        error: (_, _) => const Center(
           child: Text(
-            '오류가 발생했습니다: $error',
-            style: const TextStyle(color: AppColors.white),
+            '영상을 불러올 수 없습니다',
+            style: TextStyle(color: AppColors.white),
           ),
         ),
       ),

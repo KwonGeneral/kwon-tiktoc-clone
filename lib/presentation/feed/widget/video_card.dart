@@ -1,60 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
 
-class VideoCard extends StatefulWidget {
+class VideoCard extends ConsumerWidget {
   const VideoCard({
     required this.video,
+    required this.index,
     super.key,
   });
 
   final Video video;
+  final int index;
 
   @override
-  State<VideoCard> createState() => _VideoCardState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Manager의 state를 watch하여 controller 변경 시 rebuild
+    final controllers = ref.watch(videoPlayerManagerProvider);
+    final controller = controllers[index];
 
-class _VideoCardState extends State<VideoCard> {
-  late final VideoPlayerController _controller;
-  bool _isInitialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.networkUrl(
-      Uri.parse(widget.video.videoUrl),
-    )..initialize().then((_) {
-        if (mounted) {
-          setState(() {
-            _isInitialized = true;
-          });
-          _controller.setLooping(true);
-        }
-      });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.black,
-      child: _isInitialized ? _buildVideoPlayer() : _buildLoading(),
+    return GestureDetector(
+      onTap: () {
+        ref.read(videoPlayerManagerProvider.notifier).togglePlayPause(index);
+      },
+      child: Container(
+        color: AppColors.black,
+        child: _buildContent(controller),
+      ),
     );
   }
 
-  Widget _buildVideoPlayer() {
-    return Center(
-      child: AspectRatio(
-        aspectRatio: _controller.value.aspectRatio,
-        child: VideoPlayer(_controller),
-      ),
+  Widget _buildContent(VideoPlayerController? controller) {
+    if (controller == null || !controller.value.isInitialized) {
+      return _buildLoading();
+    }
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // 비디오 플레이어
+        SizedBox.expand(
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+              width: controller.value.size.width,
+              height: controller.value.size.height,
+              child: VideoPlayer(controller),
+            ),
+          ),
+        ),
+
+        // 버퍼링 인디케이터
+        if (controller.value.isBuffering)
+          const CircularProgressIndicator(
+            color: AppColors.white,
+            strokeWidth: 2,
+          ),
+
+        // 일시정지 아이콘
+        if (!controller.value.isPlaying && !controller.value.isBuffering)
+          const Icon(
+            Icons.play_arrow_rounded,
+            color: AppColors.whiteSecondary,
+            size: 72,
+          ),
+      ],
     );
   }
 

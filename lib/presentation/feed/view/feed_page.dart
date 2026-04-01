@@ -3,13 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:supersent_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
 import 'package:supersent_tiktoc_clone/presentation/feed/widget/video_card.dart';
 
-class FeedPage extends ConsumerWidget {
+class FeedPage extends ConsumerStatefulWidget {
   const FeedPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FeedPage> createState() => _FeedPageState();
+}
+
+class _FeedPageState extends ConsumerState<FeedPage> {
+  bool _initialized = false;
+
+  @override
+  Widget build(BuildContext context) {
     final feedAsync = ref.watch(feedNotifierProvider);
 
     return Scaffold(
@@ -25,6 +33,16 @@ class FeedPage extends ConsumerWidget {
             );
           }
 
+          // 최초 1회 Manager 초기화
+          if (!_initialized) {
+            _initialized = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ref
+                  .read(videoPlayerManagerProvider.notifier)
+                  .initializeForIndex(0, feedState.videos);
+            });
+          }
+
           return PageView.builder(
             scrollDirection: Axis.vertical,
             itemCount: feedState.videos.length,
@@ -32,7 +50,10 @@ class FeedPage extends ConsumerWidget {
               ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
             },
             itemBuilder: (context, index) {
-              return VideoCard(video: feedState.videos[index]);
+              return VideoCard(
+                video: feedState.videos[index],
+                index: index,
+              );
             },
           );
         },

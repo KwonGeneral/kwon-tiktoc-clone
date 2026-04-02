@@ -195,7 +195,7 @@ class _FindFriendsCard extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color: const Color(0xFF1877F2),
+              color: AppColors.facebookBlue,
               borderRadius: BorderRadius.circular(26),
             ),
             child: const Icon(Icons.facebook, color: AppColors.white, size: 36),
@@ -231,7 +231,7 @@ class _FindFriendsCard extends StatelessWidget {
           SizedBox(
             height: 36,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 shape: RoundedRectangleBorder(

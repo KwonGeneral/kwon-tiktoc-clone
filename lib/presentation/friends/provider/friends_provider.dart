@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
+import 'package:kwon_tiktoc_clone/presentation/friends/provider/friends_state.dart';
 
 part 'friends_provider.g.dart';
 
@@ -12,13 +13,10 @@ class FriendsNotifier extends _$FriendsNotifier {
 
   @override
   Future<FriendsState> build() async {
-    final repository = ref.read(userRepositoryProvider);
+    final repository = ref.watch(userRepositoryProvider);
     _allUsers = await repository.getRecommendedUsers();
 
-    return FriendsState(
-      users: _allUsers,
-      searchQuery: '',
-    );
+    return FriendsState(users: _allUsers);
   }
 
   void search(String query) {
@@ -50,25 +48,5 @@ class FriendsNotifier extends _$FriendsNotifier {
     final updatedUsers =
         currentState.users.where((u) => u.id != userId).toList();
     state = AsyncData(currentState.copyWith(users: updatedUsers));
-  }
-}
-
-class FriendsState {
-  const FriendsState({
-    required this.users,
-    required this.searchQuery,
-  });
-
-  final List<User> users;
-  final String searchQuery;
-
-  FriendsState copyWith({
-    List<User>? users,
-    String? searchQuery,
-  }) {
-    return FriendsState(
-      users: users ?? this.users,
-      searchQuery: searchQuery ?? this.searchQuery,
-    );
   }
 }

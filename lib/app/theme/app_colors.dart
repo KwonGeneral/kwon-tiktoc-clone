@@ -19,6 +19,9 @@ abstract final class AppColors {
   static const like = Color(0xFFFF2D55);
   static const bookmark = Color(0xFFFACD00);
 
+  // Social
+  static const facebookBlue = Color(0xFF1877F2);
+
   // Utility
   static const divider = Color(0xFF2C2C2C);
   static const overlay = Color(0x80000000); // 50% 블랙

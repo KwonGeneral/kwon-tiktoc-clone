@@ -73,7 +73,7 @@ class FriendListTile extends StatelessWidget {
                 Text(
                   isFollowed
                       ? AppStrings.friendsMutualFollow
-                      : '${AppStrings.friendsFollowedBy}${user.id}',
+                      : '${AppStrings.friendsFollowedBy}${user.nickname}',
                   style: const TextStyle(
                     color: AppColors.whiteSecondary,
                     fontSize: 13,

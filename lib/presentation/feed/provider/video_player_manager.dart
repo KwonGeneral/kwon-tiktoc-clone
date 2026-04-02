@@ -8,7 +8,7 @@ import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart'
 part 'video_player_manager.g.dart';
 
 /// 비디오 플레이어 컨트롤러를 중앙 관리하는 Manager.
-/// 현재 페이지 ± 1 범위의 컨트롤러만 유지하여 메모리를 관리한다.
+/// 현재 페이지 ± 2 범위의 컨트롤러만 유지하여 메모리를 관리한다.
 @Riverpod(keepAlive: true)
 class VideoPlayerManager extends _$VideoPlayerManager {
   final Map<int, VideoPlayerController> _controllers = {};
@@ -45,9 +45,10 @@ class VideoPlayerManager extends _$VideoPlayerManager {
 
     // 1. 유지할 범위 계산 (currentIndex ± 2, 루프 고려)
     final keepRange = <int>{};
+    final len = videos.length;
     for (var offset = -2; offset <= 2; offset++) {
-      final i = (currentIndex + offset) % videos.length;
-      if (i >= 0) keepRange.add(i);
+      final i = ((currentIndex + offset) % len + len) % len;
+      keepRange.add(i);
     }
 
     // 2. 범위 밖 컨트롤러 dispose

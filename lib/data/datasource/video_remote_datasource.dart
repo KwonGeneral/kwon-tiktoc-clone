@@ -252,9 +252,13 @@ class VideoRemoteDataSource implements VideoDataSource {
     // 서버 응답 파싱하여 Video 정보 반환
     final json = jsonDecode(response.body) as Map<String, dynamic>;
     final metadata = json['metadata'] as Map<String, dynamic>? ?? {};
+    final videoId = json['id'];
+    if (videoId == null) {
+      throw Exception('업로드 응답에 id 필드가 없습니다');
+    }
 
     final uploadedVideo = VideoModel(
-      id: 'video_${json['id']}',
+      id: 'video_$videoId',
       userId: metadata['userId'] as String? ?? '',
       videoUrl: json['url'] as String? ?? '',
       hlsUrl: json['hlsUrl'] as String? ?? '',

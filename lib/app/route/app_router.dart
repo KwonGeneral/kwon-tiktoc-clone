@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/constants/app_strings.dart';
-import '../theme/app_colors.dart';
+import '../../presentation/camera/view/camera_page.dart';
 import '../../presentation/feed/view/feed_page.dart';
 import '../../presentation/friends/view/friends_page.dart';
 import '../../presentation/main/main_shell.dart';
@@ -22,6 +21,11 @@ GoRouter createRouter() {
           final userId = state.pathParameters['userId']!;
           return UserProfilePage(userId: userId);
         },
+      ),
+      // 카메라 (ShellRoute 밖 — 전체 화면)
+      GoRoute(
+        path: RoutePaths.camera,
+        builder: (context, state) => const CameraPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -47,7 +51,7 @@ GoRouter createRouter() {
             routes: [
               GoRoute(
                 path: RoutePaths.discover,
-                builder: (context, state) => const _CreatePlaceholder(),
+                builder: (context, state) => const SizedBox.shrink(),
               ),
             ],
           ),
@@ -71,20 +75,4 @@ GoRouter createRouter() {
       ),
     ],
   );
-}
-
-class _CreatePlaceholder extends StatelessWidget {
-  const _CreatePlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          AppStrings.placeholderCreate,
-          style: TextStyle(color: AppColors.whiteSecondary, fontSize: 16),
-        ),
-      ),
-    );
-  }
 }

@@ -10,6 +10,7 @@ import '../../../core/utils/format_utils.dart';
 import '../../../domain/entity/post_image.dart';
 import '../../../domain/entity/video.dart';
 import '../../feed/provider/feed_provider.dart';
+import '../../feed/provider/feed_state.dart';
 import '../../profile/provider/profile_provider.dart';
 import '../../profile/widget/profile_image_grid.dart';
 import '../../publish/provider/publish_image_provider.dart';
@@ -133,7 +134,7 @@ class UserProfilePage extends ConsumerWidget {
   Widget _buildUserContent(
     BuildContext context,
     WidgetRef ref,
-    dynamic feedState,
+    FeedState feedState,
     List<Video> userVideos,
   ) {
     final imagesAsync = ref.watch(postImageListNotifierProvider);

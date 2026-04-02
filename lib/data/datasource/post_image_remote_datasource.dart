@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/post_image_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/model/post_image_model.dart';
 
@@ -14,7 +15,6 @@ class PostImageRemoteDataSource implements PostImageDataSource {
   final http.Client _client;
 
   static const _baseUrl = 'https://api.myfortie.com';
-  static const _currentUserId = 'current_user';
 
   List<PostImageModel>? _cachedImages;
 
@@ -72,7 +72,7 @@ class PostImageRemoteDataSource implements PostImageDataSource {
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['caption'] = caption;
-    request.fields['userId'] = _currentUserId;
+    request.fields['userId'] = AppStrings.commentCurrentUserId;
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       request.fields['avatarUrl'] = avatarUrl;
     }
@@ -100,7 +100,7 @@ class PostImageRemoteDataSource implements PostImageDataSource {
       thumbUrl: json['thumbUrl'] as String? ?? '',
       fullUrl: json['fullUrl'] as String? ?? '',
       caption: metadata['caption'] as String? ?? caption,
-      userId: metadata['userId'] as String? ?? _currentUserId,
+      userId: metadata['userId'] as String? ?? AppStrings.commentCurrentUserId,
       username: metadata['username'] as String? ?? '',
       nickname: metadata['nickname'] as String? ?? '',
       avatarUrl: metadata['avatarUrl'] as String? ?? '',

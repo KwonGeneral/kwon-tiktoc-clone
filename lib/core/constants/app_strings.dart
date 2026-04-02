@@ -63,6 +63,19 @@ abstract final class AppStrings {
   static const friendsSearchHint = '검색';
   static const friendsEmpty = '추천 친구가 없습니다';
 
+  // 카메라
+  static const cameraNotAvailable = '사용 가능한 카메라가 없습니다';
+  static const cameraInitError = '카메라를 초기화할 수 없습니다';
+  static const cameraGoBack = '돌아가기';
+  static const cameraDeleteClipTitle = '클립 삭제';
+  static const cameraDeleteClipMessage = '마지막 클립을 삭제할까요?';
+  static const cameraCancel = '취소';
+  static const cameraDelete = '삭제';
+  static const cameraConfirm = '확인';
+  static const cameraRecordingComplete = '촬영 완료';
+  static const cameraRecordingCompleteMessage = '게시 기능은 다음 Phase에서 구현됩니다.';
+  static const cameraVideoMode = '동영상';
+
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';

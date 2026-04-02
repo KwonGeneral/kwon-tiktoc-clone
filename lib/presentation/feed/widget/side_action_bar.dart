@@ -13,6 +13,8 @@ class SideActionBar extends StatelessWidget {
     this.onBookmarkTap,
     this.onCommentTap,
     this.onFollowTap,
+    this.onShareTap,
+    this.onProfileTap,
     super.key,
   });
 
@@ -22,6 +24,8 @@ class SideActionBar extends StatelessWidget {
   final VoidCallback? onBookmarkTap;
   final VoidCallback? onCommentTap;
   final VoidCallback? onFollowTap;
+  final VoidCallback? onShareTap;
+  final VoidCallback? onProfileTap;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,8 @@ class SideActionBar extends StatelessWidget {
             userId: video.userId,
             avatarUrl: video.avatarUrl,
             isFollowing: isFollowing,
-            onTap: onFollowTap,
+            onTap: onProfileTap,
+            onFollowTap: onFollowTap,
           ),
           const SizedBox(height: 20),
 
@@ -70,6 +75,7 @@ class SideActionBar extends StatelessWidget {
             icon: Icons.reply,
             count: video.shareCount,
             isMirrored: true,
+            onTap: onShareTap,
           ),
         ],
       ),
@@ -83,22 +89,25 @@ class _ProfileAvatar extends StatelessWidget {
     this.avatarUrl = '',
     this.isFollowing = false,
     this.onTap,
+    this.onFollowTap,
   });
 
   final String userId;
   final String avatarUrl;
   final bool isFollowing;
   final VoidCallback? onTap;
+  final VoidCallback? onFollowTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.bottomCenter,
+      children: [
+        // 아바타 탭 → 유저 프로필 이동
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
             width: 44,
             height: 44,
             decoration: BoxDecoration(
@@ -125,9 +134,12 @@ class _ProfileAvatar extends StatelessWidget {
                   )
                 : const Icon(Icons.person, color: AppColors.white, size: 24),
           ),
-          // 팔로우 + 뱃지
-          Positioned(
-            bottom: -8,
+        ),
+        // 팔로우 뱃지 탭 → 팔로우 토글
+        Positioned(
+          bottom: -8,
+          child: GestureDetector(
+            onTap: onFollowTap,
             child: Container(
               width: 20,
               height: 20,
@@ -142,8 +154,8 @@ class _ProfileAvatar extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -41,6 +41,15 @@ abstract final class AppStrings {
   static const commentHoursAgo = '{h}시간 전';
   static const commentDaysAgo = '{d}일 전';
 
+  // 공유
+  static const shareText = '{nickname}님의 영상을 확인해보세요!';
+
+  // 유저 프로필
+  static const userProfileFollow = '팔로우';
+  static const userProfileFollowing = '팔로잉';
+  static const userProfileMessage = '메시지';
+  static const userProfileVideos = '동영상';
+
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';

@@ -4,4 +4,7 @@ abstract final class RoutePaths {
   static const discover = '/discover';
   static const notifications = '/notifications';
   static const profile = '/profile';
+  static const userProfile = '/user/:userId';
+
+  static String userProfilePath(String userId) => '/user/$userId';
 }

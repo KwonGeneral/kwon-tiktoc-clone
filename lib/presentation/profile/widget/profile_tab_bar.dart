@@ -14,7 +14,6 @@ class ProfileTabBar extends StatelessWidget {
 
   static const _tabs = [
     _TabItem(icon: Icons.grid_view_outlined, activeIcon: Icons.grid_view),
-    _TabItem(icon: Icons.lock_outline, activeIcon: Icons.lock),
     _TabItem(icon: Icons.bookmark_border, activeIcon: Icons.bookmark),
     _TabItem(icon: Icons.favorite_border, activeIcon: Icons.favorite),
   ];

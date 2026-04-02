@@ -16,4 +16,13 @@ abstract class LocalStorageRepository {
 
   String getUserCommentsJson();
   Future<void> saveUserCommentsJson(String json);
+
+  String getProfileNickname();
+  Future<void> saveProfileNickname(String nickname);
+
+  String getProfileBio();
+  Future<void> saveProfileBio(String bio);
+
+  bool getNotificationEnabled();
+  Future<void> saveNotificationEnabled({required bool enabled});
 }

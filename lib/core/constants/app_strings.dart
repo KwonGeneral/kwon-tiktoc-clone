@@ -110,6 +110,30 @@ abstract final class AppStrings {
   static const notificationsRecommendedAccounts = '추천 계정';
   static const notificationsEmpty = '아직 알림이 없습니다';
 
+  // 프로필 편집
+  static const profileEditTitle = '프로필 편집';
+  static const profileEditNickname = '닉네임';
+  static const profileEditNicknameHint = '닉네임을 입력하세요';
+  static const profileEditBioTitle = '자기소개';
+  static const profileEditBioDescription = '자기소개는 언제든지 편집할 수 있습니다.';
+  static const profileEditBioHint = '제 취미는...';
+  static const profileEditCancel = '취소';
+  static const profileEditSave = '저장';
+
+  // 설정
+  static const settingsTitle = '설정';
+  static const settingsNotification = '알림 설정';
+  static const settingsNotificationDescription = '푸시 알림을 받습니다';
+  static const settingsPermission = '권한 관리';
+  static const settingsPermissionDescription = '카메라, 마이크 등 앱 권한을 관리합니다';
+  static const settingsVersion = '앱 버전';
+  static const appVersion = '1.0.0';
+
+  // 프로필 탭 빈 상태
+  static const profileEmptyBookmarks = '즐겨찾기 동영상이 여기에 표시됩니다.';
+  static const profileEmptyLikes = '내가 \'좋아요\'를 누른 게시물은 내게만\n표시됩니다';
+  static const profileEmptyMyVideos = '데일리 루틴을 공유하세요';
+
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../app/route/route_paths.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/constants/app_strings.dart';
 import '../provider/profile_provider.dart';
-import '../widget/profile_empty_state.dart';
 import '../widget/profile_header.dart';
 import '../widget/profile_stats.dart';
 import '../widget/profile_tab_bar.dart';
+import '../widget/profile_video_grid.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -41,13 +43,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const SizedBox(height: 16),
               ProfileStats(user: user),
               const SizedBox(height: 16),
-              _buildBioRow(),
+              _buildBioRow(user.bio),
               const SizedBox(height: 16),
               ProfileTabBar(
                 selectedIndex: _selectedTabIndex,
                 onTap: (index) => setState(() => _selectedTabIndex = index),
               ),
-              const ProfileEmptyState(),
+              _buildTabContent(),
             ],
           ),
         ),
@@ -68,18 +70,34 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ],
         ),
       ),
-      actions: const [
-        Icon(Icons.more_horiz, color: AppColors.white, size: 24),
-        SizedBox(width: 8),
-        Icon(Icons.send_outlined, color: AppColors.white, size: 24),
-        SizedBox(width: 8),
-        Icon(Icons.menu, color: AppColors.white, size: 24),
-        SizedBox(width: 16),
+      actions: [
+        const Icon(Icons.more_horiz, color: AppColors.white, size: 24),
+        const SizedBox(width: 8),
+        const Icon(Icons.send_outlined, color: AppColors.white, size: 24),
+        const SizedBox(width: 8),
+        GestureDetector(
+          onTap: () => context.push(RoutePaths.settings),
+          child: const Icon(Icons.menu, color: AppColors.white, size: 24),
+        ),
+        const SizedBox(width: 16),
       ],
     );
   }
 
-  Widget _buildBioRow() {
+  Widget _buildBioRow(String bio) {
+    if (bio.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Text(
+          bio,
+          style: AppTextStyles.description.copyWith(
+            color: AppColors.whiteSecondary,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Row(
@@ -132,6 +150,100 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTabContent() {
+    switch (_selectedTabIndex) {
+      case 0:
+        return _buildMyVideosTab();
+      case 1:
+        return _buildBookmarksTab();
+      case 2:
+        return _buildLikesTab();
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildMyVideosTab() {
+    final videos = ref.watch(myVideosProvider);
+    if (videos.isEmpty) {
+      return _buildEmptyState(
+        icon: Icons.photo_camera_back_outlined,
+        message: AppStrings.profileEmptyMyVideos,
+        showUploadButton: true,
+      );
+    }
+    return ProfileVideoGrid(videos: videos);
+  }
+
+  Widget _buildBookmarksTab() {
+    final videos = ref.watch(bookmarkedVideosProvider);
+    if (videos.isEmpty) {
+      return _buildEmptyState(
+        icon: Icons.bookmark_border,
+        message: AppStrings.profileEmptyBookmarks,
+      );
+    }
+    return ProfileVideoGrid(videos: videos);
+  }
+
+  Widget _buildLikesTab() {
+    final videos = ref.watch(likedVideosProvider);
+    if (videos.isEmpty) {
+      return _buildEmptyState(
+        icon: Icons.favorite_border,
+        message: AppStrings.profileEmptyLikes,
+      );
+    }
+    return ProfileVideoGrid(videos: videos);
+  }
+
+  Widget _buildEmptyState({
+    required IconData icon,
+    required String message,
+    bool showUploadButton = false,
+  }) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 60),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 64,
+              color: AppColors.whiteSecondary.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              style: AppTextStyles.description,
+              textAlign: TextAlign.center,
+            ),
+            if (showUploadButton) ...[
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () => context.push(RoutePaths.camera),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: Text(
+                    AppStrings.profileUpload,
+                    style: AppTextStyles.description
+                        .copyWith(fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

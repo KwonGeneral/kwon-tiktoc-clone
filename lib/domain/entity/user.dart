@@ -8,6 +8,7 @@ sealed class User with _$User {
     required String id,
     required String nickname,
     @Default('') String avatarUrl,
+    @Default('') String bio,
     @Default(false) bool isVerified,
     @Default(0) int followingCount,
     @Default(0) int followerCount,

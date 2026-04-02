@@ -1,7 +1,7 @@
-import 'package:supersent_tiktoc_clone/data/datasource/video_datasource.dart';
-import 'package:supersent_tiktoc_clone/domain/entity/comment.dart';
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
-import 'package:supersent_tiktoc_clone/domain/repository/video_repository.dart';
+import 'package:kwon_tiktoc_clone/data/datasource/video_datasource.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/comment.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/domain/repository/video_repository.dart';
 
 class VideoRepositoryImpl implements VideoRepository {
   final VideoDataSource _dataSource;

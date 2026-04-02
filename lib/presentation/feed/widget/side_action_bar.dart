@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
-import 'package:supersent_tiktoc_clone/app/theme/app_text_styles.dart';
-import 'package:supersent_tiktoc_clone/core/utils/format_utils.dart';
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
+import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 
 class SideActionBar extends StatelessWidget {
   const SideActionBar({

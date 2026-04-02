@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
-import 'package:supersent_tiktoc_clone/core/constants/app_strings.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/widget/video_card.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_card.dart';
 
 class FeedPage extends ConsumerStatefulWidget {
   const FeedPage({super.key});

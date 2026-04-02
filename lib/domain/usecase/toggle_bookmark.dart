@@ -1,5 +1,5 @@
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
-import 'package:supersent_tiktoc_clone/domain/repository/video_repository.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/domain/repository/video_repository.dart';
 
 class ToggleBookmark {
   final VideoRepository _repository;

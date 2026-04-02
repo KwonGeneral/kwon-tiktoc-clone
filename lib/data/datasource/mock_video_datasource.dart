@@ -1,7 +1,7 @@
-import 'package:supersent_tiktoc_clone/core/constants/app_constants.dart';
-import 'package:supersent_tiktoc_clone/data/datasource/video_datasource.dart';
-import 'package:supersent_tiktoc_clone/data/model/comment_model.dart';
-import 'package:supersent_tiktoc_clone/data/model/video_model.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
+import 'package:kwon_tiktoc_clone/data/datasource/video_datasource.dart';
+import 'package:kwon_tiktoc_clone/data/model/comment_model.dart';
+import 'package:kwon_tiktoc_clone/data/model/video_model.dart';
 
 class MockVideoDataSource implements VideoDataSource {
   late final List<VideoModel> _videos = _generateVideos();

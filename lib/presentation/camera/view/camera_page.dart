@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/route/route_paths.dart';
-import '../../../app/theme/app_colors.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../core/constants/app_strings.dart';
-import '../provider/camera_provider.dart';
-import '../provider/camera_state.dart';
-import '../widget/camera_controls.dart';
-import '../widget/recording_timer_indicator.dart';
+import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/presentation/camera/provider/camera_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/camera/provider/camera_state.dart';
+import 'package:kwon_tiktoc_clone/presentation/camera/widget/camera_controls.dart';
+import 'package:kwon_tiktoc_clone/presentation/camera/widget/recording_timer_indicator.dart';
 
 class CameraPage extends ConsumerStatefulWidget {
   const CameraPage({super.key});

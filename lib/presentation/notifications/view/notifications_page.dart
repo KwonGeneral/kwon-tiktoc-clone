@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/route/route_paths.dart';
-import '../../../app/theme/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../../domain/entity/notification.dart' as domain;
-import '../../../presentation/feed/provider/feed_provider.dart';
-import '../provider/notifications_provider.dart';
-import '../widget/notification_category_tile.dart';
-import '../widget/notification_item.dart';
-import '../widget/recommended_account_tile.dart';
+import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/notification.dart' as domain;
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/notifications/provider/notifications_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/notifications/widget/notification_category_tile.dart';
+import 'package:kwon_tiktoc_clone/presentation/notifications/widget/notification_item.dart';
+import 'package:kwon_tiktoc_clone/presentation/notifications/widget/recommended_account_tile.dart';
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});

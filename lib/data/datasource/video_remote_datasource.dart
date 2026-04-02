@@ -98,9 +98,16 @@ class VideoRemoteDataSource implements VideoDataSource {
           ? '$description $hashTags'
           : description;
 
+      // metadata에 userId가 있으면 그대로 사용 (업로드된 영상),
+      // 없으면 mock user와 일치하도록 index+1 기반 userId 할당
+      final rawUserId = metadata['userId'] as String?;
+      final userId = (rawUserId != null && rawUserId.isNotEmpty)
+          ? rawUserId
+          : 'user_${index + 1}';
+
       return VideoModel(
         id: 'video_${v['id']}',
-        userId: metadata['userId'] as String? ?? 'user_${v['id']}',
+        userId: userId,
         videoUrl: v['url'] as String,
         hlsUrl: v['hlsUrl'] as String? ?? '',
         thumbnailUrl: v['thumbnailUrl'] as String? ?? '',
@@ -220,6 +227,12 @@ class VideoRemoteDataSource implements VideoDataSource {
   Future<VideoModel> uploadVideo({
     required String filePath,
     required String description,
+    String? title,
+    String? tags,
+    String? location,
+    String? userId,
+    String? username,
+    String? nickname,
     String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
@@ -232,7 +245,22 @@ class VideoRemoteDataSource implements VideoDataSource {
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['description'] = description;
-    request.fields['userId'] = _currentUserId;
+    request.fields['userId'] = userId ?? _currentUserId;
+    if (title != null && title.isNotEmpty) {
+      request.fields['title'] = title;
+    }
+    if (tags != null && tags.isNotEmpty) {
+      request.fields['tags'] = tags;
+    }
+    if (location != null && location.isNotEmpty) {
+      request.fields['location'] = location;
+    }
+    if (username != null && username.isNotEmpty) {
+      request.fields['username'] = username;
+    }
+    if (nickname != null && nickname.isNotEmpty) {
+      request.fields['nickname'] = nickname;
+    }
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       request.fields['avatarUrl'] = avatarUrl;
     }

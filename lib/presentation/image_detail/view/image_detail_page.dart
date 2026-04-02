@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../../domain/entity/post_image.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 
 class ImageDetailPage extends StatelessWidget {
   const ImageDetailPage({super.key, required this.postImage});

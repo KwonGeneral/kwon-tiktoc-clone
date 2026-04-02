@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../core/utils/format_utils.dart';
-import '../../../domain/entity/notification.dart' as domain;
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/notification.dart' as domain;
 
 class NotificationItem extends StatelessWidget {
   const NotificationItem({

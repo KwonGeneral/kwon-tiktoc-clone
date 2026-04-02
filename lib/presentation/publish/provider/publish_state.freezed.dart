@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PublishState {
 
- PublishStatus get status; double get progress; String? get errorMessage;
+ PublishStatus get status; double get progress; String? get errorMessage; String? get uploadedVideoUrl; String? get uploadedDescription;
 /// Create a copy of PublishState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PublishStateCopyWith<PublishState> get copyWith => _$PublishStateCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PublishState&&(identical(other.status, status) || other.status == status)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PublishState&&(identical(other.status, status) || other.status == status)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.uploadedVideoUrl, uploadedVideoUrl) || other.uploadedVideoUrl == uploadedVideoUrl)&&(identical(other.uploadedDescription, uploadedDescription) || other.uploadedDescription == uploadedDescription));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,progress,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,progress,errorMessage,uploadedVideoUrl,uploadedDescription);
 
 @override
 String toString() {
-  return 'PublishState(status: $status, progress: $progress, errorMessage: $errorMessage)';
+  return 'PublishState(status: $status, progress: $progress, errorMessage: $errorMessage, uploadedVideoUrl: $uploadedVideoUrl, uploadedDescription: $uploadedDescription)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PublishStateCopyWith<$Res>  {
   factory $PublishStateCopyWith(PublishState value, $Res Function(PublishState) _then) = _$PublishStateCopyWithImpl;
 @useResult
 $Res call({
- PublishStatus status, double progress, String? errorMessage
+ PublishStatus status, double progress, String? errorMessage, String? uploadedVideoUrl, String? uploadedDescription
 });
 
 
@@ -62,11 +62,13 @@ class _$PublishStateCopyWithImpl<$Res>
 
 /// Create a copy of PublishState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? progress = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? progress = null,Object? errorMessage = freezed,Object? uploadedVideoUrl = freezed,Object? uploadedDescription = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as PublishStatus,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as double,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,uploadedVideoUrl: freezed == uploadedVideoUrl ? _self.uploadedVideoUrl : uploadedVideoUrl // ignore: cast_nullable_to_non_nullable
+as String?,uploadedDescription: freezed == uploadedDescription ? _self.uploadedDescription : uploadedDescription // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -149,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PublishStatus status,  double progress,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PublishStatus status,  double progress,  String? errorMessage,  String? uploadedVideoUrl,  String? uploadedDescription)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PublishState() when $default != null:
-return $default(_that.status,_that.progress,_that.errorMessage);case _:
+return $default(_that.status,_that.progress,_that.errorMessage,_that.uploadedVideoUrl,_that.uploadedDescription);case _:
   return orElse();
 
 }
@@ -170,10 +172,10 @@ return $default(_that.status,_that.progress,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PublishStatus status,  double progress,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PublishStatus status,  double progress,  String? errorMessage,  String? uploadedVideoUrl,  String? uploadedDescription)  $default,) {final _that = this;
 switch (_that) {
 case _PublishState():
-return $default(_that.status,_that.progress,_that.errorMessage);}
+return $default(_that.status,_that.progress,_that.errorMessage,_that.uploadedVideoUrl,_that.uploadedDescription);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -187,10 +189,10 @@ return $default(_that.status,_that.progress,_that.errorMessage);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PublishStatus status,  double progress,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PublishStatus status,  double progress,  String? errorMessage,  String? uploadedVideoUrl,  String? uploadedDescription)?  $default,) {final _that = this;
 switch (_that) {
 case _PublishState() when $default != null:
-return $default(_that.status,_that.progress,_that.errorMessage);case _:
+return $default(_that.status,_that.progress,_that.errorMessage,_that.uploadedVideoUrl,_that.uploadedDescription);case _:
   return null;
 
 }
@@ -202,12 +204,14 @@ return $default(_that.status,_that.progress,_that.errorMessage);case _:
 
 
 class _PublishState implements PublishState {
-  const _PublishState({this.status = PublishStatus.idle, this.progress = 0.0, this.errorMessage});
+  const _PublishState({this.status = PublishStatus.idle, this.progress = 0.0, this.errorMessage, this.uploadedVideoUrl, this.uploadedDescription});
   
 
 @override@JsonKey() final  PublishStatus status;
 @override@JsonKey() final  double progress;
 @override final  String? errorMessage;
+@override final  String? uploadedVideoUrl;
+@override final  String? uploadedDescription;
 
 /// Create a copy of PublishState
 /// with the given fields replaced by the non-null parameter values.
@@ -219,16 +223,16 @@ _$PublishStateCopyWith<_PublishState> get copyWith => __$PublishStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PublishState&&(identical(other.status, status) || other.status == status)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PublishState&&(identical(other.status, status) || other.status == status)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.uploadedVideoUrl, uploadedVideoUrl) || other.uploadedVideoUrl == uploadedVideoUrl)&&(identical(other.uploadedDescription, uploadedDescription) || other.uploadedDescription == uploadedDescription));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,progress,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,progress,errorMessage,uploadedVideoUrl,uploadedDescription);
 
 @override
 String toString() {
-  return 'PublishState(status: $status, progress: $progress, errorMessage: $errorMessage)';
+  return 'PublishState(status: $status, progress: $progress, errorMessage: $errorMessage, uploadedVideoUrl: $uploadedVideoUrl, uploadedDescription: $uploadedDescription)';
 }
 
 
@@ -239,7 +243,7 @@ abstract mixin class _$PublishStateCopyWith<$Res> implements $PublishStateCopyWi
   factory _$PublishStateCopyWith(_PublishState value, $Res Function(_PublishState) _then) = __$PublishStateCopyWithImpl;
 @override @useResult
 $Res call({
- PublishStatus status, double progress, String? errorMessage
+ PublishStatus status, double progress, String? errorMessage, String? uploadedVideoUrl, String? uploadedDescription
 });
 
 
@@ -256,11 +260,13 @@ class __$PublishStateCopyWithImpl<$Res>
 
 /// Create a copy of PublishState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? progress = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? progress = null,Object? errorMessage = freezed,Object? uploadedVideoUrl = freezed,Object? uploadedDescription = freezed,}) {
   return _then(_PublishState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as PublishStatus,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as double,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,uploadedVideoUrl: freezed == uploadedVideoUrl ? _self.uploadedVideoUrl : uploadedVideoUrl // ignore: cast_nullable_to_non_nullable
+as String?,uploadedDescription: freezed == uploadedDescription ? _self.uploadedDescription : uploadedDescription // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

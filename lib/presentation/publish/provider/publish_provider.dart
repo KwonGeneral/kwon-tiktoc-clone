@@ -4,7 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:video_compress/video_compress.dart';
 
-import '../../../core/di/providers.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'publish_state.dart';
 
 part 'publish_provider.g.dart';
@@ -33,21 +34,33 @@ class PublishNotifier extends _$PublishNotifier {
       // 2) 업로드
       state = state.copyWith(status: PublishStatus.uploading, progress: 0.0);
 
-      // 프로필 이미지 URL 가져오기
+      // 프로필 정보 가져오기
       final storage = ref.read(localStorageRepositoryProvider);
       final profileImageUrl = storage.getProfileImageUrl();
+      final profileNickname = storage.getProfileNickname();
 
       final repository = ref.read(videoRepositoryProvider);
-      await repository.uploadVideo(
+      final uploadedVideo = await repository.uploadVideo(
         filePath: compressedPath,
         description: description,
+        title: description,
+        userId: AppStrings.commentCurrentUserId,
+        username: AppStrings.uploadedUsername,
+        nickname: profileNickname.isNotEmpty
+            ? profileNickname
+            : AppStrings.uploadedNickname,
         avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
         onProgress: (progress) {
           state = state.copyWith(progress: progress);
         },
       );
 
-      state = state.copyWith(status: PublishStatus.success, progress: 1.0);
+      state = state.copyWith(
+        status: PublishStatus.success,
+        progress: 1.0,
+        uploadedVideoUrl: uploadedVideo.videoUrl,
+        uploadedDescription: description,
+      );
     } catch (e) {
       state = state.copyWith(
         status: PublishStatus.failed,

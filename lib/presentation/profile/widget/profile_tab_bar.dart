@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 
 class ProfileTabBar extends StatelessWidget {
   const ProfileTabBar({

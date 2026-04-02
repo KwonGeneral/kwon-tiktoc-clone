@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../domain/entity/post_image.dart';
-import '../../presentation/camera/view/camera_page.dart';
-import '../../presentation/feed/view/feed_page.dart';
-import '../../presentation/friends/view/friends_page.dart';
-import '../../presentation/image_detail/view/image_detail_page.dart';
-import '../../presentation/main/main_shell.dart';
-import '../../presentation/notifications/view/notifications_page.dart';
-import '../../presentation/profile/view/profile_edit_page.dart';
-import '../../presentation/profile/view/profile_page.dart';
-import '../../presentation/publish/view/publish_image_page.dart';
-import '../../presentation/publish/view/publish_page.dart';
-import '../../presentation/settings/view/settings_page.dart';
-import '../../presentation/user_profile/view/user_profile_page.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
+import 'package:kwon_tiktoc_clone/presentation/camera/view/camera_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/view/feed_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/friends/view/friends_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/image_detail/view/image_detail_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/main/main_shell.dart';
+import 'package:kwon_tiktoc_clone/presentation/notifications/view/notifications_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/profile/view/profile_edit_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/profile/view/profile_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/view/publish_image_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/view/publish_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/settings/view/settings_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/user_profile/view/user_profile_page.dart';
 import 'route_paths.dart';
 
 GoRouter createRouter() {

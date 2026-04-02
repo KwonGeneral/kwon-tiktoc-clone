@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/constants/app_constants.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
 import 'camera_state.dart';
 
 part 'camera_provider.g.dart';

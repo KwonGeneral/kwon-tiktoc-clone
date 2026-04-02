@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/route/route_paths.dart';
-import '../../../app/theme/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
-import '../provider/publish_image_provider.dart';
-import '../provider/publish_state.dart';
-import '../widget/publish_upload_overlay.dart';
+import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_image_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_state.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/widget/publish_upload_overlay.dart';
 
 class PublishImagePage extends ConsumerStatefulWidget {
   const PublishImagePage({super.key, required this.imageFilePath});

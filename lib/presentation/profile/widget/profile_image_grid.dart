@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../domain/entity/post_image.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 
 class ProfileImageGrid extends StatelessWidget {
   const ProfileImageGrid({required this.images, this.onImageTap, super.key});

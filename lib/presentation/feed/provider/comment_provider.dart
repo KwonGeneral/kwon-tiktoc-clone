@@ -21,28 +21,47 @@ class CommentNotifier extends _$CommentNotifier {
     return const CommentState();
   }
 
+  /// 댓글창 열기
+  Future<void> open(String videoId) async {
+    state = state.copyWith(isOpen: true);
+    await loadComments(videoId);
+  }
+
+  /// 댓글창 닫기
+  void close() {
+    state = state.copyWith(
+      isOpen: false,
+      replyingToCommentId: null,
+      replyingToUserName: null,
+    );
+  }
+
   Future<void> loadComments(String videoId) async {
-    state = state.copyWith(isLoading: true, videoId: videoId);
-
-    final getComments = ref.read(getCommentsProvider);
-    final serverComments = await getComments(videoId);
-
-    // 로컬에 저장된 사용자 작성 댓글 로드
+    // 로컬 댓글과 좋아요/싫어요 상태를 먼저 즉시 표시 (optimistic)
     final userComments = _loadUserComments(videoId);
-
-    final allComments = [...userComments, ...serverComments];
-
-    // 좋아요/싫어요 상태 적용
     final likedIds = _storage.getLikedCommentIds();
     final dislikedIds = _storage.getDislikedCommentIds();
 
     state = state.copyWith(
-      comments: allComments,
+      comments: userComments,
       likedCommentIds: likedIds,
       dislikedCommentIds: dislikedIds,
-      isLoading: false,
+      isLoading: userComments.isEmpty,
       videoId: videoId,
     );
+
+    // 서버 댓글을 비동기로 로드하여 병합
+    final getComments = ref.read(getCommentsProvider);
+    final serverComments = await getComments(videoId);
+
+    // 로컬 댓글 ID 집합 (중복 방지)
+    final userCommentIds = userComments.map((c) => c.id).toSet();
+    final mergedComments = [
+      ...userComments,
+      ...serverComments.where((c) => !userCommentIds.contains(c.id)),
+    ];
+
+    state = state.copyWith(comments: mergedComments, isLoading: false);
   }
 
   List<Comment> _loadUserComments(String videoId) {

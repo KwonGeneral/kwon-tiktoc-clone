@@ -36,12 +36,24 @@ class VideoRepositoryImpl implements VideoRepository {
   Future<Video> uploadVideo({
     required String filePath,
     required String description,
+    String? title,
+    String? tags,
+    String? location,
+    String? userId,
+    String? username,
+    String? nickname,
     String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
     final model = await _dataSource.uploadVideo(
       filePath: filePath,
       description: description,
+      title: title,
+      tags: tags,
+      location: location,
+      userId: userId,
+      username: username,
+      nickname: nickname,
       avatarUrl: avatarUrl,
       onProgress: onProgress,
     );

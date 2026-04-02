@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/route/route_paths.dart';
-import '../../../app/theme/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../feed/provider/feed_provider.dart';
-import '../provider/publish_provider.dart';
-import '../provider/publish_state.dart';
-import '../widget/publish_cover_thumbnail.dart';
-import '../widget/publish_upload_overlay.dart';
+import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_state.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/widget/publish_cover_thumbnail.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/widget/publish_upload_overlay.dart';
 
 class PublishPage extends ConsumerStatefulWidget {
   const PublishPage({super.key, required this.videoFilePath});
@@ -60,6 +60,7 @@ class _PublishPageState extends ConsumerState<PublishPage> {
   }
 
   void _startUpload() {
+    FocusManager.instance.primaryFocus?.unfocus();
     ref
         .read(publishNotifierProvider.notifier)
         .publish(
@@ -72,11 +73,20 @@ class _PublishPageState extends ConsumerState<PublishPage> {
     // 성공 메시지 잠시 표시 후 피드 리로드 + 프로필 이동
     await Future<void>.delayed(const Duration(milliseconds: 800));
     if (!mounted) return;
-    try {
-      await ref.read(feedNotifierProvider.notifier).reload();
-    } catch (_) {
-      // 리로드 실패 시에도 프로필로 이동 (다음 앱 실행 시 갱신됨)
+
+    // 업로드된 영상을 피드에 즉시 추가
+    final publishState = ref.read(publishNotifierProvider);
+    final videoUrl = publishState.uploadedVideoUrl;
+    final desc = publishState.uploadedDescription;
+    if (videoUrl != null && videoUrl.isNotEmpty) {
+      ref
+          .read(feedNotifierProvider.notifier)
+          .addUploadedVideo(videoUrl: videoUrl, description: desc ?? '');
     }
+
+    // 서버에서 최신 피드도 비동기로 갱신 (실패해도 무시)
+    ref.read(feedNotifierProvider.notifier).reload().ignore();
+
     if (!mounted) return;
     context.go(RoutePaths.profile);
   }

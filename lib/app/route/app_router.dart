@@ -6,8 +6,10 @@ import '../../presentation/feed/view/feed_page.dart';
 import '../../presentation/friends/view/friends_page.dart';
 import '../../presentation/main/main_shell.dart';
 import '../../presentation/notifications/view/notifications_page.dart';
+import '../../presentation/profile/view/profile_edit_page.dart';
 import '../../presentation/profile/view/profile_page.dart';
 import '../../presentation/publish/view/publish_page.dart';
+import '../../presentation/settings/view/settings_page.dart';
 import '../../presentation/user_profile/view/user_profile_page.dart';
 import 'route_paths.dart';
 
@@ -35,6 +37,22 @@ GoRouter createRouter() {
           final filePath = state.uri.queryParameters['filePath'] ?? '';
           return PublishPage(videoFilePath: filePath);
         },
+      ),
+      // 프로필 편집
+      GoRoute(
+        path: RoutePaths.profileEdit,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, String>? ?? {};
+          return ProfileEditPage(
+            initialNickname: extra['nickname'] ?? '',
+            initialBio: extra['bio'] ?? '',
+          );
+        },
+      ),
+      // 설정
+      GoRoute(
+        path: RoutePaths.settings,
+        builder: (context, state) => const SettingsPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

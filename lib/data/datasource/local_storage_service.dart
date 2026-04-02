@@ -9,6 +9,9 @@ class LocalStorageService implements LocalStorageRepository {
   static const _likedCommentIdsKey = 'liked_comment_ids';
   static const _dislikedCommentIdsKey = 'disliked_comment_ids';
   static const _userCommentsKey = 'user_comments';
+  static const _profileNicknameKey = 'profile_nickname';
+  static const _profileBioKey = 'profile_bio';
+  static const _notificationEnabledKey = 'notification_enabled';
 
   final SharedPreferences _prefs;
 
@@ -72,5 +75,35 @@ class LocalStorageService implements LocalStorageRepository {
   @override
   Future<void> saveUserCommentsJson(String json) {
     return _prefs.setString(_userCommentsKey, json);
+  }
+
+  @override
+  String getProfileNickname() {
+    return _prefs.getString(_profileNicknameKey) ?? '';
+  }
+
+  @override
+  Future<void> saveProfileNickname(String nickname) {
+    return _prefs.setString(_profileNicknameKey, nickname);
+  }
+
+  @override
+  String getProfileBio() {
+    return _prefs.getString(_profileBioKey) ?? '';
+  }
+
+  @override
+  Future<void> saveProfileBio(String bio) {
+    return _prefs.setString(_profileBioKey, bio);
+  }
+
+  @override
+  bool getNotificationEnabled() {
+    return _prefs.getBool(_notificationEnabledKey) ?? true;
+  }
+
+  @override
+  Future<void> saveNotificationEnabled({required bool enabled}) {
+    return _prefs.setBool(_notificationEnabledKey, enabled);
   }
 }

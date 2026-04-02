@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../app/route/route_paths.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/constants/app_strings.dart';
@@ -15,13 +17,10 @@ class ProfileHeader extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 8),
-        // 프로필 아바타
         _buildAvatar(),
         const SizedBox(height: 12),
-        // 이름 + 편집 버튼
-        _buildNameRow(),
+        _buildNameRow(context),
         const SizedBox(height: 4),
-        // @user_id
         Text('@${user.id}', style: AppTextStyles.profileId),
       ],
     );
@@ -62,7 +61,7 @@ class ProfileHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildNameRow() {
+  Widget _buildNameRow(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -73,17 +72,26 @@ class ProfileHeader extends StatelessWidget {
         const SizedBox(width: 4),
         const Icon(Icons.keyboard_arrow_down, size: 20, color: AppColors.white),
         const SizedBox(width: 12),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.gray,
-            borderRadius: BorderRadius.circular(4),
+        GestureDetector(
+          onTap: () => context.push(
+            RoutePaths.profileEdit,
+            extra: {
+              'nickname': user.nickname,
+              'bio': user.bio,
+            },
           ),
-          child: Text(
-            AppStrings.profileEdit,
-            style: AppTextStyles.profileLabel.copyWith(
-              color: AppColors.white,
-              fontWeight: FontWeight.w600,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.gray,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              AppStrings.profileEdit,
+              style: AppTextStyles.profileLabel.copyWith(
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ),

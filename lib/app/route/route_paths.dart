@@ -8,6 +8,8 @@ abstract final class RoutePaths {
   static const userProfile = '/user/:userId';
 
   static const publish = '/publish';
+  static const profileEdit = '/profile/edit';
+  static const settings = '/settings';
 
   static String userProfilePath(String userId) => '/user/$userId';
 }

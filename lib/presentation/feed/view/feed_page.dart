@@ -48,16 +48,31 @@ class _FeedPageState extends ConsumerState<FeedPage> {
     }
   }
 
-  PageController _getPageController(int videoCount, FeedTab tab) {
+  int _midStartForCount(int videoCount) {
+    if (videoCount <= 0) return 0;
+    return (_virtualPageCount ~/ 2) -
+        ((_virtualPageCount ~/ 2) % videoCount);
+  }
+
+  PageController _getPageController(
+    int videoCount,
+    FeedTab tab, {
+    int initialIndex = 0,
+  }) {
     if (_pageController == null || _currentTab != tab) {
       _pageController?.dispose();
-      final midStart = videoCount > 0
-          ? (_virtualPageCount ~/ 2) - ((_virtualPageCount ~/ 2) % videoCount)
-          : 0;
+      final midStart = _midStartForCount(videoCount) + initialIndex;
       _pageController = PageController(initialPage: midStart);
       _currentTab = tab;
     }
     return _pageController!;
+  }
+
+  void _jumpToIndex(int realIndex, int videoCount) {
+    if (_pageController == null || !_pageController!.hasClients) return;
+    if (videoCount <= 0) return;
+    final midStart = _midStartForCount(videoCount);
+    _pageController!.jumpToPage(midStart + realIndex);
   }
 
   void _onPageChanged(int loopIndex, int totalVideos) {
@@ -67,6 +82,21 @@ class _FeedPageState extends ConsumerState<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 외부에서 currentIndex가 변경되면 PageController 점프
+    ref.listen(feedNotifierProvider, (prev, next) {
+      final prevIndex = prev?.valueOrNull?.currentIndex;
+      final nextIndex = next.valueOrNull?.currentIndex;
+      final videoCount = next.valueOrNull?.displayVideos.length ?? 0;
+      if (prevIndex != null &&
+          nextIndex != null &&
+          prevIndex != nextIndex &&
+          videoCount > 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _jumpToIndex(nextIndex, videoCount);
+        });
+      }
+    });
+
     final feedAsync = ref.watch(feedNotifierProvider);
 
     return Scaffold(
@@ -114,6 +144,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                 controller: _getPageController(
                   displayVideos.length,
                   feedState.selectedTab,
+                  initialIndex: feedState.currentIndex,
                 ),
                 scrollDirection: Axis.vertical,
                 itemCount: _virtualPageCount,

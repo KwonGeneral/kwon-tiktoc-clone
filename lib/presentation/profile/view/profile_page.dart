@@ -6,6 +6,8 @@ import '../../../app/route/route_paths.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../domain/entity/video.dart';
+import '../../feed/provider/feed_provider.dart';
 import '../provider/profile_provider.dart';
 import '../widget/profile_header.dart';
 import '../widget/profile_stats.dart';
@@ -43,7 +45,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const SizedBox(height: 16),
               ProfileStats(user: user),
               const SizedBox(height: 16),
-              _buildBioRow(user.bio),
+              _buildBioRow(user.bio, user.nickname),
               const SizedBox(height: 16),
               ProfileTabBar(
                 selectedIndex: _selectedTabIndex,
@@ -61,20 +63,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     return AppBar(
       backgroundColor: AppColors.black,
       elevation: 0,
-      leadingWidth: 80,
-      leading: const Padding(
-        padding: EdgeInsets.only(left: 16),
-        child: Row(
-          children: [
-            Icon(Icons.person_add_outlined, color: AppColors.white, size: 24),
-          ],
-        ),
-      ),
+      automaticallyImplyLeading: false,
       actions: [
-        const Icon(Icons.more_horiz, color: AppColors.white, size: 24),
-        const SizedBox(width: 8),
-        const Icon(Icons.send_outlined, color: AppColors.white, size: 24),
-        const SizedBox(width: 8),
         GestureDetector(
           onTap: () => context.push(RoutePaths.settings),
           child: const Icon(Icons.menu, color: AppColors.white, size: 24),
@@ -84,7 +74,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     );
   }
 
-  Widget _buildBioRow(String bio) {
+  Widget _buildBioRow(String bio, String nickname) {
     if (bio.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -104,18 +94,25 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.gray,
-                borderRadius: BorderRadius.circular(4),
+            child: GestureDetector(
+              onTap: () => context.push(
+                RoutePaths.profileEdit,
+                extra: {'nickname': nickname, 'bio': ''},
               ),
-              child: Text(
-                AppStrings.profileAddBio,
-                style: AppTextStyles.profileLabel.copyWith(
-                  color: AppColors.whiteSecondary,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.gray,
+                  borderRadius: BorderRadius.circular(4),
                 ),
-                overflow: TextOverflow.ellipsis,
+                child: Text(
+                  AppStrings.profileAddBio,
+                  style: AppTextStyles.profileLabel.copyWith(
+                    color: AppColors.whiteSecondary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ),
@@ -176,7 +173,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         showUploadButton: true,
       );
     }
-    return ProfileVideoGrid(videos: videos);
+    return ProfileVideoGrid(videos: videos, onVideoTap: _navigateToVideo);
   }
 
   Widget _buildBookmarksTab() {
@@ -187,7 +184,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         message: AppStrings.profileEmptyBookmarks,
       );
     }
-    return ProfileVideoGrid(videos: videos);
+    return ProfileVideoGrid(videos: videos, onVideoTap: _navigateToVideo);
   }
 
   Widget _buildLikesTab() {
@@ -198,7 +195,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         message: AppStrings.profileEmptyLikes,
       );
     }
-    return ProfileVideoGrid(videos: videos);
+    return ProfileVideoGrid(videos: videos, onVideoTap: _navigateToVideo);
+  }
+
+  void _navigateToVideo(Video video) {
+    final feedState = ref.read(feedNotifierProvider).valueOrNull;
+    if (feedState == null) return;
+
+    final index = feedState.videos.indexWhere((v) => v.id == video.id);
+    if (index < 0) return;
+
+    ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
+    context.go(RoutePaths.feed);
   }
 
   Widget _buildEmptyState({

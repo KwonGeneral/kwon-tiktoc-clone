@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/route/route_paths.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/constants/app_strings.dart';
@@ -50,10 +51,6 @@ class UserProfilePage extends ConsumerWidget {
         ),
         title: Text(nickname, style: AppTextStyles.profileName),
         centerTitle: true,
-        actions: const [
-          Icon(Icons.more_horiz, color: AppColors.white, size: 24),
-          SizedBox(width: 16),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -102,35 +99,18 @@ class UserProfilePage extends ConsumerWidget {
                   bottom: BorderSide(color: AppColors.divider, width: 0.5),
                 ),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom:
-                              BorderSide(color: AppColors.white, width: 1.5),
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.grid_view,
-                        color: AppColors.white,
-                        size: 22,
-                      ),
-                    ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppColors.white, width: 1.5),
                   ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: const Icon(
-                        Icons.favorite_border,
-                        color: AppColors.whiteSecondary,
-                        size: 22,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                child: const Icon(
+                  Icons.grid_view,
+                  color: AppColors.white,
+                  size: 22,
+                ),
               ),
             ),
             // 영상 그리드
@@ -155,7 +135,19 @@ class UserProfilePage extends ConsumerWidget {
                 ),
               )
             else
-              UserVideoGrid(videos: userVideos),
+              UserVideoGrid(
+                videos: userVideos,
+                onVideoTap: (video) {
+                  final index = feedState.videos.indexWhere(
+                    (v) => v.id == video.id,
+                  );
+                  if (index < 0) return;
+                  ref
+                      .read(feedNotifierProvider.notifier)
+                      .updateCurrentIndex(index);
+                  context.go(RoutePaths.feed);
+                },
+              ),
           ],
         ),
       ),
@@ -176,60 +168,25 @@ class UserProfilePage extends ConsumerWidget {
   Widget _buildActionButtons(WidgetRef ref, bool isFollowing) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 팔로우/팔로잉 버튼
-          GestureDetector(
-            onTap: () {
-              ref.read(feedNotifierProvider.notifier).toggleFollow(userId);
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
-              decoration: BoxDecoration(
-                color: isFollowing ? AppColors.gray : AppColors.primary,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                isFollowing
-                    ? AppStrings.userProfileFollowing
-                    : AppStrings.userProfileFollow,
-                style: AppTextStyles.description.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+      child: GestureDetector(
+        onTap: () {
+          ref.read(feedNotifierProvider.notifier).toggleFollow(userId);
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 10),
+          decoration: BoxDecoration(
+            color: isFollowing ? AppColors.gray : AppColors.primary,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            isFollowing
+                ? AppStrings.userProfileFollowing
+                : AppStrings.userProfileFollow,
+            style: AppTextStyles.description.copyWith(
+              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(width: 8),
-          // 메시지 버튼
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.gray,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              AppStrings.userProfileMessage,
-              style: AppTextStyles.description.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          // 추천 버튼
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.gray,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Icon(
-              Icons.person_add_outlined,
-              color: AppColors.white,
-              size: 20,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

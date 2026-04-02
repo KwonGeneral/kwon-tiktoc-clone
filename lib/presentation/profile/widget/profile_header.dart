@@ -66,11 +66,7 @@ class ProfileHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.lock, size: 16, color: AppColors.white),
-        const SizedBox(width: 4),
         Text(user.nickname, style: AppTextStyles.profileName),
-        const SizedBox(width: 4),
-        const Icon(Icons.keyboard_arrow_down, size: 20, color: AppColors.white),
         const SizedBox(width: 12),
         GestureDetector(
           onTap: () => context.push(

@@ -1,6 +1,5 @@
 abstract final class AppStrings {
   // Feed 탭
-  static const feedTabExplore = '탐색';
   static const feedTabFollowing = '팔로잉';
   static const feedTabRecommend = '추천';
 

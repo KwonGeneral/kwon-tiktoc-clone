@@ -202,8 +202,7 @@ class VideoRemoteDataSource implements VideoDataSource {
       await http.MultipartFile.fromPath('video', filePath),
     );
 
-    // 파일 크기 기반 진행률 시뮬레이션 (http 패키지는 실제 업로드 진행률 미지원)
-    final fileSize = await file.length();
+    // 진행률 시뮬레이션 (http 패키지는 실제 업로드 진행률 미지원)
     onProgress?.call(0.0);
 
     final streamedResponse = await request.send();
@@ -216,7 +215,7 @@ class VideoRemoteDataSource implements VideoDataSource {
       throw Exception('업로드 실패: ${response.statusCode}');
     }
 
-    debugPrint('업로드 완료: $fileSize bytes');
+    debugPrint('업로드 완료: ${file.lengthSync()} bytes');
 
     // 캐시 초기화하여 다음 피드 로드 시 새 영상 포함
     _cachedVideos = null;

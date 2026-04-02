@@ -27,7 +27,9 @@ class _VideoDescriptionState extends State<VideoDescription> {
         Row(
           children: [
             Text(
-              '@user_${widget.video.userId}',
+              widget.video.username.isNotEmpty
+                  ? '@${widget.video.username}'
+                  : '@user_${widget.video.userId}',
               style: AppTextStyles.username,
             ),
             const SizedBox(width: 4),

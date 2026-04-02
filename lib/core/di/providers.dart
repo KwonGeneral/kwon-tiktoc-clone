@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:kwon_tiktoc_clone/data/datasource/mock_video_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/video_datasource.dart';
+import 'package:kwon_tiktoc_clone/data/datasource/video_remote_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/repository/user_repository_impl.dart';
 import 'package:kwon_tiktoc_clone/data/repository/video_repository_impl.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
@@ -17,7 +17,7 @@ part 'providers.g.dart';
 // DataSource
 @Riverpod(keepAlive: true)
 VideoDataSource videoDataSource(Ref ref) {
-  return MockVideoDataSource();
+  return VideoRemoteDataSource();
 }
 
 // Repositories

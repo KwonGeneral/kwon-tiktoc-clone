@@ -31,6 +31,7 @@ class SideActionBar extends StatelessWidget {
           // 프로필 아바타 + 팔로우 뱃지
           _ProfileAvatar(
             userId: video.userId,
+            avatarUrl: video.avatarUrl,
             isFollowing: isFollowing,
             onTap: onFollowTap,
           ),
@@ -76,11 +77,13 @@ class SideActionBar extends StatelessWidget {
 class _ProfileAvatar extends StatelessWidget {
   const _ProfileAvatar({
     required this.userId,
+    this.avatarUrl = '',
     this.isFollowing = false,
     this.onTap,
   });
 
   final String userId;
+  final String avatarUrl;
   final bool isFollowing;
   final VoidCallback? onTap;
 
@@ -103,7 +106,21 @@ class _ProfileAvatar extends StatelessWidget {
               ),
               color: AppColors.gray,
             ),
-            child: const Icon(Icons.person, color: AppColors.white, size: 24),
+            child: avatarUrl.isNotEmpty
+                ? ClipOval(
+                    child: Image.network(
+                      avatarUrl,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const Icon(
+                        Icons.person,
+                        color: AppColors.white,
+                        size: 24,
+                      ),
+                    ),
+                  )
+                : const Icon(Icons.person, color: AppColors.white, size: 24),
           ),
           // 팔로우 + 뱃지
           Positioned(

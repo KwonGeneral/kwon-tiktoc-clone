@@ -6,7 +6,7 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$videoDataSourceHash() => r'67f61fe5c03741f275c7c0bd09b0b6b27b942c5f';
+String _$videoDataSourceHash() => r'516cf2bbd00775b4eb76b263afdb46bc498a15a1';
 
 /// See also [videoDataSource].
 @ProviderFor(videoDataSource)

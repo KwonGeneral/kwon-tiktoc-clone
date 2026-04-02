@@ -1,0 +1,163 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:kwon_tiktoc_clone/data/datasource/video_datasource.dart';
+import 'package:kwon_tiktoc_clone/data/model/comment_model.dart';
+import 'package:kwon_tiktoc_clone/data/model/video_model.dart';
+
+class VideoRemoteDataSource implements VideoDataSource {
+  VideoRemoteDataSource({http.Client? client})
+      : _client = client ?? http.Client();
+
+  final http.Client _client;
+
+  static const _baseUrl = 'https://api.myfortie.com';
+
+  List<VideoModel>? _cachedVideos;
+
+  final Map<String, List<CommentModel>> _comments = {};
+
+  static const _sampleComments = [
+    '와 대박 ㅋㅋㅋ',
+    '이거 진짜 잘했다 👏',
+    '나도 해보고 싶다!',
+    '팔로우 했어요~',
+    '다음 영상도 기대할게요 ❤️',
+  ];
+
+  static const _musicNames = [
+    'Original Sound - @{username}',
+    'Blinding Lights - The Weeknd',
+    'Lo-fi Chill Beats',
+    'Happy Vibes - Original',
+    'Cooking ASMR - Original',
+    'Nature Ambience',
+    'Peaceful Morning',
+    'City Lights - Original',
+    'Sunset Melody',
+    'Workout Mix 2024',
+    'Drawing Time - art_studio',
+    'Skater Anthem',
+    'Golden Hour - sunset_chaser',
+  ];
+
+  Future<List<VideoModel>> _fetchVideos() async {
+    if (_cachedVideos != null) return _cachedVideos!;
+
+    final response = await _client.get(Uri.parse('$_baseUrl/videos'));
+
+    if (response.statusCode != 200) {
+      throw Exception('API 요청 실패: ${response.statusCode}');
+    }
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    final videosJson = json['videos'] as List<dynamic>;
+    final now = DateTime.now();
+
+    _cachedVideos = videosJson.asMap().entries.map((entry) {
+      final index = entry.key;
+      final v = entry.value as Map<String, dynamic>;
+      final metadata = v['metadata'] as Map<String, dynamic>;
+      final username = metadata['username'] as String? ?? '';
+
+      final musicName = _musicNames[index % _musicNames.length]
+          .replaceAll('{username}', username);
+
+      final tags = metadata['tags'] as String? ?? '';
+      final description = metadata['description'] as String? ?? '';
+      final hashTags =
+          tags.isNotEmpty
+              ? tags.split(',').map((t) => '#${t.trim()}').join(' ')
+              : '';
+      final fullDescription =
+          hashTags.isNotEmpty ? '$description $hashTags' : description;
+
+      return VideoModel(
+        id: 'video_${v['id']}',
+        userId: metadata['userId'] as String? ?? 'user_${v['id']}',
+        videoUrl: v['url'] as String,
+        description: fullDescription,
+        musicName: musicName,
+        username: username,
+        nickname: metadata['nickname'] as String? ?? '',
+        avatarUrl: metadata['avatarUrl'] as String? ?? '',
+        likeCount: (index + 1) * 55000,
+        commentCount: (index + 1) * 4170,
+        bookmarkCount: (index + 1) * 24700,
+        shareCount: (index + 1) * 13700,
+        createdAt: now.subtract(Duration(hours: index * 3)),
+      );
+    }).toList();
+
+    debugPrint('VideoRemoteDataSource: ${_cachedVideos!.length}개 영상 로드 완료');
+    return _cachedVideos!;
+  }
+
+  @override
+  Future<List<VideoModel>> getVideoFeed({int page = 0}) async {
+    final videos = await _fetchVideos();
+
+    const pageSize = 10;
+    final start = page * pageSize;
+    if (start >= videos.length) return [];
+
+    final end = (start + pageSize).clamp(0, videos.length);
+    return videos.sublist(start, end);
+  }
+
+  @override
+  Future<VideoModel> toggleLike(String videoId) async {
+    final videos = await _fetchVideos();
+    final index = videos.indexWhere((v) => v.id == videoId);
+    if (index == -1) throw Exception('Video not found: $videoId');
+
+    final video = videos[index];
+    final updated = video.copyWith(
+      isLiked: !video.isLiked,
+      likeCount: video.isLiked ? video.likeCount - 1 : video.likeCount + 1,
+    );
+    _cachedVideos![index] = updated;
+    return updated;
+  }
+
+  @override
+  Future<VideoModel> toggleBookmark(String videoId) async {
+    final videos = await _fetchVideos();
+    final index = videos.indexWhere((v) => v.id == videoId);
+    if (index == -1) throw Exception('Video not found: $videoId');
+
+    final video = videos[index];
+    final updated = video.copyWith(
+      isBookmarked: !video.isBookmarked,
+      bookmarkCount:
+          video.isBookmarked
+              ? video.bookmarkCount - 1
+              : video.bookmarkCount + 1,
+    );
+    _cachedVideos![index] = updated;
+    return updated;
+  }
+
+  @override
+  Future<List<CommentModel>> getComments(String videoId) async {
+    if (_comments.containsKey(videoId)) return _comments[videoId]!;
+
+    final now = DateTime.now();
+    final comments = List.generate(5, (i) {
+      return CommentModel(
+        id: 'comment_${videoId}_$i',
+        videoId: videoId,
+        userId: 'commenter_$i',
+        userName: '유저${i + 1}',
+        text: _sampleComments[i % _sampleComments.length],
+        likeCount: (i + 1) * 120,
+        createdAt: now.subtract(Duration(hours: i)),
+      );
+    });
+
+    _comments[videoId] = comments;
+    return comments;
+  }
+}

@@ -12,10 +12,9 @@ class TopTabBar extends StatefulWidget {
 }
 
 class _TopTabBarState extends State<TopTabBar> {
-  int _selectedIndex = 2; // 기본: 추천
+  int _selectedIndex = 1; // 기본: 추천
 
   static const _tabs = [
-    AppStrings.feedTabExplore,
     AppStrings.feedTabFollowing,
     AppStrings.feedTabRecommend,
   ];
@@ -60,13 +59,6 @@ class _TopTabBarState extends State<TopTabBar> {
               ),
             ],
 
-            // 검색 아이콘
-            const SizedBox(width: 16),
-            const Icon(
-              Icons.search,
-              color: AppColors.white,
-              size: 24,
-            ),
           ],
         ),
       ),

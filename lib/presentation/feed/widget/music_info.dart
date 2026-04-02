@@ -53,6 +53,7 @@ class _MusicInfoState extends State<MusicInfo>
                     '${widget.musicName}    ${widget.musicName}',
                     style: AppTextStyles.musicInfo,
                     maxLines: 1,
+                    softWrap: false,
                   ),
                 ],
               ),

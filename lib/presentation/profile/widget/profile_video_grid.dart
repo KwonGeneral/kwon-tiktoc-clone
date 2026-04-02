@@ -32,7 +32,7 @@ class ProfileVideoGrid extends StatelessWidget {
         final video = videos[index];
         return GestureDetector(
           onTap: () => onVideoTap?.call(video),
-          child: _VideoThumbnail(video: video),
+          child: _VideoThumbnail(key: ValueKey(video.id), video: video),
         );
       },
     );
@@ -40,7 +40,7 @@ class ProfileVideoGrid extends StatelessWidget {
 }
 
 class _VideoThumbnail extends StatefulWidget {
-  const _VideoThumbnail({required this.video});
+  const _VideoThumbnail({super.key, required this.video});
 
   final Video video;
 
@@ -71,15 +71,21 @@ class _VideoThumbnailState extends State<_VideoThumbnail>
     _controller = controller;
 
     try {
-      await controller.initialize();
+      await controller.initialize().timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() => _initialized = true);
       } else {
         controller.dispose();
+        _controller = null;
       }
     } catch (_) {
-      if (!mounted) {
+      if (mounted) {
+        // 초기화 실패 시 placeholder 유지
+        _controller?.dispose();
+        _controller = null;
+      } else {
         controller.dispose();
+        _controller = null;
       }
     }
   }

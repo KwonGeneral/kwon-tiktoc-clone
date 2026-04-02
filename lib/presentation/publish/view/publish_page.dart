@@ -32,7 +32,8 @@ class _PublishPageState extends ConsumerState<PublishPage> {
   }
 
   void _onPublish() {
-    FocusScope.of(context).unfocus();
+    _descriptionFocusNode.unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -63,6 +64,15 @@ class _PublishPageState extends ConsumerState<PublishPage> {
           videoFilePath: widget.videoFilePath,
           description: _descriptionController.text,
         );
+  }
+
+  Future<void> _onUploadSuccess() async {
+    // 성공 메시지 잠시 표시 후 피드 리로드 + 프로필 이동
+    await Future<void>.delayed(const Duration(milliseconds: 800));
+    if (!mounted) return;
+    await ref.read(feedNotifierProvider.notifier).reload();
+    if (!mounted) return;
+    context.go(RoutePaths.profile);
   }
 
   void _onHashtagTap() {
@@ -96,12 +106,9 @@ class _PublishPageState extends ConsumerState<PublishPage> {
     final publishState = ref.watch(publishNotifierProvider);
 
     ref.listen(publishNotifierProvider, (prev, next) {
-      if (next.status == PublishStatus.success) {
-        ref.read(feedNotifierProvider.notifier).addUploadedVideo(
-              videoUrl: widget.videoFilePath,
-              description: _descriptionController.text,
-            );
-        context.go(RoutePaths.profile);
+      if (prev?.status != PublishStatus.success &&
+          next.status == PublishStatus.success) {
+        _onUploadSuccess();
       }
     });
 

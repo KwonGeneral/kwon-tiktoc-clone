@@ -224,6 +224,12 @@ class FeedNotifier extends _$FeedNotifier {
     );
   }
 
+  /// 피드를 API에서 다시 로드 (업로드 후 서버 데이터 반영)
+  Future<void> reload() async {
+    final newState = await _loadInitial();
+    state = AsyncData(newState);
+  }
+
   void incrementCommentCount(String videoId) {
     final currentState = state.valueOrNull;
     if (currentState == null) return;

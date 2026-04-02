@@ -7,7 +7,7 @@ part of 'video_player_manager.dart';
 // **************************************************************************
 
 String _$videoPlayerManagerHash() =>
-    r'3860abc3da6757f918b567ab45ec5a6c068d6928';
+    r'367e6ee1b15be219a9b716ca63e79ff1091485e2';
 
 /// 비디오 플레이어 컨트롤러를 중앙 관리하는 Manager.
 /// 현재 페이지 ± 1 범위의 컨트롤러만 유지하여 메모리를 관리한다.

@@ -284,7 +284,70 @@
 
 ---
 
-## Phase 21E: 최종 폴리시
+## Fix 21E: 팔로잉 + 게시 + 알림 + 비디오 안정성 ✅ (완료)
+
+### 작업 내용 (7개 버그 수정 완료)
+- [x] 팔로잉 탭 TopTabBar 사라짐 → Stack으로 빈 상태에서도 표시
+- [x] 게시 키보드 올라옴 → FocusManager + FocusNode unfocus
+- [x] 게시 후 프로필 미이동 → feedNotifier.reload() → 프로필 이동
+- [x] 앱 재실행 시 업로드 영상 → reload() + API 리로드로 서버 URL 반영
+- [x] 프로필 탭 전환 그리드 미갱신 → ValueKey로 탭별 위젯 트리 분리
+- [x] 알림 설정 동기화 → OFF→ON 시 AppSettings.openAppSettings(type: notification)
+- [x] 비디오 무한로딩 → dispose 레이스 컨디션 보호, 10초 타임아웃, disposed set 추적
+
+---
+
+## Fix 21F: HLS 전환 + 썸네일 + 비디오 최적화
+
+### 배경
+API V3에서 HLS 스트리밍(.m3u8) + 썸네일(.jpg)이 추가됨.
+MP4 직접 재생 → HLS 스트리밍으로 전환하여 재생 지연을 1~3초 → 0.2~0.5초로 단축.
+
+### API 정의서
+- /Users/kwontaewan/Downloads/VIDEO_API_SPEC_V3.md
+
+### 작업 내용
+- [ ] Video Entity에 hlsUrl, thumbnailUrl 필드 추가 + build_runner 재생성
+- [ ] VideoRemoteDataSource에서 hlsUrl, thumbnailUrl 파싱
+- [ ] VideoPlayerController: MP4 URL → HLS URL(.m3u8)로 변경
+- [ ] HLS 사용 불가 시 MP4 fallback 처리 (업로드된 새 영상은 HLS 없을 수 있음)
+- [ ] 영상 로딩 중 thumbnailUrl로 첫 프레임 이미지 표시 (검정 화면 대신)
+- [ ] 프리로딩 범위 ±1 → ±2로 확대
+- [ ] 비디오 무한로딩 버그 수정 (MediaCodec dead thread → dispose 타이밍 개선)
+- [ ] 업로드 응답 파싱: Future<void> → Future<Video>로 변경, 서버 반환값 사용
+
+### 완료 기준
+- HLS로 재생 시 스와이프 후 0.5초 이내 재생 시작
+- 로딩 중 썸네일 이미지 표시 (검정 화면 없음)
+- 무한로딩 버그 없음
+- 업로드 후 서버 응답(Video 정보) 정상 수신
+
+---
+
+## Fix 21G: 남은 버그 (21E에서 재발 또는 미해결 시)
+
+### 작업 내용
+- [ ] 게시 버튼 시 키보드 안 올라오게 (FocusManager.instance.primaryFocus?.unfocus() 게시 함수 시작부에)
+- [ ] 게시 완료 후: 서버 반환 Video를 피드에 추가 → 프로필로 이동 → "내 영상" 탭에 표시
+- [ ] 앱 재실행 시 업로드 영상 피드에 표시 (API 재조회로 자동 포함 확인)
+- [ ] 팔로잉 탭: 팔로잉한 유저 영상 정상 필터링 + 빈 상태에서 탭바 사라지지 않게
+- [ ] 프로필 탭 전환 시 영상 그리드 갱신 (좋아요/북마크 탭 전환 시 데이터 변경)
+- [ ] 알림 설정: 시스템 알림 OFF → 앱 내 토글 OFF 연동, ON 시 시스템 설정창 이동
+
+### 현재 앱 문제 이미지 (QA)
+- /Users/kwontaewan/Downloads/qa/팔로잉을 했는데도 팔로잉 영상이 없음.jpeg
+- /Users/kwontaewan/Downloads/qa/게시할때 키보드가 올라옴.jpeg
+- /Users/kwontaewan/Downloads/qa/동영상 게시 후 내 영상에 없음.jpeg
+
+### 완료 기준
+- 게시 → 프로필 내 영상에 표시
+- 팔로잉 탭 정상 + 탭바 유지
+- 프로필 탭 전환 시 갱신
+- 알림 설정 시스템과 동기화
+
+---
+
+## Phase 21H: 최종 폴리시
 
 ### 작업 내용
 - [ ] 전체 앱 통합 테스트

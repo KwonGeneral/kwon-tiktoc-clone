@@ -57,8 +57,9 @@ class CameraNotifier extends _$CameraNotifier {
     _timer = Timer.periodic(const Duration(milliseconds: 100), (_) {
       final newElapsed = state.elapsed + const Duration(milliseconds: 100);
       if (newElapsed >= AppConstants.maxRecordingDuration) {
+        _stopTimer();
         state = state.copyWith(elapsed: AppConstants.maxRecordingDuration);
-        // 자동 정지는 UI에서 처리 (CameraController 접근 필요)
+        // 자동 정지는 UI에서 ref.listen으로 처리 (CameraController 접근 필요)
       } else {
         state = state.copyWith(elapsed: newElapsed);
       }

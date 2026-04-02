@@ -45,6 +45,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     if (state == AppLifecycleState.inactive) {
       _controller?.dispose();
+      _controller = null;
     } else if (state == AppLifecycleState.resumed) {
       _initializeCamera();
     }
@@ -237,10 +238,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
     }
   }
 
-  Future<void> _handleAutoStop() async {
-    await _stopRecording();
-  }
-
   @override
   Widget build(BuildContext context) {
     final cameraState = ref.watch(cameraNotifierProvider);
@@ -249,7 +246,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
     ref.listen(cameraNotifierProvider, (prev, next) {
       if (next.status == RecordingStatus.recording &&
           next.elapsed >= AppConstants.maxRecordingDuration) {
-        _handleAutoStop();
+        _stopRecording();
       }
     });
 
@@ -267,13 +264,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
               : _CameraBody(
                   controller: _controller!,
                   cameraState: cameraState,
-                  onClose: () {
-                    if (cameraState.status != RecordingStatus.idle) {
-                      _handleCancel();
-                    } else {
-                      context.pop();
-                    }
-                  },
+                  onClose: _handleCancel,
                   onSwitchCamera: _switchCamera,
                   onStartRecording: _startRecording,
                   onPauseRecording: _pauseRecording,

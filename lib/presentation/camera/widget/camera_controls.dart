@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/constants/app_strings.dart';
 import '../provider/camera_state.dart';
 
 class CameraControls extends StatelessWidget {
@@ -180,7 +181,7 @@ class _CancelButton extends StatelessWidget {
           Icon(Icons.close, color: AppColors.white, size: 28),
           SizedBox(height: 4),
           Text(
-            '취소',
+            AppStrings.cameraCancel,
             style: TextStyle(color: AppColors.white, fontSize: 12),
           ),
         ],

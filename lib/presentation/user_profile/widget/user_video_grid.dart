@@ -6,11 +6,7 @@ import '../../../core/utils/format_utils.dart';
 import '../../../domain/entity/video.dart';
 
 class UserVideoGrid extends StatelessWidget {
-  const UserVideoGrid({
-    required this.videos,
-    this.onVideoTap,
-    super.key,
-  });
+  const UserVideoGrid({required this.videos, this.onVideoTap, super.key});
 
   final List<Video> videos;
   final void Function(Video video)? onVideoTap;
@@ -67,11 +63,7 @@ class _VideoThumbnail extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.play_arrow,
-                  color: AppColors.white,
-                  size: 16,
-                ),
+                const Icon(Icons.play_arrow, color: AppColors.white, size: 16),
                 const SizedBox(width: 2),
                 Text(
                   FormatUtils.compactNumber(video.likeCount),

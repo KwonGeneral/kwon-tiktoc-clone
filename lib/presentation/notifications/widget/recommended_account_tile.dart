@@ -98,11 +98,13 @@ class RecommendedAccountTile extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: onToggleFollow,
                 style: OutlinedButton.styleFrom(
-                  backgroundColor:
-                      isFollowed ? Colors.transparent : AppColors.primary,
+                  backgroundColor: isFollowed
+                      ? Colors.transparent
+                      : AppColors.primary,
                   side: BorderSide(
-                    color:
-                        isFollowed ? AppColors.whiteDisabled : AppColors.primary,
+                    color: isFollowed
+                        ? AppColors.whiteDisabled
+                        : AppColors.primary,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
@@ -114,8 +116,9 @@ class RecommendedAccountTile extends StatelessWidget {
                       ? AppStrings.friendsFollowing
                       : AppStrings.friendsFollow,
                   style: TextStyle(
-                    color:
-                        isFollowed ? AppColors.whiteSecondary : AppColors.white,
+                    color: isFollowed
+                        ? AppColors.whiteSecondary
+                        : AppColors.white,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),

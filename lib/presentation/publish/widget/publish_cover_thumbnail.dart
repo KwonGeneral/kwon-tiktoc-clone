@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_compress/video_compress.dart';
 
-
 class PublishCoverThumbnail extends StatefulWidget {
   const PublishCoverThumbnail({super.key, required this.videoFilePath});
 

@@ -19,7 +19,10 @@ class SettingsPage extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: AppColors.black,
         elevation: 0,
-        title: const Text(AppStrings.settingsTitle, style: AppTextStyles.username),
+        title: const Text(
+          AppStrings.settingsTitle,
+          style: AppTextStyles.username,
+        ),
         centerTitle: true,
         foregroundColor: AppColors.white,
       ),
@@ -40,9 +43,7 @@ class SettingsPage extends ConsumerWidget {
                     type: AppSettingsType.notification,
                   );
                 }
-                ref
-                    .read(notificationSettingNotifierProvider.notifier)
-                    .toggle();
+                ref.read(notificationSettingNotifierProvider.notifier).toggle();
               },
               activeTrackColor: AppColors.primary,
             ),

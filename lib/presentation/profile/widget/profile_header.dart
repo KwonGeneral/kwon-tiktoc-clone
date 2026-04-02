@@ -55,12 +55,12 @@ class ProfileHeader extends ConsumerWidget {
                     ),
                   )
                 : user.avatarUrl.isEmpty
-                    ? const Icon(
-                        Icons.person,
-                        size: 44,
-                        color: AppColors.whiteSecondary,
-                      )
-                    : null,
+                ? const Icon(
+                    Icons.person,
+                    size: 44,
+                    color: AppColors.whiteSecondary,
+                  )
+                : null,
           ),
           Positioned(
             bottom: -6,
@@ -154,9 +154,7 @@ class ProfileHeader extends ConsumerWidget {
     );
     if (image == null) return;
 
-    await ref
-        .read(profileImageNotifierProvider.notifier)
-        .upload(image.path);
+    await ref.read(profileImageNotifierProvider.notifier).upload(image.path);
   }
 
   Widget _buildNameRow(BuildContext context) {
@@ -169,10 +167,7 @@ class ProfileHeader extends ConsumerWidget {
         GestureDetector(
           onTap: () => context.push(
             RoutePaths.profileEdit,
-            extra: {
-              'nickname': user.nickname,
-              'bio': user.bio,
-            },
+            extra: {'nickname': user.nickname, 'bio': user.bio},
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

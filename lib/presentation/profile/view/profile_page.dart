@@ -6,10 +6,12 @@ import '../../../app/route/route_paths.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../domain/entity/post_image.dart';
 import '../../../domain/entity/video.dart';
 import '../../feed/provider/feed_provider.dart';
 import '../provider/profile_provider.dart';
 import '../widget/profile_header.dart';
+import '../widget/profile_image_grid.dart';
 import '../widget/profile_stats.dart';
 import '../widget/profile_tab_bar.dart';
 import '../widget/profile_video_grid.dart';
@@ -100,8 +102,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 extra: {'nickname': nickname, 'bio': ''},
               ),
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.gray,
                   borderRadius: BorderRadius.circular(4),
@@ -166,17 +170,29 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   Widget _buildMyVideosTab() {
     final videos = ref.watch(myVideosProvider);
-    if (videos.isEmpty) {
+    final images = ref.watch(myPostImagesProvider);
+    if (videos.isEmpty && images.isEmpty) {
       return _buildEmptyState(
         icon: Icons.photo_camera_back_outlined,
         message: AppStrings.profileEmptyMyVideos,
         showUploadButton: true,
       );
     }
-    return ProfileVideoGrid(
-      key: const ValueKey('my_videos'),
-      videos: videos,
-      onVideoTap: _navigateToVideo,
+    return Column(
+      children: [
+        if (videos.isNotEmpty)
+          ProfileVideoGrid(
+            key: const ValueKey('my_videos'),
+            videos: videos,
+            onVideoTap: _navigateToVideo,
+          ),
+        if (images.isNotEmpty)
+          ProfileImageGrid(
+            key: const ValueKey('my_images'),
+            images: images,
+            onImageTap: _navigateToImageDetail,
+          ),
+      ],
     );
   }
 
@@ -221,6 +237,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     context.go(RoutePaths.feed);
   }
 
+  void _navigateToImageDetail(PostImage image) {
+    context.push(RoutePaths.imageDetailPath(image.id), extra: image);
+  }
+
   Widget _buildEmptyState({
     required IconData icon,
     required String message,
@@ -248,16 +268,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               GestureDetector(
                 onTap: () => context.push(RoutePaths.camera),
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: Text(
                     AppStrings.profileUpload,
-                    style: AppTextStyles.description
-                        .copyWith(fontWeight: FontWeight.w600),
+                    style: AppTextStyles.description.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

@@ -19,12 +19,15 @@ class CameraPage extends ConsumerStatefulWidget {
   ConsumerState<CameraPage> createState() => _CameraPageState();
 }
 
+enum CameraMode { video, photo }
+
 class _CameraPageState extends ConsumerState<CameraPage>
     with WidgetsBindingObserver {
   CameraController? _controller;
   List<CameraDescription> _cameras = [];
   bool _isInitializing = true;
   String? _errorMessage;
+  CameraMode _cameraMode = CameraMode.video;
 
   @override
   void initState() {
@@ -75,8 +78,9 @@ class _CameraPageState extends ConsumerState<CameraPage>
   }
 
   CameraDescription _getCameraDescription(bool isFront) {
-    final direction =
-        isFront ? CameraLensDirection.front : CameraLensDirection.back;
+    final direction = isFront
+        ? CameraLensDirection.front
+        : CameraLensDirection.back;
     return _cameras.firstWhere(
       (c) => c.lensDirection == direction,
       orElse: () => _cameras.first,
@@ -169,6 +173,21 @@ class _CameraPageState extends ConsumerState<CameraPage>
     }
   }
 
+  Future<void> _takePhoto() async {
+    if (_controller == null || !_controller!.value.isInitialized) return;
+
+    try {
+      final file = await _controller!.takePicture();
+      if (mounted) {
+        context.push(
+          '${RoutePaths.publishImage}?filePath=${Uri.encodeComponent(file.path)}',
+        );
+      }
+    } catch (e) {
+      debugPrint('사진 촬영 실패: $e');
+    }
+  }
+
   Future<void> _handleCancel() async {
     final cameraState = ref.read(cameraNotifierProvider);
     if (cameraState.status == RecordingStatus.idle) {
@@ -233,21 +252,21 @@ class _CameraPageState extends ConsumerState<CameraPage>
               child: CircularProgressIndicator(color: AppColors.white),
             )
           : _errorMessage != null
-              ? _ErrorView(
-                  message: _errorMessage!,
-                  onBack: () => context.pop(),
-                )
-              : _CameraBody(
-                  controller: _controller!,
-                  cameraState: cameraState,
-                  onClose: _handleCancel,
-                  onSwitchCamera: _switchCamera,
-                  onStartRecording: _startRecording,
-                  onPauseRecording: _pauseRecording,
-                  onResumeRecording: _resumeRecording,
-                  onStopRecording: _stopRecording,
-                  onCancel: _handleCancel,
-                ),
+          ? _ErrorView(message: _errorMessage!, onBack: () => context.pop())
+          : _CameraBody(
+              controller: _controller!,
+              cameraState: cameraState,
+              cameraMode: _cameraMode,
+              onClose: _handleCancel,
+              onSwitchCamera: _switchCamera,
+              onStartRecording: _startRecording,
+              onPauseRecording: _pauseRecording,
+              onResumeRecording: _resumeRecording,
+              onStopRecording: _stopRecording,
+              onCancel: _handleCancel,
+              onTakePhoto: _takePhoto,
+              onModeChanged: (mode) => setState(() => _cameraMode = mode),
+            ),
     );
   }
 }
@@ -264,11 +283,18 @@ class _ErrorView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.videocam_off, color: AppColors.whiteDisabled, size: 64),
+          const Icon(
+            Icons.videocam_off,
+            color: AppColors.whiteDisabled,
+            size: 64,
+          ),
           const SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(color: AppColors.whiteSecondary, fontSize: 16),
+            style: const TextStyle(
+              color: AppColors.whiteSecondary,
+              fontSize: 16,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -286,6 +312,7 @@ class _CameraBody extends StatelessWidget {
   const _CameraBody({
     required this.controller,
     required this.cameraState,
+    required this.cameraMode,
     required this.onClose,
     required this.onSwitchCamera,
     required this.onStartRecording,
@@ -293,10 +320,13 @@ class _CameraBody extends StatelessWidget {
     required this.onResumeRecording,
     required this.onStopRecording,
     required this.onCancel,
+    required this.onTakePhoto,
+    required this.onModeChanged,
   });
 
   final CameraController controller;
   final CameraState cameraState;
+  final CameraMode cameraMode;
   final VoidCallback onClose;
   final VoidCallback onSwitchCamera;
   final VoidCallback onStartRecording;
@@ -304,6 +334,8 @@ class _CameraBody extends StatelessWidget {
   final VoidCallback onResumeRecording;
   final VoidCallback onStopRecording;
   final VoidCallback onCancel;
+  final VoidCallback onTakePhoto;
+  final ValueChanged<CameraMode> onModeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -387,30 +419,107 @@ class _CameraBody extends StatelessWidget {
           bottom: MediaQuery.of(context).padding.bottom + 40,
           left: 0,
           right: 0,
-          child: CameraControls(
-            status: cameraState.status,
-            elapsed: cameraState.elapsed,
-            onStartRecording: onStartRecording,
-            onPauseRecording: onPauseRecording,
-            onResumeRecording: onResumeRecording,
-            onStopRecording: onStopRecording,
-            onCancel: onCancel,
-          ),
+          child: cameraMode == CameraMode.photo
+              ? _PhotoCaptureButton(onTakePhoto: onTakePhoto)
+              : CameraControls(
+                  status: cameraState.status,
+                  elapsed: cameraState.elapsed,
+                  onStartRecording: onStartRecording,
+                  onPauseRecording: onPauseRecording,
+                  onResumeRecording: onResumeRecording,
+                  onStopRecording: onStopRecording,
+                  onCancel: onCancel,
+                ),
         ),
 
-        // 동영상 모드 라벨
-        Positioned(
-          bottom: MediaQuery.of(context).padding.bottom + 16,
-          left: 0,
-          right: 0,
-          child: const Center(
-            child: Text(
-              AppStrings.cameraVideoMode,
-              style: TextStyle(
-                color: AppColors.white,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
+        // 모드 전환 탭 (녹화 중이 아닐 때만)
+        if (cameraState.status == RecordingStatus.idle)
+          Positioned(
+            bottom: MediaQuery.of(context).padding.bottom + 16,
+            left: 0,
+            right: 0,
+            child: _CameraModeSwitcher(
+              currentMode: cameraMode,
+              onModeChanged: onModeChanged,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _PhotoCaptureButton extends StatelessWidget {
+  const _PhotoCaptureButton({required this.onTakePhoto});
+
+  final VoidCallback onTakePhoto;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GestureDetector(
+        onTap: onTakePhoto,
+        child: Container(
+          width: 72,
+          height: 72,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.white, width: 4),
+          ),
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CameraModeSwitcher extends StatelessWidget {
+  const _CameraModeSwitcher({
+    required this.currentMode,
+    required this.onModeChanged,
+  });
+
+  final CameraMode currentMode;
+  final ValueChanged<CameraMode> onModeChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () => onModeChanged(CameraMode.video),
+          child: Text(
+            AppStrings.cameraVideoMode,
+            style: TextStyle(
+              color: currentMode == CameraMode.video
+                  ? AppColors.white
+                  : AppColors.whiteSecondary,
+              fontSize: 13,
+              fontWeight: currentMode == CameraMode.video
+                  ? FontWeight.w600
+                  : FontWeight.normal,
+            ),
+          ),
+        ),
+        const SizedBox(width: 24),
+        GestureDetector(
+          onTap: () => onModeChanged(CameraMode.photo),
+          child: Text(
+            AppStrings.cameraPhotoMode,
+            style: TextStyle(
+              color: currentMode == CameraMode.photo
+                  ? AppColors.white
+                  : AppColors.whiteSecondary,
+              fontSize: 13,
+              fontWeight: currentMode == CameraMode.photo
+                  ? FontWeight.w600
+                  : FontWeight.normal,
             ),
           ),
         ),

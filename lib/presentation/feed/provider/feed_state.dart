@@ -25,9 +25,7 @@ sealed class FeedState with _$FeedState {
   /// 현재 탭에 맞는 영상 목록
   List<Video> get displayVideos {
     if (selectedTab == FeedTab.following) {
-      return videos
-          .where((v) => followedUserIds.contains(v.userId))
-          .toList();
+      return videos.where((v) => followedUserIds.contains(v.userId)).toList();
     }
     return videos;
   }

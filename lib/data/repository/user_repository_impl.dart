@@ -8,8 +8,7 @@ import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  UserRepositoryImpl({http.Client? client})
-    : _client = client ?? http.Client();
+  UserRepositoryImpl({http.Client? client}) : _client = client ?? http.Client();
 
   final http.Client _client;
 
@@ -180,9 +179,7 @@ class UserRepositoryImpl implements UserRepository {
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['userId'] = userId;
-    request.files.add(
-      await http.MultipartFile.fromPath('image', imagePath),
-    );
+    request.files.add(await http.MultipartFile.fromPath('image', imagePath));
 
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);

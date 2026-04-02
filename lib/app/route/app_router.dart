@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/entity/post_image.dart';
 import '../../presentation/camera/view/camera_page.dart';
 import '../../presentation/feed/view/feed_page.dart';
 import '../../presentation/friends/view/friends_page.dart';
+import '../../presentation/image_detail/view/image_detail_page.dart';
 import '../../presentation/main/main_shell.dart';
 import '../../presentation/notifications/view/notifications_page.dart';
 import '../../presentation/profile/view/profile_edit_page.dart';
 import '../../presentation/profile/view/profile_page.dart';
+import '../../presentation/publish/view/publish_image_page.dart';
 import '../../presentation/publish/view/publish_page.dart';
 import '../../presentation/settings/view/settings_page.dart';
 import '../../presentation/user_profile/view/user_profile_page.dart';
@@ -36,6 +39,22 @@ GoRouter createRouter() {
         builder: (context, state) {
           final filePath = state.uri.queryParameters['filePath'] ?? '';
           return PublishPage(videoFilePath: filePath);
+        },
+      ),
+      // 이미지 게시 (ShellRoute 밖 — 전체 화면)
+      GoRoute(
+        path: RoutePaths.publishImage,
+        builder: (context, state) {
+          final filePath = state.uri.queryParameters['filePath'] ?? '';
+          return PublishImagePage(imageFilePath: filePath);
+        },
+      ),
+      // 이미지 상세 보기
+      GoRoute(
+        path: RoutePaths.imageDetail,
+        builder: (context, state) {
+          final postImage = state.extra as PostImage;
+          return ImageDetailPage(postImage: postImage);
         },
       ),
       // 프로필 편집

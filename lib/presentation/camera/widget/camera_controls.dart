@@ -76,7 +76,8 @@ class _RecordButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = elapsed.inMilliseconds /
+    final progress =
+        elapsed.inMilliseconds /
         AppConstants.maxRecordingDuration.inMilliseconds;
 
     return GestureDetector(
@@ -110,8 +111,11 @@ class _RecordButton extends StatelessWidget {
                 ),
               ),
               child: status == RecordingStatus.paused
-                  ? const Icon(Icons.play_arrow,
-                      color: AppColors.white, size: 20)
+                  ? const Icon(
+                      Icons.play_arrow,
+                      color: AppColors.white,
+                      size: 20,
+                    )
                   : null,
             ),
           ),
@@ -122,10 +126,7 @@ class _RecordButton extends StatelessWidget {
 }
 
 class _RecordButtonPainter extends CustomPainter {
-  _RecordButtonPainter({
-    required this.progress,
-    required this.isRecording,
-  });
+  _RecordButtonPainter({required this.progress, required this.isRecording});
 
   final double progress;
   final bool isRecording;

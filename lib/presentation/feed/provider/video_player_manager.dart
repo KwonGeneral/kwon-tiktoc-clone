@@ -31,13 +31,13 @@ class VideoPlayerManager extends _$VideoPlayerManager {
   }
 
   /// 페이지 변경 시 호출: 재생/정지/dispose 관리
+  /// currentIndex는 이미 실제 인덱스(0~length-1)로 변환된 값
   void _onPageChanged(int currentIndex, List<Video> videos) {
-    // 1. 유지할 범위 계산 (currentIndex ± 1)
+    // 1. 유지할 범위 계산 (currentIndex ± 1, 루프 고려)
     final keepRange = <int>{};
-    for (var i = currentIndex - 1; i <= currentIndex + 1; i++) {
-      if (i >= 0 && i < videos.length) {
-        keepRange.add(i);
-      }
+    for (var offset = -1; offset <= 1; offset++) {
+      final i = (currentIndex + offset) % videos.length;
+      if (i >= 0) keepRange.add(i);
     }
 
     // 2. 범위 밖 컨트롤러 dispose

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FeedState {
 
- List<Video> get videos; int get currentIndex; int get currentPage; bool get hasMore; Set<String> get followedUserIds; bool get isLoadingMore; String? get loadMoreError;
+ List<Video> get videos; int get currentIndex; int get currentPage; bool get hasMore; Set<String> get followedUserIds; bool get isLoadingMore; String? get loadMoreError; FeedTab get selectedTab;
 /// Create a copy of FeedState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $FeedStateCopyWith<FeedState> get copyWith => _$FeedStateCopyWithImpl<FeedState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FeedState&&const DeepCollectionEquality().equals(other.videos, videos)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other.followedUserIds, followedUserIds)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.loadMoreError, loadMoreError) || other.loadMoreError == loadMoreError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FeedState&&const DeepCollectionEquality().equals(other.videos, videos)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other.followedUserIds, followedUserIds)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.loadMoreError, loadMoreError) || other.loadMoreError == loadMoreError)&&(identical(other.selectedTab, selectedTab) || other.selectedTab == selectedTab));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(videos),currentIndex,currentPage,hasMore,const DeepCollectionEquality().hash(followedUserIds),isLoadingMore,loadMoreError);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(videos),currentIndex,currentPage,hasMore,const DeepCollectionEquality().hash(followedUserIds),isLoadingMore,loadMoreError,selectedTab);
 
 @override
 String toString() {
-  return 'FeedState(videos: $videos, currentIndex: $currentIndex, currentPage: $currentPage, hasMore: $hasMore, followedUserIds: $followedUserIds, isLoadingMore: $isLoadingMore, loadMoreError: $loadMoreError)';
+  return 'FeedState(videos: $videos, currentIndex: $currentIndex, currentPage: $currentPage, hasMore: $hasMore, followedUserIds: $followedUserIds, isLoadingMore: $isLoadingMore, loadMoreError: $loadMoreError, selectedTab: $selectedTab)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $FeedStateCopyWith<$Res>  {
   factory $FeedStateCopyWith(FeedState value, $Res Function(FeedState) _then) = _$FeedStateCopyWithImpl;
 @useResult
 $Res call({
- List<Video> videos, int currentIndex, int currentPage, bool hasMore, Set<String> followedUserIds, bool isLoadingMore, String? loadMoreError
+ List<Video> videos, int currentIndex, int currentPage, bool hasMore, Set<String> followedUserIds, bool isLoadingMore, String? loadMoreError, FeedTab selectedTab
 });
 
 
@@ -62,7 +62,7 @@ class _$FeedStateCopyWithImpl<$Res>
 
 /// Create a copy of FeedState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? videos = null,Object? currentIndex = null,Object? currentPage = null,Object? hasMore = null,Object? followedUserIds = null,Object? isLoadingMore = null,Object? loadMoreError = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? videos = null,Object? currentIndex = null,Object? currentPage = null,Object? hasMore = null,Object? followedUserIds = null,Object? isLoadingMore = null,Object? loadMoreError = freezed,Object? selectedTab = null,}) {
   return _then(_self.copyWith(
 videos: null == videos ? _self.videos : videos // ignore: cast_nullable_to_non_nullable
 as List<Video>,currentIndex: null == currentIndex ? _self.currentIndex : currentIndex // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullab
 as bool,followedUserIds: null == followedUserIds ? _self.followedUserIds : followedUserIds // ignore: cast_nullable_to_non_nullable
 as Set<String>,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,loadMoreError: freezed == loadMoreError ? _self.loadMoreError : loadMoreError // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,selectedTab: null == selectedTab ? _self.selectedTab : selectedTab // ignore: cast_nullable_to_non_nullable
+as FeedTab,
   ));
 }
 
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds,  bool isLoadingMore,  String? loadMoreError)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds,  bool isLoadingMore,  String? loadMoreError,  FeedTab selectedTab)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FeedState() when $default != null:
-return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds,_that.isLoadingMore,_that.loadMoreError);case _:
+return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds,_that.isLoadingMore,_that.loadMoreError,_that.selectedTab);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds,  bool isLoadingMore,  String? loadMoreError)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds,  bool isLoadingMore,  String? loadMoreError,  FeedTab selectedTab)  $default,) {final _that = this;
 switch (_that) {
 case _FeedState():
-return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds,_that.isLoadingMore,_that.loadMoreError);}
+return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds,_that.isLoadingMore,_that.loadMoreError,_that.selectedTab);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -191,10 +192,10 @@ return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds,  bool isLoadingMore,  String? loadMoreError)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Video> videos,  int currentIndex,  int currentPage,  bool hasMore,  Set<String> followedUserIds,  bool isLoadingMore,  String? loadMoreError,  FeedTab selectedTab)?  $default,) {final _that = this;
 switch (_that) {
 case _FeedState() when $default != null:
-return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds,_that.isLoadingMore,_that.loadMoreError);case _:
+return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,_that.followedUserIds,_that.isLoadingMore,_that.loadMoreError,_that.selectedTab);case _:
   return null;
 
 }
@@ -205,8 +206,8 @@ return $default(_that.videos,_that.currentIndex,_that.currentPage,_that.hasMore,
 /// @nodoc
 
 
-class _FeedState implements FeedState {
-  const _FeedState({final  List<Video> videos = const [], this.currentIndex = 0, this.currentPage = 0, this.hasMore = false, final  Set<String> followedUserIds = const {}, this.isLoadingMore = false, this.loadMoreError}): _videos = videos,_followedUserIds = followedUserIds;
+class _FeedState extends FeedState {
+  const _FeedState({final  List<Video> videos = const [], this.currentIndex = 0, this.currentPage = 0, this.hasMore = false, final  Set<String> followedUserIds = const {}, this.isLoadingMore = false, this.loadMoreError, this.selectedTab = FeedTab.recommend}): _videos = videos,_followedUserIds = followedUserIds,super._();
   
 
  final  List<Video> _videos;
@@ -228,6 +229,7 @@ class _FeedState implements FeedState {
 
 @override@JsonKey() final  bool isLoadingMore;
 @override final  String? loadMoreError;
+@override@JsonKey() final  FeedTab selectedTab;
 
 /// Create a copy of FeedState
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +241,16 @@ _$FeedStateCopyWith<_FeedState> get copyWith => __$FeedStateCopyWithImpl<_FeedSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FeedState&&const DeepCollectionEquality().equals(other._videos, _videos)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._followedUserIds, _followedUserIds)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.loadMoreError, loadMoreError) || other.loadMoreError == loadMoreError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FeedState&&const DeepCollectionEquality().equals(other._videos, _videos)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._followedUserIds, _followedUserIds)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.loadMoreError, loadMoreError) || other.loadMoreError == loadMoreError)&&(identical(other.selectedTab, selectedTab) || other.selectedTab == selectedTab));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_videos),currentIndex,currentPage,hasMore,const DeepCollectionEquality().hash(_followedUserIds),isLoadingMore,loadMoreError);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_videos),currentIndex,currentPage,hasMore,const DeepCollectionEquality().hash(_followedUserIds),isLoadingMore,loadMoreError,selectedTab);
 
 @override
 String toString() {
-  return 'FeedState(videos: $videos, currentIndex: $currentIndex, currentPage: $currentPage, hasMore: $hasMore, followedUserIds: $followedUserIds, isLoadingMore: $isLoadingMore, loadMoreError: $loadMoreError)';
+  return 'FeedState(videos: $videos, currentIndex: $currentIndex, currentPage: $currentPage, hasMore: $hasMore, followedUserIds: $followedUserIds, isLoadingMore: $isLoadingMore, loadMoreError: $loadMoreError, selectedTab: $selectedTab)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$FeedStateCopyWith<$Res> implements $FeedStateCopyWith<$Re
   factory _$FeedStateCopyWith(_FeedState value, $Res Function(_FeedState) _then) = __$FeedStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<Video> videos, int currentIndex, int currentPage, bool hasMore, Set<String> followedUserIds, bool isLoadingMore, String? loadMoreError
+ List<Video> videos, int currentIndex, int currentPage, bool hasMore, Set<String> followedUserIds, bool isLoadingMore, String? loadMoreError, FeedTab selectedTab
 });
 
 
@@ -276,7 +278,7 @@ class __$FeedStateCopyWithImpl<$Res>
 
 /// Create a copy of FeedState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? videos = null,Object? currentIndex = null,Object? currentPage = null,Object? hasMore = null,Object? followedUserIds = null,Object? isLoadingMore = null,Object? loadMoreError = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? videos = null,Object? currentIndex = null,Object? currentPage = null,Object? hasMore = null,Object? followedUserIds = null,Object? isLoadingMore = null,Object? loadMoreError = freezed,Object? selectedTab = null,}) {
   return _then(_FeedState(
 videos: null == videos ? _self._videos : videos // ignore: cast_nullable_to_non_nullable
 as List<Video>,currentIndex: null == currentIndex ? _self.currentIndex : currentIndex // ignore: cast_nullable_to_non_nullable
@@ -285,7 +287,8 @@ as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullab
 as bool,followedUserIds: null == followedUserIds ? _self._followedUserIds : followedUserIds // ignore: cast_nullable_to_non_nullable
 as Set<String>,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,loadMoreError: freezed == loadMoreError ? _self.loadMoreError : loadMoreError // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,selectedTab: null == selectedTab ? _self.selectedTab : selectedTab // ignore: cast_nullable_to_non_nullable
+as FeedTab,
   ));
 }
 

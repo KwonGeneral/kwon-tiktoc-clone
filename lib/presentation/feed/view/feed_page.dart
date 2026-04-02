@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_state.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_card.dart';
 
@@ -16,9 +17,11 @@ class FeedPage extends ConsumerStatefulWidget {
 
 class _FeedPageState extends ConsumerState<FeedPage> {
   bool _initialized = false;
+  PageController? _pageController;
+  FeedTab? _currentTab;
 
-  /// 무한 스크롤 트리거: 끝에서 이 값만큼 남았을 때 loadMore 호출
-  static const _loadMoreThreshold = 3;
+  /// 무한 루프를 위한 큰 가상 페이지 수
+  static const _virtualPageCount = 100000;
 
   @override
   void initState() {
@@ -26,6 +29,12 @@ class _FeedPageState extends ConsumerState<FeedPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _tryInitialize();
     });
+  }
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    super.dispose();
   }
 
   void _tryInitialize() {
@@ -39,13 +48,20 @@ class _FeedPageState extends ConsumerState<FeedPage> {
     }
   }
 
-  void _onPageChanged(int index, int totalVideos) {
-    ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
-
-    // 끝에서 threshold 이내면 다음 페이지 로드
-    if (index >= totalVideos - _loadMoreThreshold) {
-      ref.read(feedNotifierProvider.notifier).loadMore();
+  PageController _getPageController(int videoCount, FeedTab tab) {
+    if (_pageController == null || _currentTab != tab) {
+      _pageController?.dispose();
+      final midStart = (_virtualPageCount ~/ 2) -
+          ((_virtualPageCount ~/ 2) % videoCount);
+      _pageController = PageController(initialPage: midStart);
+      _currentTab = tab;
     }
+    return _pageController!;
+  }
+
+  void _onPageChanged(int loopIndex, int totalVideos) {
+    final realIndex = loopIndex % totalVideos;
+    ref.read(feedNotifierProvider.notifier).updateCurrentIndex(realIndex);
   }
 
   @override
@@ -75,17 +91,38 @@ class _FeedPageState extends ConsumerState<FeedPage> {
             });
           }
 
+          final displayVideos = feedState.displayVideos;
+
+          // 팔로잉 탭에서 팔로잉한 유저가 없는 경우
+          if (displayVideos.isEmpty) {
+            return const Center(
+              child: Text(
+                AppStrings.feedFollowingEmpty,
+                style: TextStyle(
+                  color: AppColors.whiteSecondary,
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+
           return Stack(
             children: [
               PageView.builder(
+                controller: _getPageController(
+                  displayVideos.length,
+                  feedState.selectedTab,
+                ),
                 scrollDirection: Axis.vertical,
-                itemCount: feedState.videos.length,
+                itemCount: _virtualPageCount,
                 onPageChanged: (index) =>
-                    _onPageChanged(index, feedState.videos.length),
+                    _onPageChanged(index, displayVideos.length),
                 itemBuilder: (context, index) {
+                  final realIndex = index % displayVideos.length;
                   return VideoCard(
-                    video: feedState.videos[index],
-                    index: index,
+                    video: displayVideos[realIndex],
+                    index: realIndex,
                   );
                 },
               ),

@@ -13,5 +13,7 @@ sealed class Comment with _$Comment {
     required String text,
     @Default(0) int likeCount,
     required DateTime createdAt,
+    String? parentCommentId,
+    @Default(0) int replyCount,
   }) = _Comment;
 }

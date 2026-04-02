@@ -17,6 +17,7 @@ abstract final class AppStrings {
   static const feedError = '영상을 불러올 수 없습니다';
   static const feedRetry = '다시 시도';
   static const feedLoadMoreError = '탭하여 다시 불러오기';
+  static const feedFollowingEmpty = '팔로잉한 사람의 영상이 없습니다.\n추천 탭에서 크리에이터를 팔로우해보세요!';
 
   // 프로필
   static const profileEdit = '편집';
@@ -36,6 +37,9 @@ abstract final class AppStrings {
   static const commentCurrentUserId = 'current_user';
   static const commentCurrentUserName = '나';
   static const commentReply = '답글';
+  static const commentShowReplies = '답글 {count}개 더보기';
+  static const commentHideReplies = '답글 숨기기';
+  static const commentReplyingTo = '{name}님에게 답글 남기는 중';
   static const commentJustNow = '방금';
   static const commentMinutesAgo = '{m}분 전';
   static const commentHoursAgo = '{h}시간 전';

@@ -12,6 +12,16 @@ class CommentItem extends StatelessWidget {
     required this.isDisliked,
     required this.onLikeTap,
     required this.onDislikeTap,
+    required this.onReplyTap,
+    this.replies = const [],
+    this.isExpanded = false,
+    this.onToggleReplies,
+    this.likedCommentIds = const {},
+    this.dislikedCommentIds = const {},
+    this.onReplyLikeTap,
+    this.onReplyDislikeTap,
+    this.onReplyReplyTap,
+    this.isReply = false,
     super.key,
   });
 
@@ -20,28 +30,59 @@ class CommentItem extends StatelessWidget {
   final bool isDisliked;
   final VoidCallback onLikeTap;
   final VoidCallback onDislikeTap;
+  final VoidCallback onReplyTap;
+  final List<Comment> replies;
+  final bool isExpanded;
+  final VoidCallback? onToggleReplies;
+  final Set<String> likedCommentIds;
+  final Set<String> dislikedCommentIds;
+  final void Function(String commentId)? onReplyLikeTap;
+  final void Function(String commentId)? onReplyDislikeTap;
+  final void Function(String commentId, String userName)? onReplyReplyTap;
+  final bool isReply;
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildCommentRow(),
+        // 답글 더보기/숨기기 + 답글 목록 (최상위 댓글만)
+        if (!isReply && (comment.replyCount > 0 || replies.isNotEmpty))
+          _buildRepliesSection(),
+      ],
+    );
+  }
+
+  Widget _buildCommentRow() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.only(
+        left: isReply ? 44 : 16,
+        right: 16,
+        top: isReply ? 6 : 10,
+        bottom: isReply ? 6 : 10,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 아바타
           CircleAvatar(
-            radius: 16,
+            radius: isReply ? 12 : 16,
             backgroundColor: AppColors.gray,
             backgroundImage: comment.userAvatarUrl.isNotEmpty
                 ? NetworkImage(comment.userAvatarUrl)
                 : null,
             child: comment.userAvatarUrl.isEmpty
-                ? const Icon(Icons.person, color: AppColors.white, size: 18)
+                ? Icon(
+                    Icons.person,
+                    color: AppColors.white,
+                    size: isReply ? 14 : 18,
+                  )
                 : null,
           ),
           const SizedBox(width: 12),
 
-          // 이름 + 내용 + 시간
+          // 이름 + 내용 + 시간 + 답글
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +98,10 @@ class CommentItem extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   comment.text,
-                  style: const TextStyle(color: AppColors.white, fontSize: 14),
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Row(
@@ -70,12 +114,15 @@ class CommentItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    const Text(
-                      AppStrings.commentReply,
-                      style: TextStyle(
-                        color: AppColors.whiteSecondary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                    GestureDetector(
+                      onTap: onReplyTap,
+                      child: const Text(
+                        AppStrings.commentReply,
+                        style: TextStyle(
+                          color: AppColors.whiteSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -85,9 +132,9 @@ class CommentItem extends StatelessWidget {
           ),
 
           // 좋아요 / 싫어요
-          Column(
+          Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // 좋아요
               GestureDetector(
                 onTap: onLikeTap,
                 child: Column(
@@ -110,12 +157,13 @@ class CommentItem extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
-              // 싫어요
+              const SizedBox(width: 12),
               GestureDetector(
                 onTap: onDislikeTap,
                 child: Icon(
-                  isDisliked ? Icons.heart_broken : Icons.heart_broken_outlined,
+                  isDisliked
+                      ? Icons.thumb_down_alt
+                      : Icons.thumb_down_alt_outlined,
                   size: 18,
                   color: isDisliked
                       ? AppColors.whiteSecondary
@@ -124,6 +172,65 @@ class CommentItem extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRepliesSection() {
+    final totalReplies = replies.length > comment.replyCount
+        ? replies.length
+        : comment.replyCount;
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 44),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 답글 더보기/숨기기 토글
+          GestureDetector(
+            onTap: onToggleReplies,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 24,
+                    height: 1,
+                    color: AppColors.whiteSecondary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    isExpanded
+                        ? AppStrings.commentHideReplies
+                        : AppStrings.commentShowReplies
+                            .replaceAll('{count}', totalReplies.toString()),
+                    style: const TextStyle(
+                      color: AppColors.whiteSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // 답글 목록
+          if (isExpanded)
+            ...replies.map(
+              (reply) => CommentItem(
+                comment: reply,
+                isLiked: likedCommentIds.contains(reply.id),
+                isDisliked: dislikedCommentIds.contains(reply.id),
+                onLikeTap: () => onReplyLikeTap?.call(reply.id),
+                onDislikeTap: () => onReplyDislikeTap?.call(reply.id),
+                onReplyTap: () =>
+                    onReplyReplyTap?.call(comment.id, reply.userName),
+                isReply: true,
+              ),
+            ),
         ],
       ),
     );

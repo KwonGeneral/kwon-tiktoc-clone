@@ -41,7 +41,9 @@ class VideoPlayerManager extends _$VideoPlayerManager {
     }
 
     // 2. 범위 밖 컨트롤러 dispose
-    final toRemove = _controllers.keys.where((i) => !keepRange.contains(i)).toList();
+    final toRemove = _controllers.keys
+        .where((i) => !keepRange.contains(i))
+        .toList();
     for (final index in toRemove) {
       _controllers[index]?.dispose();
       _controllers.remove(index);
@@ -83,13 +85,17 @@ class VideoPlayerManager extends _$VideoPlayerManager {
       controller.setLooping(true);
 
       // 초기화 완료 후 현재 페이지면 자동 재생
-      final currentIndex =
-          ref.read(feedNotifierProvider).valueOrNull?.currentIndex;
+      final currentIndex = ref
+          .read(feedNotifierProvider)
+          .valueOrNull
+          ?.currentIndex;
       if (currentIndex == index) {
         controller.play();
       }
     } catch (e) {
-      debugPrint('VideoPlayerManager: controller init failed for index $index: $e');
+      debugPrint(
+        'VideoPlayerManager: controller init failed for index $index: $e',
+      );
       _controllers[index]?.dispose();
       _controllers.remove(index);
     } finally {

@@ -42,9 +42,7 @@ class ProfileEmptyState extends StatelessWidget {
       ),
       child: Text(
         AppStrings.profileUpload,
-        style: AppTextStyles.description.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        style: AppTextStyles.description.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

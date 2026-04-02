@@ -32,10 +32,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           child: CircularProgressIndicator(color: AppColors.white),
         ),
         error: (error, _) => const Center(
-          child: Text(
-            AppStrings.feedError,
-            style: AppTextStyles.description,
-          ),
+          child: Text(AppStrings.feedError, style: AppTextStyles.description),
         ),
         data: (user) => SingleChildScrollView(
           child: Column(
@@ -67,11 +64,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         padding: EdgeInsets.only(left: 16),
         child: Row(
           children: [
-            Icon(
-              Icons.person_add_outlined,
-              color: AppColors.white,
-              size: 24,
-            ),
+            Icon(Icons.person_add_outlined, color: AppColors.white, size: 24),
           ],
         ),
       ),
@@ -111,8 +104,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           const SizedBox(width: 8),
           Flexible(
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: AppColors.gray,
                 borderRadius: BorderRadius.circular(4),

@@ -18,9 +18,7 @@ class BottomNavBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.black,
-        border: Border(
-          top: BorderSide(color: AppColors.divider, width: 0.5),
-        ),
+        border: Border(top: BorderSide(color: AppColors.divider, width: 0.5)),
       ),
       child: SafeArea(
         child: SizedBox(
@@ -151,11 +149,7 @@ class _CreateButton extends StatelessWidget {
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(
-                  Icons.add,
-                  color: AppColors.black,
-                  size: 22,
-                ),
+                child: const Icon(Icons.add, color: AppColors.black, size: 22),
               ),
             ),
           ],

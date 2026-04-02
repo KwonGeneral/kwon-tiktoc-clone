@@ -28,6 +28,17 @@ abstract final class AppStrings {
   static const profileEmptyVideos = '추억의 동영상을 공유하세요';
   static const profileUpload = '업로드';
 
+  // 댓글
+  static const commentTitle = '댓글';
+  static const commentTitleWithCount = '댓글 {count}개';
+  static const commentInputHint = '따뜻한 말 한마디 해주세요...';
+  static const commentEmpty = '아직 댓글이 없습니다.\n첫 댓글을 남겨보세요!';
+  static const commentReply = '답글';
+  static const commentJustNow = '방금';
+  static const commentMinutesAgo = '{m}분 전';
+  static const commentHoursAgo = '{h}시간 전';
+  static const commentDaysAgo = '{d}일 전';
+
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';

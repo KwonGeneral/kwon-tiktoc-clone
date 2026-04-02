@@ -13,10 +13,7 @@ class FriendsPage extends StatelessWidget {
       body: Center(
         child: Text(
           AppStrings.placeholderFriends,
-          style: TextStyle(
-            color: AppColors.whiteSecondary,
-            fontSize: 16,
-          ),
+          style: TextStyle(color: AppColors.whiteSecondary, fontSize: 16),
         ),
       ),
     );

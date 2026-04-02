@@ -10,11 +10,7 @@ import 'package:kwon_tiktoc_clone/presentation/feed/widget/like_animation.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_overlay.dart';
 
 class VideoCard extends ConsumerStatefulWidget {
-  const VideoCard({
-    required this.video,
-    required this.index,
-    super.key,
-  });
+  const VideoCard({required this.video, required this.index, super.key});
 
   final Video video;
   final int index;
@@ -89,9 +85,7 @@ class _VideoCardState extends ConsumerState<VideoCard> {
           ),
 
         // 오버레이 UI
-        Positioned.fill(
-          child: VideoOverlay(video: widget.video),
-        ),
+        Positioned.fill(child: VideoOverlay(video: widget.video)),
 
         // 더블탭 좋아요 애니메이션
         if (_showLikeAnimation)
@@ -108,10 +102,7 @@ class _VideoCardState extends ConsumerState<VideoCard> {
 
   Widget _buildLoading() {
     return const Center(
-      child: CircularProgressIndicator(
-        color: AppColors.white,
-        strokeWidth: 2,
-      ),
+      child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
     );
   }
 }

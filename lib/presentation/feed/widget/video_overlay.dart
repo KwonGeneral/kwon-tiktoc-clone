@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/comment_bottom_sheet.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/music_info.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/side_action_bar.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/top_tab_bar.dart';
@@ -18,12 +19,7 @@ class VideoOverlay extends ConsumerWidget {
     return Stack(
       children: [
         // 상단 탭바
-        const Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: TopTabBar(),
-        ),
+        const Positioned(top: 0, left: 0, right: 0, child: TopTabBar()),
 
         // 우측 사이드 액션바
         Positioned(
@@ -31,21 +27,21 @@ class VideoOverlay extends ConsumerWidget {
           bottom: 100,
           child: SideActionBar(
             video: video,
-            isFollowing: ref
+            isFollowing:
+                ref
                     .watch(feedNotifierProvider)
                     .valueOrNull
                     ?.followedUserIds
                     .contains(video.userId) ??
                 false,
             onLikeTap: () {
-              ref
-                  .read(feedNotifierProvider.notifier)
-                  .toggleLike(video.id);
+              ref.read(feedNotifierProvider.notifier).toggleLike(video.id);
             },
             onBookmarkTap: () {
-              ref
-                  .read(feedNotifierProvider.notifier)
-                  .toggleBookmark(video.id);
+              ref.read(feedNotifierProvider.notifier).toggleBookmark(video.id);
+            },
+            onCommentTap: () {
+              CommentBottomSheet.show(context, video.id);
             },
             onFollowTap: () {
               ref

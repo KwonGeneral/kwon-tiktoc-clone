@@ -4,10 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../common/bottom_nav_bar.dart';
 
 class MainShell extends StatelessWidget {
-  const MainShell({
-    super.key,
-    required this.navigationShell,
-  });
+  const MainShell({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 

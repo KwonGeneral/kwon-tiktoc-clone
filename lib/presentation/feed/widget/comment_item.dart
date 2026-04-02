@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/comment.dart';
 
 class CommentItem extends StatelessWidget {
@@ -62,7 +63,7 @@ class CommentItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      _formatTimeAgo(comment.createdAt),
+                      FormatUtils.timeAgo(comment.createdAt),
                       style: const TextStyle(
                         color: AppColors.whiteSecondary,
                         fontSize: 12,
@@ -133,26 +134,5 @@ class CommentItem extends StatelessWidget {
     if (isLiked) count += 1;
     if (count == 0) return '';
     return count.toString();
-  }
-
-  static String _formatTimeAgo(DateTime dateTime) {
-    final diff = DateTime.now().difference(dateTime);
-
-    if (diff.inMinutes < 1) {
-      return AppStrings.commentJustNow;
-    }
-    if (diff.inHours < 1) {
-      return AppStrings.commentMinutesAgo.replaceAll(
-        '{m}',
-        diff.inMinutes.toString(),
-      );
-    }
-    if (diff.inDays < 1) {
-      return AppStrings.commentHoursAgo.replaceAll(
-        '{h}',
-        diff.inHours.toString(),
-      );
-    }
-    return AppStrings.commentDaysAgo.replaceAll('{d}', diff.inDays.toString());
   }
 }

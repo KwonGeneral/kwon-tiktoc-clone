@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/comment.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/local_storage_repository.dart';
@@ -45,23 +46,27 @@ class CommentNotifier extends _$CommentNotifier {
   }
 
   List<Comment> _loadUserComments(String videoId) {
-    final json = _storage.getUserCommentsJson();
-    final list = jsonDecode(json) as List<dynamic>;
+    try {
+      final json = _storage.getUserCommentsJson();
+      final list = jsonDecode(json) as List<dynamic>;
 
-    return list
-        .where((item) => item['videoId'] == videoId)
-        .map(
-          (item) => Comment(
-            id: item['id'] as String,
-            videoId: item['videoId'] as String,
-            userId: item['userId'] as String,
-            userName: item['userName'] as String? ?? '',
-            text: item['text'] as String,
-            likeCount: 0,
-            createdAt: DateTime.parse(item['createdAt'] as String),
-          ),
-        )
-        .toList();
+      return list
+          .where((item) => item['videoId'] == videoId)
+          .map(
+            (item) => Comment(
+              id: item['id'] as String,
+              videoId: item['videoId'] as String,
+              userId: item['userId'] as String,
+              userName: item['userName'] as String? ?? '',
+              text: item['text'] as String,
+              likeCount: 0,
+              createdAt: DateTime.parse(item['createdAt'] as String),
+            ),
+          )
+          .toList();
+    } on FormatException {
+      return [];
+    }
   }
 
   Future<void> addComment(String text) async {
@@ -72,8 +77,8 @@ class CommentNotifier extends _$CommentNotifier {
     final comment = Comment(
       id: 'user_comment_${now.millisecondsSinceEpoch}',
       videoId: videoId,
-      userId: 'current_user',
-      userName: '나',
+      userId: AppStrings.commentCurrentUserId,
+      userName: AppStrings.commentCurrentUserName,
       text: text.trim(),
       likeCount: 0,
       createdAt: now,
@@ -90,8 +95,13 @@ class CommentNotifier extends _$CommentNotifier {
   }
 
   Future<void> _saveUserComment(Comment comment) async {
-    final json = _storage.getUserCommentsJson();
-    final list = jsonDecode(json) as List<dynamic>;
+    List<dynamic> list;
+    try {
+      final json = _storage.getUserCommentsJson();
+      list = jsonDecode(json) as List<dynamic>;
+    } on FormatException {
+      list = [];
+    }
 
     list.insert(0, {
       'id': comment.id,

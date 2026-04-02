@@ -82,6 +82,21 @@ class _FeedPageState extends ConsumerState<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 외부에서 currentIndex가 변경되면 PageController 점프
+    ref.listen(feedNotifierProvider, (prev, next) {
+      final prevIndex = prev?.valueOrNull?.currentIndex;
+      final nextIndex = next.valueOrNull?.currentIndex;
+      final videoCount = next.valueOrNull?.displayVideos.length ?? 0;
+      if (prevIndex != null &&
+          nextIndex != null &&
+          prevIndex != nextIndex &&
+          videoCount > 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _jumpToIndex(nextIndex, videoCount);
+        });
+      }
+    });
+
     final feedAsync = ref.watch(feedNotifierProvider);
 
     return Scaffold(
@@ -106,23 +121,6 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                   .initializeForIndex(0, feedState.videos);
             });
           }
-
-          // 외부에서 currentIndex가 변경되면 PageController 점프
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (_pageController != null && _pageController!.hasClients) {
-              final currentPage = _pageController!.page?.round() ?? 0;
-              final currentReal =
-                  feedState.displayVideos.isNotEmpty
-                      ? currentPage % feedState.displayVideos.length
-                      : 0;
-              if (currentReal != feedState.currentIndex) {
-                _jumpToIndex(
-                  feedState.currentIndex,
-                  feedState.displayVideos.length,
-                );
-              }
-            }
-          });
 
           final displayVideos = feedState.displayVideos;
 

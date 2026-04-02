@@ -203,9 +203,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     if (feedState == null) return;
 
     final index = feedState.videos.indexWhere((v) => v.id == video.id);
-    if (index >= 0) {
-      ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
-    }
+    if (index < 0) return;
+
+    ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
     context.go(RoutePaths.feed);
   }
 

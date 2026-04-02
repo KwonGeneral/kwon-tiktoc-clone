@@ -141,11 +141,10 @@ class UserProfilePage extends ConsumerWidget {
                   final index = feedState.videos.indexWhere(
                     (v) => v.id == video.id,
                   );
-                  if (index >= 0) {
-                    ref
-                        .read(feedNotifierProvider.notifier)
-                        .updateCurrentIndex(index);
-                  }
+                  if (index < 0) return;
+                  ref
+                      .read(feedNotifierProvider.notifier)
+                      .updateCurrentIndex(index);
                   context.go(RoutePaths.feed);
                 },
               ),

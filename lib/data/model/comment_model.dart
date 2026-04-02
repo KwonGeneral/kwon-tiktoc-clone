@@ -24,24 +24,24 @@ sealed class CommentModel with _$CommentModel {
       _$CommentModelFromJson(json);
 
   factory CommentModel.fromEntity(Comment entity) => CommentModel(
-        id: entity.id,
-        videoId: entity.videoId,
-        userId: entity.userId,
-        userName: entity.userName,
-        userAvatarUrl: entity.userAvatarUrl,
-        text: entity.text,
-        likeCount: entity.likeCount,
-        createdAt: entity.createdAt,
-      );
+    id: entity.id,
+    videoId: entity.videoId,
+    userId: entity.userId,
+    userName: entity.userName,
+    userAvatarUrl: entity.userAvatarUrl,
+    text: entity.text,
+    likeCount: entity.likeCount,
+    createdAt: entity.createdAt,
+  );
 
   Comment toEntity() => Comment(
-        id: id,
-        videoId: videoId,
-        userId: userId,
-        userName: userName,
-        userAvatarUrl: userAvatarUrl,
-        text: text,
-        likeCount: likeCount,
-        createdAt: createdAt,
-      );
+    id: id,
+    videoId: videoId,
+    userId: userId,
+    userName: userName,
+    userAvatarUrl: userAvatarUrl,
+    text: text,
+    likeCount: likeCount,
+    createdAt: createdAt,
+  );
 }

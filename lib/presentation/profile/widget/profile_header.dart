@@ -22,10 +22,7 @@ class ProfileHeader extends StatelessWidget {
         _buildNameRow(),
         const SizedBox(height: 4),
         // @user_id
-        Text(
-          '@${user.id}',
-          style: AppTextStyles.profileId,
-        ),
+        Text('@${user.id}', style: AppTextStyles.profileId),
       ],
     );
   }
@@ -38,10 +35,15 @@ class ProfileHeader extends StatelessWidget {
         CircleAvatar(
           radius: 44,
           backgroundColor: AppColors.gray,
-          backgroundImage:
-              user.avatarUrl.isNotEmpty ? NetworkImage(user.avatarUrl) : null,
+          backgroundImage: user.avatarUrl.isNotEmpty
+              ? NetworkImage(user.avatarUrl)
+              : null,
           child: user.avatarUrl.isEmpty
-              ? const Icon(Icons.person, size: 44, color: AppColors.whiteSecondary)
+              ? const Icon(
+                  Icons.person,
+                  size: 44,
+                  color: AppColors.whiteSecondary,
+                )
               : null,
         ),
         Positioned(
@@ -53,11 +55,7 @@ class ProfileHeader extends StatelessWidget {
               color: AppColors.primary,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.add,
-              size: 16,
-              color: AppColors.white,
-            ),
+            child: const Icon(Icons.add, size: 16, color: AppColors.white),
           ),
         ),
       ],
@@ -73,11 +71,7 @@ class ProfileHeader extends StatelessWidget {
         const SizedBox(width: 4),
         Text(user.nickname, style: AppTextStyles.profileName),
         const SizedBox(width: 4),
-        const Icon(
-          Icons.keyboard_arrow_down,
-          size: 20,
-          color: AppColors.white,
-        ),
+        const Icon(Icons.keyboard_arrow_down, size: 20, color: AppColors.white),
         const SizedBox(width: 12),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

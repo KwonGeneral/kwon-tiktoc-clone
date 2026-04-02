@@ -23,22 +23,22 @@ sealed class UserModel with _$UserModel {
       _$UserModelFromJson(json);
 
   factory UserModel.fromEntity(User entity) => UserModel(
-        id: entity.id,
-        nickname: entity.nickname,
-        avatarUrl: entity.avatarUrl,
-        isVerified: entity.isVerified,
-        followingCount: entity.followingCount,
-        followerCount: entity.followerCount,
-        likeCount: entity.likeCount,
-      );
+    id: entity.id,
+    nickname: entity.nickname,
+    avatarUrl: entity.avatarUrl,
+    isVerified: entity.isVerified,
+    followingCount: entity.followingCount,
+    followerCount: entity.followerCount,
+    likeCount: entity.likeCount,
+  );
 
   User toEntity() => User(
-        id: id,
-        nickname: nickname,
-        avatarUrl: avatarUrl,
-        isVerified: isVerified,
-        followingCount: followingCount,
-        followerCount: followerCount,
-        likeCount: likeCount,
-      );
+    id: id,
+    nickname: nickname,
+    avatarUrl: avatarUrl,
+    isVerified: isVerified,
+    followingCount: followingCount,
+    followerCount: followerCount,
+    likeCount: likeCount,
+  );
 }

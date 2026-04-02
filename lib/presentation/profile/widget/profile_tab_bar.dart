@@ -40,8 +40,7 @@ class ProfileTabBar extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color:
-                          isSelected ? AppColors.white : Colors.transparent,
+                      color: isSelected ? AppColors.white : Colors.transparent,
                       width: 1.5,
                     ),
                   ),

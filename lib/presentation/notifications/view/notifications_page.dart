@@ -13,10 +13,7 @@ class NotificationsPage extends StatelessWidget {
       body: Center(
         child: Text(
           AppStrings.placeholderNotifications,
-          style: TextStyle(
-            color: AppColors.whiteSecondary,
-            fontSize: 16,
-          ),
+          style: TextStyle(color: AppColors.whiteSecondary, fontSize: 16),
         ),
       ),
     );

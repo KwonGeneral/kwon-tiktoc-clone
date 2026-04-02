@@ -9,7 +9,7 @@ import 'package:kwon_tiktoc_clone/data/model/video_model.dart';
 
 class VideoRemoteDataSource implements VideoDataSource {
   VideoRemoteDataSource({http.Client? client})
-      : _client = client ?? http.Client();
+    : _client = client ?? http.Client();
 
   final http.Client _client;
 
@@ -19,12 +19,30 @@ class VideoRemoteDataSource implements VideoDataSource {
 
   final Map<String, List<CommentModel>> _comments = {};
 
+  static const _commentUserNames = [
+    '꿈나라',
+    '카르페디엠',
+    'Mango Day',
+    'ga든',
+    '해피바이러스',
+    '별빛소녀',
+    '맛집헌터',
+    '댄스킹',
+    '여행러버',
+    '일상기록',
+  ];
+
   static const _sampleComments = [
     '와 대박 ㅋㅋㅋ',
     '이거 진짜 잘했다 👏',
     '나도 해보고 싶다!',
     '팔로우 했어요~',
     '다음 영상도 기대할게요 ❤️',
+    '진짜 웃기다 ㅋㅋㅋㅋ',
+    '이거 어디서 찍은거에요?',
+    '오늘도 좋은 영상 감사해요!',
+    '대박... 이건 못참지',
+    '저도 해봤는데 너무 어렵더라고요 😂',
   ];
 
   static const _musicNames = [
@@ -62,17 +80,19 @@ class VideoRemoteDataSource implements VideoDataSource {
       final metadata = v['metadata'] as Map<String, dynamic>;
       final username = metadata['username'] as String? ?? '';
 
-      final musicName = _musicNames[index % _musicNames.length]
-          .replaceAll('{username}', username);
+      final musicName = _musicNames[index % _musicNames.length].replaceAll(
+        '{username}',
+        username,
+      );
 
       final tags = metadata['tags'] as String? ?? '';
       final description = metadata['description'] as String? ?? '';
-      final hashTags =
-          tags.isNotEmpty
-              ? tags.split(',').map((t) => '#${t.trim()}').join(' ')
-              : '';
-      final fullDescription =
-          hashTags.isNotEmpty ? '$description $hashTags' : description;
+      final hashTags = tags.isNotEmpty
+          ? tags.split(',').map((t) => '#${t.trim()}').join(' ')
+          : '';
+      final fullDescription = hashTags.isNotEmpty
+          ? '$description $hashTags'
+          : description;
 
       return VideoModel(
         id: 'video_${v['id']}',
@@ -131,10 +151,9 @@ class VideoRemoteDataSource implements VideoDataSource {
     final video = videos[index];
     final updated = video.copyWith(
       isBookmarked: !video.isBookmarked,
-      bookmarkCount:
-          video.isBookmarked
-              ? video.bookmarkCount - 1
-              : video.bookmarkCount + 1,
+      bookmarkCount: video.isBookmarked
+          ? video.bookmarkCount - 1
+          : video.bookmarkCount + 1,
     );
     _cachedVideos![index] = updated;
     return updated;
@@ -145,15 +164,17 @@ class VideoRemoteDataSource implements VideoDataSource {
     if (_comments.containsKey(videoId)) return _comments[videoId]!;
 
     final now = DateTime.now();
-    final comments = List.generate(5, (i) {
+    final videoNum = int.tryParse(videoId.replaceAll('video_', '')) ?? 0;
+    final count = 5 + (videoNum % 6); // 5~10개
+    final comments = List.generate(count, (i) {
       return CommentModel(
         id: 'comment_${videoId}_$i',
         videoId: videoId,
         userId: 'commenter_$i',
-        userName: '유저${i + 1}',
+        userName: _commentUserNames[i % _commentUserNames.length],
         text: _sampleComments[i % _sampleComments.length],
         likeCount: (i + 1) * 120,
-        createdAt: now.subtract(Duration(hours: i)),
+        createdAt: now.subtract(Duration(hours: i * 2, minutes: i * 17)),
       );
     });
 

@@ -73,10 +73,7 @@ class _CreatePlaceholder extends StatelessWidget {
       body: Center(
         child: Text(
           AppStrings.placeholderCreate,
-          style: TextStyle(
-            color: AppColors.whiteSecondary,
-            fontSize: 16,
-          ),
+          style: TextStyle(color: AppColors.whiteSecondary, fontSize: 16),
         ),
       ),
     );

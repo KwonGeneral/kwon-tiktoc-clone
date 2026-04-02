@@ -102,10 +102,9 @@ class FeedNotifier extends _$FeedNotifier {
       if (video.id != videoId) return video;
       return video.copyWith(
         isBookmarked: !video.isBookmarked,
-        bookmarkCount:
-            video.isBookmarked
-                ? video.bookmarkCount - 1
-                : video.bookmarkCount + 1,
+        bookmarkCount: video.isBookmarked
+            ? video.bookmarkCount - 1
+            : video.bookmarkCount + 1,
       );
     }).toList();
     state = AsyncData(currentState.copyWith(videos: updatedVideos));
@@ -175,12 +174,20 @@ class FeedNotifier extends _$FeedNotifier {
     } else {
       updatedFollowed.add(userId);
     }
-    state = AsyncData(
-      currentState.copyWith(followedUserIds: updatedFollowed),
-    );
+    state = AsyncData(currentState.copyWith(followedUserIds: updatedFollowed));
 
     // 로컬 저장
     await _storage.saveFollowedUserIds(updatedFollowed);
   }
 
+  void incrementCommentCount(String videoId) {
+    final currentState = state.valueOrNull;
+    if (currentState == null) return;
+
+    final updatedVideos = currentState.videos.map((video) {
+      if (video.id != videoId) return video;
+      return video.copyWith(commentCount: video.commentCount + 1);
+    }).toList();
+    state = AsyncData(currentState.copyWith(videos: updatedVideos));
+  }
 }

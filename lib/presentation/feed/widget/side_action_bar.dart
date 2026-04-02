@@ -11,6 +11,7 @@ class SideActionBar extends StatelessWidget {
     this.isFollowing = false,
     this.onLikeTap,
     this.onBookmarkTap,
+    this.onCommentTap,
     this.onFollowTap,
     super.key,
   });
@@ -19,6 +20,7 @@ class SideActionBar extends StatelessWidget {
   final bool isFollowing;
   final VoidCallback? onLikeTap;
   final VoidCallback? onBookmarkTap;
+  final VoidCallback? onCommentTap;
   final VoidCallback? onFollowTap;
 
   @override
@@ -50,6 +52,7 @@ class SideActionBar extends StatelessWidget {
           _ActionItem(
             icon: Icons.chat_bubble,
             count: video.commentCount,
+            onTap: onCommentTap,
           ),
           const SizedBox(height: 16),
 
@@ -174,10 +177,7 @@ class _ActionItem extends StatelessWidget {
           else
             iconWidget,
           const SizedBox(height: 2),
-          Text(
-            FormatUtils.compactNumber(count),
-            style: AppTextStyles.count,
-          ),
+          Text(FormatUtils.compactNumber(count), style: AppTextStyles.count),
         ],
       ),
     );

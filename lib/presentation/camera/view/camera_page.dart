@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/route/route_paths.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_strings.dart';
@@ -159,38 +160,13 @@ class _CameraPageState extends ConsumerState<CameraPage>
       ref.read(cameraNotifierProvider.notifier).stopRecording(file.path);
 
       if (mounted) {
-        // TODO: Phase 18에서 게시 화면으로 이동
-        _showRecordingCompleteDialog(file.path);
+        context.push(
+          '${RoutePaths.publish}?filePath=${Uri.encodeComponent(file.path)}',
+        );
       }
     } catch (e) {
       debugPrint('녹화 중지 실패: $e');
     }
-  }
-
-  void _showRecordingCompleteDialog(String filePath) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.gray,
-        title: const Text(
-          AppStrings.cameraRecordingComplete,
-          style: TextStyle(color: AppColors.white),
-        ),
-        content: const Text(
-          AppStrings.cameraRecordingCompleteMessage,
-          style: TextStyle(color: AppColors.whiteSecondary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              ref.read(cameraNotifierProvider.notifier).resetRecording();
-            },
-            child: const Text(AppStrings.cameraConfirm),
-          ),
-        ],
-      ),
-    );
   }
 
   Future<void> _handleCancel() async {

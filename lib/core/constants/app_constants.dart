@@ -7,4 +7,7 @@ abstract final class AppConstants {
 
   // Camera
   static const maxRecordingDuration = Duration(seconds: 15);
+
+  // Upload
+  static const uploadApiUrl = 'https://api.myfortie.com/videos/upload';
 }

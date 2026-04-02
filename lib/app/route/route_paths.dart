@@ -7,5 +7,7 @@ abstract final class RoutePaths {
   static const profile = '/profile';
   static const userProfile = '/user/:userId';
 
+  static const publish = '/publish';
+
   static String userProfilePath(String userId) => '/user/$userId';
 }

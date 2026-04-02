@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'camera_provider.dart';
+part of 'publish_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$cameraNotifierHash() => r'fb2f2cc11b52dbc1a4dd6e5a06d1c9bb62fad6c7';
+String _$publishNotifierHash() => r'6953bf23ef71d7cf77fe31656a2e2c7d8288225a';
 
-/// See also [CameraNotifier].
-@ProviderFor(CameraNotifier)
-final cameraNotifierProvider =
-    AutoDisposeNotifierProvider<CameraNotifier, CameraState>.internal(
-      CameraNotifier.new,
-      name: r'cameraNotifierProvider',
+/// See also [PublishNotifier].
+@ProviderFor(PublishNotifier)
+final publishNotifierProvider =
+    AutoDisposeNotifierProvider<PublishNotifier, PublishState>.internal(
+      PublishNotifier.new,
+      name: r'publishNotifierProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$cameraNotifierHash,
+          : _$publishNotifierHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$CameraNotifier = AutoDisposeNotifier<CameraState>;
+typedef _$PublishNotifier = AutoDisposeNotifier<PublishState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

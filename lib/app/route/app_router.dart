@@ -7,6 +7,7 @@ import '../../presentation/friends/view/friends_page.dart';
 import '../../presentation/main/main_shell.dart';
 import '../../presentation/notifications/view/notifications_page.dart';
 import '../../presentation/profile/view/profile_page.dart';
+import '../../presentation/publish/view/publish_page.dart';
 import '../../presentation/user_profile/view/user_profile_page.dart';
 import 'route_paths.dart';
 
@@ -26,6 +27,14 @@ GoRouter createRouter() {
       GoRoute(
         path: RoutePaths.camera,
         builder: (context, state) => const CameraPage(),
+      ),
+      // 게시 (ShellRoute 밖 — 전체 화면)
+      GoRoute(
+        path: RoutePaths.publish,
+        builder: (context, state) {
+          final filePath = state.uri.queryParameters['filePath'] ?? '';
+          return PublishPage(videoFilePath: filePath);
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

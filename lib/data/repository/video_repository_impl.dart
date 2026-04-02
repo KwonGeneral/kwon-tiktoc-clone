@@ -31,4 +31,17 @@ class VideoRepositoryImpl implements VideoRepository {
     final models = await _dataSource.getComments(videoId);
     return models.map((m) => m.toEntity()).toList();
   }
+
+  @override
+  Future<void> uploadVideo({
+    required String filePath,
+    required String description,
+    void Function(double progress)? onProgress,
+  }) async {
+    await _dataSource.uploadVideo(
+      filePath: filePath,
+      description: description,
+      onProgress: onProgress,
+    );
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -180,5 +181,44 @@ class VideoRemoteDataSource implements VideoDataSource {
 
     _comments[videoId] = comments;
     return comments;
+  }
+
+  @override
+  Future<void> uploadVideo({
+    required String filePath,
+    required String description,
+    void Function(double progress)? onProgress,
+  }) async {
+    final file = File(filePath);
+    if (!file.existsSync()) {
+      throw Exception('파일을 찾을 수 없습니다: $filePath');
+    }
+
+    final uri = Uri.parse('$_baseUrl/videos/upload');
+    final request = http.MultipartRequest('POST', uri);
+
+    request.fields['description'] = description;
+    request.files.add(
+      await http.MultipartFile.fromPath('video', filePath),
+    );
+
+    // 파일 크기 기반 진행률 시뮬레이션 (http 패키지는 실제 업로드 진행률 미지원)
+    final fileSize = await file.length();
+    onProgress?.call(0.0);
+
+    final streamedResponse = await request.send();
+    onProgress?.call(0.7);
+
+    final response = await http.Response.fromStream(streamedResponse);
+    onProgress?.call(1.0);
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('업로드 실패: ${response.statusCode}');
+    }
+
+    debugPrint('업로드 완료: $fileSize bytes');
+
+    // 캐시 초기화하여 다음 피드 로드 시 새 영상 포함
+    _cachedVideos = null;
   }
 }

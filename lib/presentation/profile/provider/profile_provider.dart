@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -36,10 +38,10 @@ Future<String?> profileImage(Ref ref, String userId) async {
 @riverpod
 class ProfileImageNotifier extends _$ProfileImageNotifier {
   @override
-  AsyncValue<String?> build() {
+  FutureOr<String?> build() {
     final storage = ref.read(localStorageRepositoryProvider);
     final cachedUrl = storage.getProfileImageUrl();
-    return AsyncData(cachedUrl.isNotEmpty ? cachedUrl : null);
+    return cachedUrl.isNotEmpty ? cachedUrl : null;
   }
 
   Future<void> upload(String imagePath) async {

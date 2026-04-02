@@ -216,15 +216,12 @@ final myVideosProvider = AutoDisposeProvider<List<Video>>.internal(
 // ignore: unused_element
 typedef MyVideosRef = AutoDisposeProviderRef<List<Video>>;
 String _$profileImageNotifierHash() =>
-    r'8014a5c936b3764d5001cac614a99bd0a740afd9';
+    r'19c158302aac4a72a932c407861df905c777aaf5';
 
 /// See also [ProfileImageNotifier].
 @ProviderFor(ProfileImageNotifier)
 final profileImageNotifierProvider =
-    AutoDisposeNotifierProvider<
-      ProfileImageNotifier,
-      AsyncValue<String?>
-    >.internal(
+    AutoDisposeAsyncNotifierProvider<ProfileImageNotifier, String?>.internal(
       ProfileImageNotifier.new,
       name: r'profileImageNotifierProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -234,7 +231,7 @@ final profileImageNotifierProvider =
       allTransitiveDependencies: null,
     );
 
-typedef _$ProfileImageNotifier = AutoDisposeNotifier<AsyncValue<String?>>;
+typedef _$ProfileImageNotifier = AutoDisposeAsyncNotifier<String?>;
 String _$profileEditNotifierHash() =>
     r'8070470f49d4b98ec98d9e574c883baf630fb0f0';
 

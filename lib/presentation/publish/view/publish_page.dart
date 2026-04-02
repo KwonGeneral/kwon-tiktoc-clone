@@ -97,7 +97,10 @@ class _PublishPageState extends ConsumerState<PublishPage> {
 
     ref.listen(publishNotifierProvider, (prev, next) {
       if (next.status == PublishStatus.success) {
-        ref.invalidate(feedNotifierProvider);
+        ref.read(feedNotifierProvider.notifier).addUploadedVideo(
+              videoUrl: widget.videoFilePath,
+              description: _descriptionController.text,
+            );
         context.go(RoutePaths.profile);
       }
     });

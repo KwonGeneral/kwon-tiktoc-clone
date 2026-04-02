@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
 
+import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/comment_bottom_sheet.dart';
@@ -47,6 +51,14 @@ class VideoOverlay extends ConsumerWidget {
               ref
                   .read(feedNotifierProvider.notifier)
                   .toggleFollow(video.userId);
+            },
+            onShareTap: () {
+              final text = AppStrings.shareText
+                  .replaceAll('{nickname}', video.nickname);
+              Share.share('$text\n${video.videoUrl}');
+            },
+            onProfileTap: () {
+              context.push(RoutePaths.userProfilePath(video.userId));
             },
           ),
         ),

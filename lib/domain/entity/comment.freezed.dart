@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Comment {
 
- String get id; String get videoId; String get userId; String get userName; String get userAvatarUrl; String get text; int get likeCount; DateTime get createdAt;
+ String get id; String get videoId; String get userId; String get userName; String get userAvatarUrl; String get text; int get likeCount; DateTime get createdAt; String? get parentCommentId; int get replyCount;
 /// Create a copy of Comment
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CommentCopyWith<Comment> get copyWith => _$CommentCopyWithImpl<Comment>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Comment&&(identical(other.id, id) || other.id == id)&&(identical(other.videoId, videoId) || other.videoId == videoId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.userAvatarUrl, userAvatarUrl) || other.userAvatarUrl == userAvatarUrl)&&(identical(other.text, text) || other.text == text)&&(identical(other.likeCount, likeCount) || other.likeCount == likeCount)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Comment&&(identical(other.id, id) || other.id == id)&&(identical(other.videoId, videoId) || other.videoId == videoId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.userAvatarUrl, userAvatarUrl) || other.userAvatarUrl == userAvatarUrl)&&(identical(other.text, text) || other.text == text)&&(identical(other.likeCount, likeCount) || other.likeCount == likeCount)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.parentCommentId, parentCommentId) || other.parentCommentId == parentCommentId)&&(identical(other.replyCount, replyCount) || other.replyCount == replyCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,videoId,userId,userName,userAvatarUrl,text,likeCount,createdAt);
+int get hashCode => Object.hash(runtimeType,id,videoId,userId,userName,userAvatarUrl,text,likeCount,createdAt,parentCommentId,replyCount);
 
 @override
 String toString() {
-  return 'Comment(id: $id, videoId: $videoId, userId: $userId, userName: $userName, userAvatarUrl: $userAvatarUrl, text: $text, likeCount: $likeCount, createdAt: $createdAt)';
+  return 'Comment(id: $id, videoId: $videoId, userId: $userId, userName: $userName, userAvatarUrl: $userAvatarUrl, text: $text, likeCount: $likeCount, createdAt: $createdAt, parentCommentId: $parentCommentId, replyCount: $replyCount)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CommentCopyWith<$Res>  {
   factory $CommentCopyWith(Comment value, $Res Function(Comment) _then) = _$CommentCopyWithImpl;
 @useResult
 $Res call({
- String id, String videoId, String userId, String userName, String userAvatarUrl, String text, int likeCount, DateTime createdAt
+ String id, String videoId, String userId, String userName, String userAvatarUrl, String text, int likeCount, DateTime createdAt, String? parentCommentId, int replyCount
 });
 
 
@@ -62,7 +62,7 @@ class _$CommentCopyWithImpl<$Res>
 
 /// Create a copy of Comment
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? videoId = null,Object? userId = null,Object? userName = null,Object? userAvatarUrl = null,Object? text = null,Object? likeCount = null,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? videoId = null,Object? userId = null,Object? userName = null,Object? userAvatarUrl = null,Object? text = null,Object? likeCount = null,Object? createdAt = null,Object? parentCommentId = freezed,Object? replyCount = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,videoId: null == videoId ? _self.videoId : videoId // ignore: cast_nullable_to_non_nullable
@@ -72,7 +72,9 @@ as String,userAvatarUrl: null == userAvatarUrl ? _self.userAvatarUrl : userAvata
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,likeCount: null == likeCount ? _self.likeCount : likeCount // ignore: cast_nullable_to_non_nullable
 as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,parentCommentId: freezed == parentCommentId ? _self.parentCommentId : parentCommentId // ignore: cast_nullable_to_non_nullable
+as String?,replyCount: null == replyCount ? _self.replyCount : replyCount // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -154,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String videoId,  String userId,  String userName,  String userAvatarUrl,  String text,  int likeCount,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String videoId,  String userId,  String userName,  String userAvatarUrl,  String text,  int likeCount,  DateTime createdAt,  String? parentCommentId,  int replyCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Comment() when $default != null:
-return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAvatarUrl,_that.text,_that.likeCount,_that.createdAt);case _:
+return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAvatarUrl,_that.text,_that.likeCount,_that.createdAt,_that.parentCommentId,_that.replyCount);case _:
   return orElse();
 
 }
@@ -175,10 +177,10 @@ return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAva
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String videoId,  String userId,  String userName,  String userAvatarUrl,  String text,  int likeCount,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String videoId,  String userId,  String userName,  String userAvatarUrl,  String text,  int likeCount,  DateTime createdAt,  String? parentCommentId,  int replyCount)  $default,) {final _that = this;
 switch (_that) {
 case _Comment():
-return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAvatarUrl,_that.text,_that.likeCount,_that.createdAt);}
+return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAvatarUrl,_that.text,_that.likeCount,_that.createdAt,_that.parentCommentId,_that.replyCount);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -192,10 +194,10 @@ return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAva
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String videoId,  String userId,  String userName,  String userAvatarUrl,  String text,  int likeCount,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String videoId,  String userId,  String userName,  String userAvatarUrl,  String text,  int likeCount,  DateTime createdAt,  String? parentCommentId,  int replyCount)?  $default,) {final _that = this;
 switch (_that) {
 case _Comment() when $default != null:
-return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAvatarUrl,_that.text,_that.likeCount,_that.createdAt);case _:
+return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAvatarUrl,_that.text,_that.likeCount,_that.createdAt,_that.parentCommentId,_that.replyCount);case _:
   return null;
 
 }
@@ -207,7 +209,7 @@ return $default(_that.id,_that.videoId,_that.userId,_that.userName,_that.userAva
 
 
 class _Comment implements Comment {
-  const _Comment({required this.id, required this.videoId, required this.userId, this.userName = '', this.userAvatarUrl = '', required this.text, this.likeCount = 0, required this.createdAt});
+  const _Comment({required this.id, required this.videoId, required this.userId, this.userName = '', this.userAvatarUrl = '', required this.text, this.likeCount = 0, required this.createdAt, this.parentCommentId, this.replyCount = 0});
   
 
 @override final  String id;
@@ -218,6 +220,8 @@ class _Comment implements Comment {
 @override final  String text;
 @override@JsonKey() final  int likeCount;
 @override final  DateTime createdAt;
+@override final  String? parentCommentId;
+@override@JsonKey() final  int replyCount;
 
 /// Create a copy of Comment
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +233,16 @@ _$CommentCopyWith<_Comment> get copyWith => __$CommentCopyWithImpl<_Comment>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Comment&&(identical(other.id, id) || other.id == id)&&(identical(other.videoId, videoId) || other.videoId == videoId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.userAvatarUrl, userAvatarUrl) || other.userAvatarUrl == userAvatarUrl)&&(identical(other.text, text) || other.text == text)&&(identical(other.likeCount, likeCount) || other.likeCount == likeCount)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Comment&&(identical(other.id, id) || other.id == id)&&(identical(other.videoId, videoId) || other.videoId == videoId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.userAvatarUrl, userAvatarUrl) || other.userAvatarUrl == userAvatarUrl)&&(identical(other.text, text) || other.text == text)&&(identical(other.likeCount, likeCount) || other.likeCount == likeCount)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.parentCommentId, parentCommentId) || other.parentCommentId == parentCommentId)&&(identical(other.replyCount, replyCount) || other.replyCount == replyCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,videoId,userId,userName,userAvatarUrl,text,likeCount,createdAt);
+int get hashCode => Object.hash(runtimeType,id,videoId,userId,userName,userAvatarUrl,text,likeCount,createdAt,parentCommentId,replyCount);
 
 @override
 String toString() {
-  return 'Comment(id: $id, videoId: $videoId, userId: $userId, userName: $userName, userAvatarUrl: $userAvatarUrl, text: $text, likeCount: $likeCount, createdAt: $createdAt)';
+  return 'Comment(id: $id, videoId: $videoId, userId: $userId, userName: $userName, userAvatarUrl: $userAvatarUrl, text: $text, likeCount: $likeCount, createdAt: $createdAt, parentCommentId: $parentCommentId, replyCount: $replyCount)';
 }
 
 
@@ -249,7 +253,7 @@ abstract mixin class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
   factory _$CommentCopyWith(_Comment value, $Res Function(_Comment) _then) = __$CommentCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String videoId, String userId, String userName, String userAvatarUrl, String text, int likeCount, DateTime createdAt
+ String id, String videoId, String userId, String userName, String userAvatarUrl, String text, int likeCount, DateTime createdAt, String? parentCommentId, int replyCount
 });
 
 
@@ -266,7 +270,7 @@ class __$CommentCopyWithImpl<$Res>
 
 /// Create a copy of Comment
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? videoId = null,Object? userId = null,Object? userName = null,Object? userAvatarUrl = null,Object? text = null,Object? likeCount = null,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? videoId = null,Object? userId = null,Object? userName = null,Object? userAvatarUrl = null,Object? text = null,Object? likeCount = null,Object? createdAt = null,Object? parentCommentId = freezed,Object? replyCount = null,}) {
   return _then(_Comment(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,videoId: null == videoId ? _self.videoId : videoId // ignore: cast_nullable_to_non_nullable
@@ -276,7 +280,9 @@ as String,userAvatarUrl: null == userAvatarUrl ? _self.userAvatarUrl : userAvata
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,likeCount: null == likeCount ? _self.likeCount : likeCount // ignore: cast_nullable_to_non_nullable
 as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,parentCommentId: freezed == parentCommentId ? _self.parentCommentId : parentCommentId // ignore: cast_nullable_to_non_nullable
+as String?,replyCount: null == replyCount ? _self.replyCount : replyCount // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

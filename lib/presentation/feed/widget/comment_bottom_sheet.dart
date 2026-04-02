@@ -49,8 +49,13 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
     final commentState = ref.watch(commentNotifierProvider);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
+    // 최상위 댓글만 필터 (parentCommentId == null)
+    final topLevelComments = commentState.comments
+        .where((c) => c.parentCommentId == null)
+        .toList();
+
     return Container(
-      height: MediaQuery.of(context).size.height * 0.65,
+      height: MediaQuery.of(context).size.height * 0.6,
       decoration: const BoxDecoration(
         color: AppColors.darkGray,
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
@@ -58,7 +63,7 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
       child: Column(
         children: [
           // 헤더
-          _buildHeader(commentState.comments.length),
+          _buildHeader(topLevelComments.length),
 
           const Divider(color: AppColors.divider, height: 1),
 
@@ -68,7 +73,7 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
                 ? const Center(
                     child: CircularProgressIndicator(color: AppColors.white),
                   )
-                : commentState.comments.isEmpty
+                : topLevelComments.isEmpty
                 ? const Center(
                     child: Text(
                       AppStrings.commentEmpty,
@@ -81,26 +86,42 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.only(top: 8),
-                    itemCount: commentState.comments.length,
+                    itemCount: topLevelComments.length,
                     itemBuilder: (context, index) {
-                      final comment = commentState.comments[index];
+                      final comment = topLevelComments[index];
+                      final notifier =
+                          ref.read(commentNotifierProvider.notifier);
+                      final replies = notifier.getReplies(comment.id);
+
                       return CommentItem(
                         comment: comment,
-                        isLiked: commentState.likedCommentIds.contains(
-                          comment.id,
-                        ),
-                        isDisliked: commentState.dislikedCommentIds.contains(
-                          comment.id,
-                        ),
-                        onLikeTap: () {
-                          ref
-                              .read(commentNotifierProvider.notifier)
-                              .toggleCommentLike(comment.id);
+                        isLiked: commentState.likedCommentIds
+                            .contains(comment.id),
+                        isDisliked: commentState.dislikedCommentIds
+                            .contains(comment.id),
+                        onLikeTap: () =>
+                            notifier.toggleCommentLike(comment.id),
+                        onDislikeTap: () =>
+                            notifier.toggleCommentDislike(comment.id),
+                        onReplyTap: () {
+                          notifier.startReply(
+                            comment.id,
+                            comment.userName,
+                          );
+                          _focusNode.requestFocus();
                         },
-                        onDislikeTap: () {
-                          ref
-                              .read(commentNotifierProvider.notifier)
-                              .toggleCommentDislike(comment.id);
+                        replies: replies,
+                        isExpanded: commentState.expandedReplyIds
+                            .contains(comment.id),
+                        onToggleReplies: () =>
+                            notifier.toggleReplies(comment.id),
+                        likedCommentIds: commentState.likedCommentIds,
+                        dislikedCommentIds: commentState.dislikedCommentIds,
+                        onReplyLikeTap: notifier.toggleCommentLike,
+                        onReplyDislikeTap: notifier.toggleCommentDislike,
+                        onReplyReplyTap: (parentId, userName) {
+                          notifier.startReply(parentId, userName);
+                          _focusNode.requestFocus();
                         },
                       );
                     },
@@ -108,6 +129,41 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
           ),
 
           const Divider(color: AppColors.divider, height: 1),
+
+          // 답글 모드 표시
+          if (commentState.replyingToCommentId != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              color: AppColors.gray,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      AppStrings.commentReplyingTo.replaceAll(
+                        '{name}',
+                        commentState.replyingToUserName ?? '',
+                      ),
+                      style: const TextStyle(
+                        color: AppColors.whiteSecondary,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      ref
+                          .read(commentNotifierProvider.notifier)
+                          .cancelReply();
+                    },
+                    child: const Icon(
+                      Icons.close,
+                      color: AppColors.whiteSecondary,
+                      size: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
           // 입력 필드
           Padding(
@@ -134,7 +190,9 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
                       fontSize: 14,
                     ),
                     decoration: InputDecoration(
-                      hintText: AppStrings.commentInputHint,
+                      hintText: commentState.replyingToCommentId != null
+                          ? AppStrings.commentReply
+                          : AppStrings.commentInputHint,
                       hintStyle: const TextStyle(
                         color: AppColors.whiteDisabled,
                         fontSize: 14,

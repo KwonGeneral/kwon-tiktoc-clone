@@ -64,6 +64,13 @@ class FeedNotifier extends _$FeedNotifier {
     state = AsyncData(currentState.copyWith(currentIndex: index));
   }
 
+  void selectTab(FeedTab tab) {
+    final currentState = state.valueOrNull;
+    if (currentState == null) return;
+
+    state = AsyncData(currentState.copyWith(selectedTab: tab, currentIndex: 0));
+  }
+
   Future<void> toggleLike(String videoId) async {
     final currentState = state.valueOrNull;
     if (currentState == null) return;

@@ -70,7 +70,11 @@ class _PublishPageState extends ConsumerState<PublishPage> {
     // 성공 메시지 잠시 표시 후 피드 리로드 + 프로필 이동
     await Future<void>.delayed(const Duration(milliseconds: 800));
     if (!mounted) return;
-    await ref.read(feedNotifierProvider.notifier).reload();
+    try {
+      await ref.read(feedNotifierProvider.notifier).reload();
+    } catch (_) {
+      // 리로드 실패 시에도 프로필로 이동 (다음 앱 실행 시 갱신됨)
+    }
     if (!mounted) return;
     context.go(RoutePaths.profile);
   }

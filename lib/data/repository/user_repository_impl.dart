@@ -132,4 +132,13 @@ class UserRepositoryImpl implements UserRepository {
   Future<User> getCurrentUser() async {
     return getUserById(_currentUserId);
   }
+
+  @override
+  Future<List<User>> getRecommendedUsers() async {
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    return _mockUsers.entries
+        .where((e) => e.key != _currentUserId)
+        .map((e) => e.value.toEntity())
+        .toList();
+  }
 }

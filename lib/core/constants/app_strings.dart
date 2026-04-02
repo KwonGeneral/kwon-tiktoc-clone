@@ -49,6 +49,20 @@ abstract final class AppStrings {
   static const userProfileFollowing = '팔로잉';
   static const userProfileMessage = '메시지';
 
+  // 친구
+  static const friendsTitle = '친구';
+  static const friendsBanner = '친구를 팔로우하여\n동영상을 시청하세요';
+  static const friendsFindFacebook = 'Facebook 친구';
+  static const friendsFindFacebookSub = '친구 찾기';
+  static const friendsFindButton = '찾기';
+  static const friendsFollow = '팔로우';
+  static const friendsFollowing = '팔로잉';
+  static const friendsRemove = '제거';
+  static const friendsMutualFollow = '맞팔로우 중: ';
+  static const friendsFollowedBy = '팔로우된 친구: ';
+  static const friendsSearchHint = '검색';
+  static const friendsEmpty = '추천 친구가 없습니다';
+
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';

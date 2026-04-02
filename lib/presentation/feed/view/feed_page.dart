@@ -51,8 +51,9 @@ class _FeedPageState extends ConsumerState<FeedPage> {
   PageController _getPageController(int videoCount, FeedTab tab) {
     if (_pageController == null || _currentTab != tab) {
       _pageController?.dispose();
-      final midStart = (_virtualPageCount ~/ 2) -
-          ((_virtualPageCount ~/ 2) % videoCount);
+      final midStart = videoCount > 0
+          ? (_virtualPageCount ~/ 2) - ((_virtualPageCount ~/ 2) % videoCount)
+          : 0;
       _pageController = PageController(initialPage: midStart);
       _currentTab = tab;
     }

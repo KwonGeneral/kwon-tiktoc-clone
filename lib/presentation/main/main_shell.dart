@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../app/route/route_paths.dart';
-import '../common/bottom_nav_bar.dart';
+import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
+import 'package:kwon_tiktoc_clone/presentation/common/bottom_nav_bar.dart';
 
 class MainShell extends StatelessWidget {
   const MainShell({super.key, required this.navigationShell});

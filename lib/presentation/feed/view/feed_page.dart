@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_state.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
@@ -78,6 +79,11 @@ class _FeedPageState extends ConsumerState<FeedPage> {
   void _onPageChanged(int loopIndex, int totalVideos) {
     final realIndex = loopIndex % totalVideos;
     ref.read(feedNotifierProvider.notifier).updateCurrentIndex(realIndex);
+    // 페이지 스크롤 시 댓글창 자동 닫기
+    final commentState = ref.read(commentNotifierProvider);
+    if (commentState.isOpen) {
+      ref.read(commentNotifierProvider.notifier).close();
+    }
   }
 
   @override

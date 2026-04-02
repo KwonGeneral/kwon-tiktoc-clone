@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/di/providers.dart';
-import '../../../domain/entity/post_image.dart';
+import 'package:kwon_tiktoc_clone/core/di/providers.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 import 'publish_state.dart';
 
 part 'publish_image_provider.g.dart';

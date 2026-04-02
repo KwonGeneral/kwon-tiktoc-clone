@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../../presentation/feed/provider/feed_provider.dart';
-import '../provider/friends_provider.dart';
-import '../widget/friend_list_tile.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/friends/provider/friends_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/friends/widget/friend_list_tile.dart';
 
 class FriendsPage extends ConsumerStatefulWidget {
   const FriendsPage({super.key});

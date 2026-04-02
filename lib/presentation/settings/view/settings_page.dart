@@ -1,17 +1,45 @@
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_text_styles.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../profile/provider/profile_provider.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/presentation/profile/provider/profile_provider.dart';
 
-class SettingsPage extends ConsumerWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends ConsumerState<SettingsPage>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // 시스템 설정에서 돌아왔을 때 알림 상태 재확인
+      ref
+          .read(notificationSettingNotifierProvider.notifier)
+          .checkSystemStatus();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final notificationEnabled = ref.watch(notificationSettingNotifierProvider);
 
     return Scaffold(
@@ -37,12 +65,6 @@ class SettingsPage extends ConsumerWidget {
             trailing: Switch.adaptive(
               value: notificationEnabled,
               onChanged: (_) {
-                if (!notificationEnabled) {
-                  // OFF → ON: 시스템 알림 설정으로 이동
-                  AppSettings.openAppSettings(
-                    type: AppSettingsType.notification,
-                  );
-                }
                 ref.read(notificationSettingNotifierProvider.notifier).toggle();
               },
               activeTrackColor: AppColors.primary,
@@ -58,7 +80,7 @@ class SettingsPage extends ConsumerWidget {
               Icons.chevron_right,
               color: AppColors.whiteSecondary,
             ),
-            onTap: () => AppSettings.openAppSettings(),
+            onTap: () => openAppSettings(),
           ),
           const _Divider(),
           // 앱 버전

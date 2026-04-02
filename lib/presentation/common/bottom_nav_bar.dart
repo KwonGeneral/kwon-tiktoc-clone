@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../app/theme/app_colors.dart';
-import '../../core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({

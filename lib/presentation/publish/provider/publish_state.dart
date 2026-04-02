@@ -10,5 +10,7 @@ sealed class PublishState with _$PublishState {
     @Default(PublishStatus.idle) PublishStatus status,
     @Default(0.0) double progress,
     String? errorMessage,
+    String? uploadedVideoUrl,
+    String? uploadedDescription,
   }) = _PublishState;
 }

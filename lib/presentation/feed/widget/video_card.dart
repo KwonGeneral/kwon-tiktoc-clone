@@ -4,8 +4,10 @@ import 'package:video_player/video_player.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/comment_bottom_sheet.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/like_animation.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_overlay.dart';
 
@@ -31,21 +33,78 @@ class _VideoCardState extends ConsumerState<VideoCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Manager의 state를 watch하여 controller 변경 시 rebuild
     final controllers = ref.watch(videoPlayerManagerProvider);
     final controller = controllers[widget.index];
+    final commentState = ref.watch(commentNotifierProvider);
+    final isCommentOpen =
+        commentState.isOpen && commentState.videoId == widget.video.id;
 
     return GestureDetector(
       onTap: () {
+        if (isCommentOpen) return;
         ref
             .read(videoPlayerManagerProvider.notifier)
             .togglePlayPause(widget.index);
       },
-      onDoubleTap: _handleDoubleTap,
+      onDoubleTap: isCommentOpen ? null : _handleDoubleTap,
       child: Container(
         color: AppColors.black,
-        child: _buildContent(controller),
+        child: isCommentOpen
+            ? _buildWithComments(controller)
+            : _buildContent(controller),
       ),
+    );
+  }
+
+  /// 댓글창이 열렸을 때: 영상 축소 + 댓글
+  Widget _buildWithComments(VideoPlayerController? controller) {
+    return Column(
+      children: [
+        // 축소된 영상 (상단 약 40%)
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.38,
+          child: Stack(
+            children: [
+              if (controller != null && controller.value.isInitialized)
+                SizedBox.expand(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: controller.value.size.width,
+                      height: controller.value.size.height,
+                      child: VideoPlayer(controller),
+                    ),
+                  ),
+                )
+              else
+                _buildLoading(),
+              // 닫기 버튼
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 8,
+                right: 12,
+                child: GestureDetector(
+                  onTap: () =>
+                      ref.read(commentNotifierProvider.notifier).close(),
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.black.withValues(alpha: 0.5),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.close,
+                      color: AppColors.white,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // 댓글 영역 (하단 약 60%)
+        Expanded(child: CommentInlineView(videoId: widget.video.id)),
+      ],
     );
   }
 

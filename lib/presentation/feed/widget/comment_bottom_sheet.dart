@@ -7,35 +7,24 @@ import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/comment_item.dart';
 
-class CommentBottomSheet extends ConsumerStatefulWidget {
-  const CommentBottomSheet({required this.videoId, super.key});
+/// 댓글창 열기 (provider 기반 - 영상 축소 + 인라인 댓글)
+Future<void> openCommentView(WidgetRef ref, String videoId) async {
+  await ref.read(commentNotifierProvider.notifier).open(videoId);
+}
+
+/// 인라인 댓글 뷰 (영상 카드 내에서 사용)
+class CommentInlineView extends ConsumerStatefulWidget {
+  const CommentInlineView({required this.videoId, super.key});
 
   final String videoId;
 
-  static Future<void> show(BuildContext context, String videoId) {
-    return showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => CommentBottomSheet(videoId: videoId),
-    );
-  }
-
   @override
-  ConsumerState<CommentBottomSheet> createState() => _CommentBottomSheetState();
+  ConsumerState<CommentInlineView> createState() => _CommentInlineViewState();
 }
 
-class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
+class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(commentNotifierProvider.notifier).loadComments(widget.videoId);
-    });
-  }
 
   @override
   void dispose() {
@@ -49,13 +38,11 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
     final commentState = ref.watch(commentNotifierProvider);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    // 최상위 댓글만 필터 (parentCommentId == null)
     final topLevelComments = commentState.comments
         .where((c) => c.parentCommentId == null)
         .toList();
 
     return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
       decoration: const BoxDecoration(
         color: AppColors.commentBackground,
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
@@ -64,7 +51,6 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
         children: [
           // 헤더
           _buildHeader(topLevelComments.length),
-
           const Divider(color: AppColors.divider, height: 1),
 
           // 댓글 목록
@@ -150,9 +136,9 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      ref.read(commentNotifierProvider.notifier).cancelReply();
-                    },
+                    onTap: () => ref
+                        .read(commentNotifierProvider.notifier)
+                        .cancelReply(),
                     child: const Icon(
                       Icons.close,
                       color: AppColors.whiteSecondary,
@@ -282,7 +268,7 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
             ),
           ),
           GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
+            onTap: () => ref.read(commentNotifierProvider.notifier).close(),
             child: const Icon(Icons.close, color: AppColors.white, size: 22),
           ),
         ],

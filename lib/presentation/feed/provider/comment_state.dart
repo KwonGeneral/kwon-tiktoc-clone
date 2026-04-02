@@ -13,6 +13,9 @@ sealed class CommentState with _$CommentState {
     @Default({}) Set<String> dislikedCommentIds,
     @Default(false) bool isLoading,
 
+    /// 댓글창이 열려있는지 여부
+    @Default(false) bool isOpen,
+
     /// 답글이 펼쳐진 댓글 ID 목록
     @Default({}) Set<String> expandedReplyIds,
 

@@ -45,7 +45,7 @@ class VideoOverlay extends ConsumerWidget {
               ref.read(feedNotifierProvider.notifier).toggleBookmark(video.id);
             },
             onCommentTap: () {
-              CommentBottomSheet.show(context, video.id);
+              openCommentView(ref, video.id);
             },
             onFollowTap: () {
               ref

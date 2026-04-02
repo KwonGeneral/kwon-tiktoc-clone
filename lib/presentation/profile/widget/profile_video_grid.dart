@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_text_styles.dart';
-import '../../../domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 
 class ProfileVideoGrid extends StatelessWidget {
   const ProfileVideoGrid({required this.videos, this.onVideoTap, super.key});

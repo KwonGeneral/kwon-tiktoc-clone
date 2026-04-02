@@ -7,4 +7,5 @@ abstract final class AppConstants {
 
   // Camera
   static const maxRecordingDuration = Duration(seconds: 15);
+
 }

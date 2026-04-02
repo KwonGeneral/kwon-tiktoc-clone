@@ -6,4 +6,9 @@ abstract interface class VideoRepository {
   Future<Video> toggleLike(String videoId);
   Future<Video> toggleBookmark(String videoId);
   Future<List<Comment>> getComments(String videoId);
+  Future<void> uploadVideo({
+    required String filePath,
+    required String description,
+    void Function(double progress)? onProgress,
+  });
 }

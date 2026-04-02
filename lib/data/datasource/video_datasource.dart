@@ -6,4 +6,9 @@ abstract interface class VideoDataSource {
   Future<VideoModel> toggleLike(String videoId);
   Future<VideoModel> toggleBookmark(String videoId);
   Future<List<CommentModel>> getComments(String videoId);
+  Future<void> uploadVideo({
+    required String filePath,
+    required String description,
+    void Function(double progress)? onProgress,
+  });
 }

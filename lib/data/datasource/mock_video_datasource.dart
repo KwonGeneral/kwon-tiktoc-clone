@@ -174,4 +174,14 @@ class MockVideoDataSource implements VideoDataSource {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     return _comments[videoId] ?? [];
   }
+
+  @override
+  Future<void> uploadVideo({
+    required String filePath,
+    required String description,
+    void Function(double progress)? onProgress,
+  }) async {
+    await Future<void>.delayed(const Duration(seconds: 2));
+    onProgress?.call(1.0);
+  }
 }

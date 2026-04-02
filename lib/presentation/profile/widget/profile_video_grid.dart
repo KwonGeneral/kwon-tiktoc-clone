@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
@@ -38,25 +39,77 @@ class ProfileVideoGrid extends StatelessWidget {
   }
 }
 
-class _VideoThumbnail extends StatelessWidget {
+class _VideoThumbnail extends StatefulWidget {
   const _VideoThumbnail({required this.video});
 
   final Video video;
 
   @override
+  State<_VideoThumbnail> createState() => _VideoThumbnailState();
+}
+
+class _VideoThumbnailState extends State<_VideoThumbnail>
+    with AutomaticKeepAliveClientMixin {
+  VideoPlayerController? _controller;
+  bool _initialized = false;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initThumbnail();
+  }
+
+  Future<void> _initThumbnail() async {
+    if (widget.video.videoUrl.isEmpty) return;
+
+    final controller = VideoPlayerController.networkUrl(
+      Uri.parse(widget.video.videoUrl),
+    );
+    _controller = controller;
+
+    try {
+      await controller.initialize();
+      if (mounted) {
+        setState(() => _initialized = true);
+      }
+    } catch (_) {
+      // 초기화 실패 시 플레이스홀더 유지
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Stack(
       fit: StackFit.expand,
       children: [
-        // 썸네일 또는 플레이스홀더
-        video.thumbnailUrl.isNotEmpty
-            ? Image.network(
-                video.thumbnailUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _buildPlaceholder(),
-              )
-            : _buildPlaceholder(),
-        // 하단 조회수/좋아요 표시
+        if (_initialized && _controller != null)
+          FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+              width: _controller!.value.size.width,
+              height: _controller!.value.size.height,
+              child: VideoPlayer(_controller!),
+            ),
+          )
+        else if (widget.video.thumbnailUrl.isNotEmpty)
+          Image.network(
+            widget.video.thumbnailUrl,
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) => _buildPlaceholder(),
+          )
+        else
+          _buildPlaceholder(),
+        // 하단 좋아요 표시
         Positioned(
           left: 4,
           bottom: 4,
@@ -66,7 +119,7 @@ class _VideoThumbnail extends StatelessWidget {
               const Icon(Icons.favorite, color: AppColors.white, size: 14),
               const SizedBox(width: 2),
               Text(
-                _formatCount(video.likeCount),
+                _formatCount(widget.video.likeCount),
                 style: AppTextStyles.profileLabel.copyWith(
                   color: AppColors.white,
                   fontSize: 11,

@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/local_storage_repository.dart';
@@ -45,14 +46,25 @@ class FeedNotifier extends _$FeedNotifier {
   Future<FeedState> _loadInitial() async {
     final repository = ref.read(videoRepositoryProvider);
     final getVideoFeed = GetVideoFeed(repository);
-    final videos = await getVideoFeed(page: 0);
-    final localVideos = _applyLocalStates(videos);
+
+    // 전체 영상 로드 (팔로잉 탭 필터링을 위해 모든 페이지 로드)
+    final allVideos = <Video>[];
+    var page = 0;
+    while (true) {
+      final videos = await getVideoFeed(page: page);
+      if (videos.isEmpty) break;
+      allVideos.addAll(videos);
+      if (videos.length < AppConstants.videoPageSize) break;
+      page++;
+    }
+
+    final localVideos = _applyLocalStates(allVideos);
     final followedUserIds = _storage.getFollowedUserIds();
 
     return FeedState(
       videos: localVideos,
-      currentPage: 0,
-      hasMore: videos.length >= AppConstants.videoPageSize,
+      currentPage: page,
+      hasMore: false,
       followedUserIds: followedUserIds,
     );
   }
@@ -185,6 +197,30 @@ class FeedNotifier extends _$FeedNotifier {
 
     // 로컬 저장
     await _storage.saveFollowedUserIds(updatedFollowed);
+  }
+
+  void addUploadedVideo({
+    required String videoUrl,
+    required String description,
+  }) {
+    final currentState = state.valueOrNull;
+    if (currentState == null) return;
+
+    final now = DateTime.now();
+    final newVideo = Video(
+      id: 'uploaded_${now.millisecondsSinceEpoch}',
+      userId: AppStrings.commentCurrentUserId,
+      videoUrl: videoUrl,
+      description: description,
+      musicName: 'Original Sound',
+      username: 'me',
+      nickname: '나',
+      createdAt: now,
+    );
+
+    state = AsyncData(
+      currentState.copyWith(videos: [newVideo, ...currentState.videos]),
+    );
   }
 
   void incrementCommentCount(String videoId) {

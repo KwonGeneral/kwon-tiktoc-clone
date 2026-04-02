@@ -6,11 +6,7 @@ import '../../../app/theme/app_text_styles.dart';
 import '../../../domain/entity/video.dart';
 
 class ProfileVideoGrid extends StatelessWidget {
-  const ProfileVideoGrid({
-    required this.videos,
-    this.onVideoTap,
-    super.key,
-  });
+  const ProfileVideoGrid({required this.videos, this.onVideoTap, super.key});
 
   final List<Video> videos;
   final void Function(Video video)? onVideoTap;

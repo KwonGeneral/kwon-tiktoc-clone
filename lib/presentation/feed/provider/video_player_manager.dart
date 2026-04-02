@@ -89,9 +89,7 @@ class VideoPlayerManager extends _$VideoPlayerManager {
     _initializing.add(index);
     // HLS URL 우선 사용, 없으면 MP4 fallback
     final playUrl = video.hlsUrl.isNotEmpty ? video.hlsUrl : video.videoUrl;
-    final controller = VideoPlayerController.networkUrl(
-      Uri.parse(playUrl),
-    );
+    final controller = VideoPlayerController.networkUrl(Uri.parse(playUrl));
 
     _controllers[index] = controller;
 

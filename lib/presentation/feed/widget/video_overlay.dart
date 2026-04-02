@@ -53,8 +53,10 @@ class VideoOverlay extends ConsumerWidget {
                   .toggleFollow(video.userId);
             },
             onShareTap: () {
-              final text = AppStrings.shareText
-                  .replaceAll('{nickname}', video.nickname);
+              final text = AppStrings.shareText.replaceAll(
+                '{nickname}',
+                video.nickname,
+              );
               Share.share('$text\n${video.videoUrl}');
             },
             onProfileTap: () {

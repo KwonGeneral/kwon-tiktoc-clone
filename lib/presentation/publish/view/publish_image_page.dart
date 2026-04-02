@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,40 +7,38 @@ import 'package:go_router/go_router.dart';
 import '../../../app/route/route_paths.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../feed/provider/feed_provider.dart';
-import '../provider/publish_provider.dart';
+import '../provider/publish_image_provider.dart';
 import '../provider/publish_state.dart';
-import '../widget/publish_cover_thumbnail.dart';
 import '../widget/publish_upload_overlay.dart';
 
-class PublishPage extends ConsumerStatefulWidget {
-  const PublishPage({super.key, required this.videoFilePath});
+class PublishImagePage extends ConsumerStatefulWidget {
+  const PublishImagePage({super.key, required this.imageFilePath});
 
-  final String videoFilePath;
+  final String imageFilePath;
 
   @override
-  ConsumerState<PublishPage> createState() => _PublishPageState();
+  ConsumerState<PublishImagePage> createState() => _PublishImagePageState();
 }
 
-class _PublishPageState extends ConsumerState<PublishPage> {
-  final _descriptionController = TextEditingController();
-  final _descriptionFocusNode = FocusNode();
+class _PublishImagePageState extends ConsumerState<PublishImagePage> {
+  final _captionController = TextEditingController();
+  final _captionFocusNode = FocusNode();
 
   @override
   void dispose() {
-    _descriptionController.dispose();
-    _descriptionFocusNode.dispose();
+    _captionController.dispose();
+    _captionFocusNode.dispose();
     super.dispose();
   }
 
   void _onPublish() {
-    _descriptionFocusNode.unfocus();
+    _captionFocusNode.unfocus();
     FocusManager.instance.primaryFocus?.unfocus();
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text(AppStrings.publishPrivacyTitle),
-        content: const Text(AppStrings.publishPrivacyMessage),
+        content: const Text(AppStrings.publishImagePrivacyMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -61,59 +61,48 @@ class _PublishPageState extends ConsumerState<PublishPage> {
 
   void _startUpload() {
     ref
-        .read(publishNotifierProvider.notifier)
+        .read(publishImageNotifierProvider.notifier)
         .publish(
-          videoFilePath: widget.videoFilePath,
-          description: _descriptionController.text,
+          imageFilePath: widget.imageFilePath,
+          caption: _captionController.text,
         );
   }
 
   Future<void> _onUploadSuccess() async {
-    // 성공 메시지 잠시 표시 후 피드 리로드 + 프로필 이동
     await Future<void>.delayed(const Duration(milliseconds: 800));
     if (!mounted) return;
     try {
-      await ref.read(feedNotifierProvider.notifier).reload();
-    } catch (_) {
-      // 리로드 실패 시에도 프로필로 이동 (다음 앱 실행 시 갱신됨)
-    }
+      await ref.read(postImageListNotifierProvider.notifier).reload();
+    } catch (_) {}
     if (!mounted) return;
     context.go(RoutePaths.profile);
   }
 
   void _onHashtagTap() {
-    _descriptionFocusNode.requestFocus();
-    final text = _descriptionController.text;
-    final cursorPos = _descriptionController.selection.baseOffset;
-    final newText =
-        '${text.substring(0, cursorPos < 0 ? text.length : cursorPos)}'
-        '#'
-        '${cursorPos < 0 ? '' : text.substring(cursorPos)}';
-    _descriptionController.text = newText;
-    _descriptionController.selection = TextSelection.collapsed(
-      offset: (cursorPos < 0 ? text.length : cursorPos) + 1,
-    );
+    _captionFocusNode.requestFocus();
+    final text = _captionController.text;
+    final cursorPos = _captionController.selection.baseOffset;
+    final pos = cursorPos < 0 ? text.length : cursorPos;
+    final newText = '${text.substring(0, pos)}#${text.substring(pos)}';
+    _captionController.text = newText;
+    _captionController.selection = TextSelection.collapsed(offset: pos + 1);
   }
 
   void _onMentionTap() {
-    _descriptionFocusNode.requestFocus();
-    final text = _descriptionController.text;
-    final cursorPos = _descriptionController.selection.baseOffset;
-    final newText =
-        '${text.substring(0, cursorPos < 0 ? text.length : cursorPos)}'
-        '@'
-        '${cursorPos < 0 ? '' : text.substring(cursorPos)}';
-    _descriptionController.text = newText;
-    _descriptionController.selection = TextSelection.collapsed(
-      offset: (cursorPos < 0 ? text.length : cursorPos) + 1,
-    );
+    _captionFocusNode.requestFocus();
+    final text = _captionController.text;
+    final cursorPos = _captionController.selection.baseOffset;
+    final pos = cursorPos < 0 ? text.length : cursorPos;
+    final newText = '${text.substring(0, pos)}@${text.substring(pos)}';
+    _captionController.text = newText;
+    _captionController.selection = TextSelection.collapsed(offset: pos + 1);
   }
 
   @override
   Widget build(BuildContext context) {
-    final publishState = ref.watch(publishNotifierProvider);
+    final publishState = ref.watch(publishImageNotifierProvider);
 
-    ref.listen(publishNotifierProvider, (prev, next) {
+    ref.listen(publishImageNotifierProvider, (prev, next) {
       if (prev?.status != PublishStatus.success &&
           next.status == PublishStatus.success) {
         _onUploadSuccess();
@@ -135,7 +124,27 @@ class _PublishPageState extends ConsumerState<PublishPage> {
               if (publishState.status == PublishStatus.idle)
                 Padding(
                   padding: const EdgeInsets.only(right: 12),
-                  child: _PublishButton(onTap: _onPublish),
+                  child: GestureDetector(
+                    onTap: _onPublish,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        AppStrings.publishButton,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
             ],
           ),
@@ -146,18 +155,17 @@ class _PublishPageState extends ConsumerState<PublishPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
-                  // 설명 입력 + 커버 썸네일
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: _descriptionController,
-                          focusNode: _descriptionFocusNode,
+                          controller: _captionController,
+                          focusNode: _captionFocusNode,
                           maxLines: 5,
                           minLines: 3,
                           decoration: const InputDecoration(
-                            hintText: AppStrings.publishDescriptionHint,
+                            hintText: AppStrings.publishCaptionHint,
                             hintStyle: TextStyle(
                               color: Colors.grey,
                               fontSize: 15,
@@ -171,13 +179,30 @@ class _PublishPageState extends ConsumerState<PublishPage> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      PublishCoverThumbnail(
-                        videoFilePath: widget.videoFilePath,
+                      // 이미지 미리보기
+                      Container(
+                        width: 90,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF0F0F0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.file(
+                          File(widget.imageFilePath),
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => const Center(
+                            child: Icon(
+                              Icons.image,
+                              color: Colors.grey,
+                              size: 32,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  // 해시태그 / 멘션 버튼
                   Row(
                     children: [
                       _TagButton(
@@ -194,7 +219,6 @@ class _PublishPageState extends ConsumerState<PublishPage> {
                   const SizedBox(height: 24),
                   const Divider(height: 1, color: Color(0xFFEEEEEE)),
                   const SizedBox(height: 24),
-                  // 하단 게시 버튼
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -217,38 +241,9 @@ class _PublishPageState extends ConsumerState<PublishPage> {
             ),
           ),
         ),
-        // 업로드 오버레이
         if (publishState.status != PublishStatus.idle)
           PublishUploadOverlay(state: publishState, onRetry: _startUpload),
       ],
-    );
-  }
-}
-
-class _PublishButton extends StatelessWidget {
-  const _PublishButton({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: const Text(
-          AppStrings.publishButton,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
     );
   }
 }

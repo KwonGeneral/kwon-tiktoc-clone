@@ -28,11 +28,7 @@ class NotificationItem extends StatelessWidget {
               radius: 22,
               backgroundColor: _getAvatarColor(),
               child: notification.type == domain.NotificationType.system
-                  ? const Icon(
-                      Icons.security,
-                      color: AppColors.white,
-                      size: 20,
-                    )
+                  ? const Icon(Icons.security, color: AppColors.white, size: 20)
                   : Text(
                       notification.userNickname.isNotEmpty
                           ? notification.userNickname[0].toUpperCase()

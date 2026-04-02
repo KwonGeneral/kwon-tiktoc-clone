@@ -7,8 +7,13 @@ import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/format_utils.dart';
+import '../../../domain/entity/post_image.dart';
+import '../../../domain/entity/video.dart';
 import '../../feed/provider/feed_provider.dart';
+import '../../feed/provider/feed_state.dart';
 import '../../profile/provider/profile_provider.dart';
+import '../../profile/widget/profile_image_grid.dart';
+import '../../publish/provider/publish_image_provider.dart';
 import '../widget/user_video_grid.dart';
 
 class UserProfilePage extends ConsumerWidget {
@@ -22,15 +27,14 @@ class UserProfilePage extends ConsumerWidget {
     if (feedState == null) {
       return const Scaffold(
         backgroundColor: AppColors.black,
-        body: Center(
-          child: CircularProgressIndicator(color: AppColors.white),
-        ),
+        body: Center(child: CircularProgressIndicator(color: AppColors.white)),
       );
     }
 
     // 해당 유저의 영상들
-    final userVideos =
-        feedState.videos.where((v) => v.userId == userId).toList();
+    final userVideos = feedState.videos
+        .where((v) => v.userId == userId)
+        .toList();
     final firstVideo = userVideos.isNotEmpty ? userVideos.first : null;
 
     final nickname = firstVideo?.nickname ?? userId;
@@ -65,8 +69,9 @@ class UserProfilePage extends ConsumerWidget {
             CircleAvatar(
               radius: 44,
               backgroundColor: AppColors.gray,
-              backgroundImage:
-                  avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
+              backgroundImage: avatarUrl.isNotEmpty
+                  ? NetworkImage(avatarUrl)
+                  : null,
               child: avatarUrl.isEmpty
                   ? const Icon(
                       Icons.person,
@@ -118,44 +123,70 @@ class UserProfilePage extends ConsumerWidget {
                 ),
               ),
             ),
-            // 영상 그리드
-            if (userVideos.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 60),
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.videocam_off_outlined,
-                      size: 64,
-                      color: AppColors.whiteSecondary.withValues(alpha: 0.5),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      AppStrings.feedEmpty,
-                      style: AppTextStyles.description.copyWith(
-                        color: AppColors.whiteSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            else
-              UserVideoGrid(
-                videos: userVideos,
-                onVideoTap: (video) {
-                  final index = feedState.videos.indexWhere(
-                    (v) => v.id == video.id,
-                  );
-                  if (index < 0) return;
-                  ref
-                      .read(feedNotifierProvider.notifier)
-                      .updateCurrentIndex(index);
-                  context.go(RoutePaths.feed);
-                },
-              ),
+            // 영상 + 이미지 그리드
+            _buildUserContent(context, ref, feedState, userVideos),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildUserContent(
+    BuildContext context,
+    WidgetRef ref,
+    FeedState feedState,
+    List<Video> userVideos,
+  ) {
+    final imagesAsync = ref.watch(postImageListNotifierProvider);
+    final userImages = imagesAsync.maybeWhen(
+      data: (images) => images.where((img) => img.userId == userId).toList(),
+      orElse: () => <PostImage>[],
+    );
+
+    if (userVideos.isEmpty && userImages.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 60),
+        child: Column(
+          children: [
+            Icon(
+              Icons.videocam_off_outlined,
+              size: 64,
+              color: AppColors.whiteSecondary.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              AppStrings.feedEmpty,
+              style: AppTextStyles.description.copyWith(
+                color: AppColors.whiteSecondary,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        if (userVideos.isNotEmpty)
+          UserVideoGrid(
+            videos: userVideos,
+            onVideoTap: (video) {
+              final index = feedState.videos.indexWhere(
+                (v) => v.id == video.id,
+              );
+              if (index < 0) return;
+              ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
+              context.go(RoutePaths.feed);
+            },
+          ),
+        if (userImages.isNotEmpty)
+          ProfileImageGrid(
+            images: userImages,
+            onImageTap: (image) {
+              context.push(RoutePaths.imageDetailPath(image.id), extra: image);
+            },
+          ),
+      ],
     );
   }
 

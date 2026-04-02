@@ -107,8 +107,9 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   }
 
   Widget _buildCategorySection(List<domain.Notification> notifications) {
-    final followCount =
-        notifications.where((n) => n.type == domain.NotificationType.follow).length;
+    final followCount = notifications
+        .where((n) => n.type == domain.NotificationType.follow)
+        .length;
     final activityCount = notifications
         .where(
           (n) =>
@@ -116,8 +117,9 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
               n.type == domain.NotificationType.comment,
         )
         .length;
-    final hasSystem =
-        notifications.any((n) => n.type == domain.NotificationType.system);
+    final hasSystem = notifications.any(
+      (n) => n.type == domain.NotificationType.system,
+    );
 
     return Column(
       children: [
@@ -146,9 +148,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             iconBackgroundColor: AppColors.gray,
             title: AppStrings.notificationsSystem,
             subtitle: notifications
-                .firstWhere(
-                  (n) => n.type == domain.NotificationType.system,
-                )
+                .firstWhere((n) => n.type == domain.NotificationType.system)
                 .message,
             showBadge: true,
             onTap: () {},

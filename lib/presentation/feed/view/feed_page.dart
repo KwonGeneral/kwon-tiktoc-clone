@@ -51,8 +51,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
 
   int _midStartForCount(int videoCount) {
     if (videoCount <= 0) return 0;
-    return (_virtualPageCount ~/ 2) -
-        ((_virtualPageCount ~/ 2) % videoCount);
+    return (_virtualPageCount ~/ 2) - ((_virtualPageCount ~/ 2) % videoCount);
   }
 
   PageController _getPageController(
@@ -139,12 +138,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: TopTabBar(),
-                ),
+                Positioned(top: 0, left: 0, right: 0, child: TopTabBar()),
               ],
             );
           }

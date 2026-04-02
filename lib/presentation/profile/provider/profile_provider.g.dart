@@ -215,6 +215,23 @@ final myVideosProvider = AutoDisposeProvider<List<Video>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef MyVideosRef = AutoDisposeProviderRef<List<Video>>;
+String _$myPostImagesHash() => r'587b39e284cc6196abb8539599de5e3a2fad91a2';
+
+/// See also [myPostImages].
+@ProviderFor(myPostImages)
+final myPostImagesProvider = AutoDisposeProvider<List<PostImage>>.internal(
+  myPostImages,
+  name: r'myPostImagesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$myPostImagesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef MyPostImagesRef = AutoDisposeProviderRef<List<PostImage>>;
 String _$profileImageNotifierHash() =>
     r'19c158302aac4a72a932c407861df905c777aaf5';
 

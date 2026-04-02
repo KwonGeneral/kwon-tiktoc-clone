@@ -4,18 +4,14 @@ import '../../../app/theme/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 
 class RecordingTimerIndicator extends StatelessWidget {
-  const RecordingTimerIndicator({
-    super.key,
-    required this.elapsed,
-  });
+  const RecordingTimerIndicator({super.key, required this.elapsed});
 
   final Duration elapsed;
 
   @override
   Widget build(BuildContext context) {
     final seconds = elapsed.inMilliseconds / 1000;
-    final maxSeconds =
-        AppConstants.maxRecordingDuration.inMilliseconds / 1000;
+    final maxSeconds = AppConstants.maxRecordingDuration.inMilliseconds / 1000;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -38,8 +34,9 @@ class RecordingTimerIndicator extends StatelessWidget {
             child: LinearProgressIndicator(
               value: seconds / maxSeconds,
               backgroundColor: AppColors.whiteDisabled,
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                AppColors.primary,
+              ),
               minHeight: 3,
             ),
           ),

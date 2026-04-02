@@ -62,7 +62,11 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                 child: CircleAvatar(
                   radius: 16,
                   backgroundColor: AppColors.gray,
-                  child: Icon(Icons.person, color: AppColors.whiteSecondary, size: 20),
+                  child: Icon(
+                    Icons.person,
+                    color: AppColors.whiteSecondary,
+                    size: 20,
+                  ),
                 ),
               ),
         actions: _isSearching
@@ -79,8 +83,10 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
           child: CircularProgressIndicator(color: AppColors.white),
         ),
         error: (e, _) => Center(
-          child: Text(e.toString(),
-              style: const TextStyle(color: AppColors.whiteSecondary)),
+          child: Text(
+            e.toString(),
+            style: const TextStyle(color: AppColors.whiteSecondary),
+          ),
         ),
         data: (friendsState) => ListView(
           children: [
@@ -107,20 +113,22 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                 ),
               )
             else
-              ...friendsState.users.map((user) => FriendListTile(
-                    user: user,
-                    isFollowed: followedUserIds.contains(user.id),
-                    onToggleFollow: () {
-                      ref
-                          .read(feedNotifierProvider.notifier)
-                          .toggleFollow(user.id);
-                    },
-                    onRemove: () {
-                      ref
-                          .read(friendsNotifierProvider.notifier)
-                          .removeUser(user.id);
-                    },
-                  )),
+              ...friendsState.users.map(
+                (user) => FriendListTile(
+                  user: user,
+                  isFollowed: followedUserIds.contains(user.id),
+                  onToggleFollow: () {
+                    ref
+                        .read(feedNotifierProvider.notifier)
+                        .toggleFollow(user.id);
+                  },
+                  onRemove: () {
+                    ref
+                        .read(friendsNotifierProvider.notifier)
+                        .removeUser(user.id);
+                  },
+                ),
+              ),
 
             const SizedBox(height: 100),
           ],
@@ -152,7 +160,11 @@ class _SearchField extends StatelessWidget {
         hintStyle: const TextStyle(color: AppColors.whiteDisabled),
         border: InputBorder.none,
         suffixIcon: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.whiteSecondary, size: 20),
+          icon: const Icon(
+            Icons.close,
+            color: AppColors.whiteSecondary,
+            size: 20,
+          ),
           onPressed: onClose,
         ),
       ),

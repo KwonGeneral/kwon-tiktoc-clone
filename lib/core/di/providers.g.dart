@@ -95,6 +95,42 @@ final notificationRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef NotificationRepositoryRef = ProviderRef<NotificationRepository>;
+String _$postImageDataSourceHash() =>
+    r'18ec268f0536c1bd39ffa78c780b3011a8b06d61';
+
+/// See also [postImageDataSource].
+@ProviderFor(postImageDataSource)
+final postImageDataSourceProvider = Provider<PostImageDataSource>.internal(
+  postImageDataSource,
+  name: r'postImageDataSourceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$postImageDataSourceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef PostImageDataSourceRef = ProviderRef<PostImageDataSource>;
+String _$postImageRepositoryHash() =>
+    r'4a96fd2ec7d2d97ad4f1add261c18345e0db591c';
+
+/// See also [postImageRepository].
+@ProviderFor(postImageRepository)
+final postImageRepositoryProvider = Provider<PostImageRepository>.internal(
+  postImageRepository,
+  name: r'postImageRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$postImageRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef PostImageRepositoryRef = ProviderRef<PostImageRepository>;
 String _$getVideoFeedHash() => r'83206837b7bcb601c30c3b6d976a0fe89d43751a';
 
 /// See also [getVideoFeed].

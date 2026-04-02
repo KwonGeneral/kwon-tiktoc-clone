@@ -47,11 +47,7 @@ class VideoRemoteDataSource implements VideoDataSource {
     '저도 해봤는데 너무 어렵더라고요 😂',
   ];
 
-  static const _sampleReplies = [
-    '맞아요 ㅋㅋㅋ',
-    '저도 공감해요!',
-    '완전 동의합니다',
-  ];
+  static const _sampleReplies = ['맞아요 ㅋㅋㅋ', '저도 공감해요!', '완전 동의합니다'];
 
   static const _musicNames = [
     'Original Sound - @{username}',
@@ -183,32 +179,36 @@ class VideoRemoteDataSource implements VideoDataSource {
       final commentId = 'comment_${videoId}_$i';
       final replyCount = (i < 3) ? (2 - i).clamp(0, 3) : 0; // 첫 몇 개 댓글에 답글
 
-      comments.add(CommentModel(
-        id: commentId,
-        videoId: videoId,
-        userId: 'commenter_$i',
-        userName: _commentUserNames[i % _commentUserNames.length],
-        text: _sampleComments[i % _sampleComments.length],
-        likeCount: (i + 1) * 120,
-        createdAt: now.subtract(Duration(hours: i * 2, minutes: i * 17)),
-        replyCount: replyCount,
-      ));
+      comments.add(
+        CommentModel(
+          id: commentId,
+          videoId: videoId,
+          userId: 'commenter_$i',
+          userName: _commentUserNames[i % _commentUserNames.length],
+          text: _sampleComments[i % _sampleComments.length],
+          likeCount: (i + 1) * 120,
+          createdAt: now.subtract(Duration(hours: i * 2, minutes: i * 17)),
+          replyCount: replyCount,
+        ),
+      );
 
       // 답글 생성
       for (var r = 0; r < replyCount; r++) {
         final replyUserIdx = (i + r + 3) % _commentUserNames.length;
-        comments.add(CommentModel(
-          id: 'reply_${commentId}_$r',
-          videoId: videoId,
-          userId: 'replier_${i}_$r',
-          userName: _commentUserNames[replyUserIdx],
-          text: _sampleReplies[r % _sampleReplies.length],
-          likeCount: (r + 1) * 30,
-          createdAt: now.subtract(
-            Duration(hours: i * 2, minutes: i * 17 + r * 5 + 10),
+        comments.add(
+          CommentModel(
+            id: 'reply_${commentId}_$r',
+            videoId: videoId,
+            userId: 'replier_${i}_$r',
+            userName: _commentUserNames[replyUserIdx],
+            text: _sampleReplies[r % _sampleReplies.length],
+            likeCount: (r + 1) * 30,
+            createdAt: now.subtract(
+              Duration(hours: i * 2, minutes: i * 17 + r * 5 + 10),
+            ),
+            parentCommentId: commentId,
           ),
-          parentCommentId: commentId,
-        ));
+        );
       }
     }
 
@@ -236,9 +236,7 @@ class VideoRemoteDataSource implements VideoDataSource {
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       request.fields['avatarUrl'] = avatarUrl;
     }
-    request.files.add(
-      await http.MultipartFile.fromPath('video', filePath),
-    );
+    request.files.add(await http.MultipartFile.fromPath('video', filePath));
 
     // 진행률 시뮬레이션 (http 패키지는 실제 업로드 진행률 미지원)
     onProgress?.call(0.0);

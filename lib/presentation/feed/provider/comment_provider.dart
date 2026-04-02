@@ -157,10 +157,7 @@ class CommentNotifier extends _$CommentNotifier {
 
   /// 답글 입력 모드 취소
   void cancelReply() {
-    state = state.copyWith(
-      replyingToCommentId: null,
-      replyingToUserName: null,
-    );
+    state = state.copyWith(replyingToCommentId: null, replyingToUserName: null);
   }
 
   /// 답글 펼치기/접기 토글
@@ -176,9 +173,7 @@ class CommentNotifier extends _$CommentNotifier {
 
   /// 특정 댓글의 답글 목록
   List<Comment> getReplies(String commentId) {
-    return state.comments
-        .where((c) => c.parentCommentId == commentId)
-        .toList();
+    return state.comments.where((c) => c.parentCommentId == commentId).toList();
   }
 
   Future<void> toggleCommentLike(String commentId) async {

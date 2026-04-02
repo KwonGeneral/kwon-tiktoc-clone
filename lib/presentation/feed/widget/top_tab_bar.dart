@@ -19,7 +19,7 @@ class TopTabBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTab =
         ref.watch(feedNotifierProvider).valueOrNull?.selectedTab ??
-            FeedTab.recommend;
+        FeedTab.recommend;
 
     return SafeArea(
       bottom: false,

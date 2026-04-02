@@ -28,8 +28,9 @@ class FriendListTile extends StatelessWidget {
           CircleAvatar(
             radius: 26,
             backgroundColor: AppColors.gray,
-            backgroundImage:
-                user.avatarUrl.isNotEmpty ? NetworkImage(user.avatarUrl) : null,
+            backgroundImage: user.avatarUrl.isNotEmpty
+                ? NetworkImage(user.avatarUrl)
+                : null,
             child: user.avatarUrl.isEmpty
                 ? Text(
                     user.nickname.isNotEmpty
@@ -65,7 +66,11 @@ class FriendListTile extends StatelessWidget {
                     ),
                     if (user.isVerified) ...[
                       const SizedBox(width: 4),
-                      const Icon(Icons.verified, color: AppColors.secondary, size: 14),
+                      const Icon(
+                        Icons.verified,
+                        color: AppColors.secondary,
+                        size: 14,
+                      ),
                     ],
                   ],
                 ),
@@ -129,9 +134,7 @@ class _ActionButton extends StatelessWidget {
           side: BorderSide(
             color: isPrimary ? AppColors.primary : AppColors.whiteDisabled,
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           padding: EdgeInsets.zero,
         ),
         child: Text(

@@ -89,30 +89,30 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
                     itemCount: topLevelComments.length,
                     itemBuilder: (context, index) {
                       final comment = topLevelComments[index];
-                      final notifier =
-                          ref.read(commentNotifierProvider.notifier);
+                      final notifier = ref.read(
+                        commentNotifierProvider.notifier,
+                      );
                       final replies = notifier.getReplies(comment.id);
 
                       return CommentItem(
                         comment: comment,
-                        isLiked: commentState.likedCommentIds
-                            .contains(comment.id),
-                        isDisliked: commentState.dislikedCommentIds
-                            .contains(comment.id),
-                        onLikeTap: () =>
-                            notifier.toggleCommentLike(comment.id),
+                        isLiked: commentState.likedCommentIds.contains(
+                          comment.id,
+                        ),
+                        isDisliked: commentState.dislikedCommentIds.contains(
+                          comment.id,
+                        ),
+                        onLikeTap: () => notifier.toggleCommentLike(comment.id),
                         onDislikeTap: () =>
                             notifier.toggleCommentDislike(comment.id),
                         onReplyTap: () {
-                          notifier.startReply(
-                            comment.id,
-                            comment.userName,
-                          );
+                          notifier.startReply(comment.id, comment.userName);
                           _focusNode.requestFocus();
                         },
                         replies: replies,
-                        isExpanded: commentState.expandedReplyIds
-                            .contains(comment.id),
+                        isExpanded: commentState.expandedReplyIds.contains(
+                          comment.id,
+                        ),
                         onToggleReplies: () =>
                             notifier.toggleReplies(comment.id),
                         likedCommentIds: commentState.likedCommentIds,
@@ -151,9 +151,7 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      ref
-                          .read(commentNotifierProvider.notifier)
-                          .cancelReply();
+                      ref.read(commentNotifierProvider.notifier).cancelReply();
                     },
                     child: const Icon(
                       Icons.close,

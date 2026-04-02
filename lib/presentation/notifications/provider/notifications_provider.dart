@@ -16,10 +16,9 @@ class NotificationsNotifier extends _$NotificationsNotifier {
     final recommendedUsers = await userRepo.getRecommendedUsers();
 
     // 추천 계정은 3명만 표시
-    final recommended =
-        recommendedUsers.length > 3
-            ? recommendedUsers.sublist(0, 3)
-            : recommendedUsers;
+    final recommended = recommendedUsers.length > 3
+        ? recommendedUsers.sublist(0, 3)
+        : recommendedUsers;
 
     return NotificationsState(
       notifications: notifications,

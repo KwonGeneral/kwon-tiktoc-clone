@@ -46,10 +46,9 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
     final nickname = _nicknameController.text.trim();
     if (nickname.isEmpty) return;
 
-    await ref.read(profileEditNotifierProvider.notifier).save(
-          nickname: nickname,
-          bio: _bioController.text.trim(),
-        );
+    await ref
+        .read(profileEditNotifierProvider.notifier)
+        .save(nickname: nickname, bio: _bioController.text.trim());
     if (mounted) context.pop();
   }
 
@@ -122,9 +121,7 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
     );
     if (image == null) return;
 
-    await ref
-        .read(profileImageNotifierProvider.notifier)
-        .upload(image.path);
+    await ref.read(profileImageNotifierProvider.notifier).upload(image.path);
   }
 
   @override
@@ -194,12 +191,12 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
                                 ),
                               )
                             : user.avatarUrl.isEmpty
-                                ? const Icon(
-                                    Icons.person,
-                                    size: 44,
-                                    color: AppColors.whiteSecondary,
-                                  )
-                                : null,
+                            ? const Icon(
+                                Icons.person,
+                                size: 44,
+                                color: AppColors.whiteSecondary,
+                              )
+                            : null,
                       ),
                       loading: () => const CircleAvatar(
                         radius: 44,
@@ -256,8 +253,10 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 14,
+                ),
                 counterText: '',
               ),
             ),

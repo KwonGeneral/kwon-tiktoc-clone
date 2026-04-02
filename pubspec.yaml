@@ -64,6 +64,9 @@ dependencies:
   # Image Picker
   image_picker: ^1.1.2
 
+  # Image Cache
+  cached_network_image: ^3.4.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

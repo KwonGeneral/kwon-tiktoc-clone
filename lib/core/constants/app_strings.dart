@@ -17,7 +17,8 @@ abstract final class AppStrings {
   static const feedError = '영상을 불러올 수 없습니다';
   static const feedRetry = '다시 시도';
   static const feedLoadMoreError = '탭하여 다시 불러오기';
-  static const feedFollowingEmpty = '팔로잉한 사람의 영상이 없습니다.\n추천 탭에서 크리에이터를 팔로우해보세요!';
+  static const feedFollowingEmpty =
+      '팔로잉한 사람의 영상이 없습니다.\n추천 탭에서 크리에이터를 팔로우해보세요!';
 
   // 프로필
   static const profileEdit = '편집';
@@ -150,6 +151,22 @@ abstract final class AppStrings {
   static const uploadedMusicName = 'Original Sound';
   static const uploadedUsername = 'me';
   static const uploadedNickname = '나';
+
+  // 카메라 모드
+  static const cameraPhotoMode = '사진';
+
+  // 이미지 게시
+  static const publishImageUploading = '이미지 업로드 중...';
+  static const publishImageSuccess = '이미지 업로드 완료!';
+  static const publishImagePrivacyMessage =
+      '이 이미지는 실제로 서버에 업로드됩니다. 개인정보가 포함되지 않았는지 확인해주세요.';
+  static const publishCaptionHint = '설명을 추가하세요...';
+
+  // 이미지 상세
+  static const imageDetailTitle = '게시물';
+
+  // 프로필 이미지 게시물
+  static const profileEmptyPostImages = '아직 이미지 게시물이 없습니다';
 
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';

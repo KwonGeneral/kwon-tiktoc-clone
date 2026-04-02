@@ -31,10 +31,7 @@ class PublishNotifier extends _$PublishNotifier {
       final compressedPath = await _compressVideo(videoFilePath);
 
       // 2) 업로드
-      state = state.copyWith(
-        status: PublishStatus.uploading,
-        progress: 0.0,
-      );
+      state = state.copyWith(status: PublishStatus.uploading, progress: 0.0);
 
       // 프로필 이미지 URL 가져오기
       final storage = ref.read(localStorageRepositoryProvider);
@@ -50,10 +47,7 @@ class PublishNotifier extends _$PublishNotifier {
         },
       );
 
-      state = state.copyWith(
-        status: PublishStatus.success,
-        progress: 1.0,
-      );
+      state = state.copyWith(status: PublishStatus.success, progress: 1.0);
     } catch (e) {
       state = state.copyWith(
         status: PublishStatus.failed,

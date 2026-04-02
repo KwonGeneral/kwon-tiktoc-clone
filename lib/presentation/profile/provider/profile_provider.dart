@@ -5,10 +5,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/di/providers.dart';
+import '../../../domain/entity/post_image.dart';
 import '../../../domain/entity/user.dart';
 import '../../../domain/entity/video.dart';
 import '../../../domain/repository/local_storage_repository.dart';
 import '../../feed/provider/feed_provider.dart';
+import '../../publish/provider/publish_image_provider.dart';
 
 part 'profile_provider.g.dart';
 
@@ -25,7 +27,9 @@ Future<User> currentUser(Ref ref) async {
   return user.copyWith(
     nickname: savedNickname.isNotEmpty ? savedNickname : user.nickname,
     bio: savedBio,
-    avatarUrl: savedProfileImage.isNotEmpty ? savedProfileImage : user.avatarUrl,
+    avatarUrl: savedProfileImage.isNotEmpty
+        ? savedProfileImage
+        : user.avatarUrl,
   );
 }
 
@@ -84,10 +88,20 @@ List<Video> bookmarkedVideos(Ref ref) {
 List<Video> myVideos(Ref ref) {
   final feedAsync = ref.watch(feedNotifierProvider);
   return feedAsync.maybeWhen(
-    data: (state) =>
-        state.videos
-            .where((v) => v.userId == AppStrings.commentCurrentUserId)
-            .toList(),
+    data: (state) => state.videos
+        .where((v) => v.userId == AppStrings.commentCurrentUserId)
+        .toList(),
+    orElse: () => [],
+  );
+}
+
+@riverpod
+List<PostImage> myPostImages(Ref ref) {
+  final imagesAsync = ref.watch(postImageListNotifierProvider);
+  return imagesAsync.maybeWhen(
+    data: (images) => images
+        .where((img) => img.userId == AppStrings.commentCurrentUserId)
+        .toList(),
     orElse: () => [],
   );
 }

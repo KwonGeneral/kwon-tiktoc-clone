@@ -45,7 +45,11 @@ class PublishUploadOverlay extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (state.status == PublishStatus.failed) ...[
-                const Icon(Icons.error_outline, color: AppColors.primary, size: 48),
+                const Icon(
+                  Icons.error_outline,
+                  color: AppColors.primary,
+                  size: 48,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   _statusText,

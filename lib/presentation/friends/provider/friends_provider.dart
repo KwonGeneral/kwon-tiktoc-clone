@@ -31,13 +31,11 @@ class FriendsNotifier extends _$FriendsNotifier {
                 user.id.toLowerCase().contains(lowerQuery);
           }).toList();
 
-    final visible =
-        filtered.where((u) => !_removedUserIds.contains(u.id)).toList();
+    final visible = filtered
+        .where((u) => !_removedUserIds.contains(u.id))
+        .toList();
 
-    state = AsyncData(FriendsState(
-      users: visible,
-      searchQuery: query,
-    ));
+    state = AsyncData(FriendsState(users: visible, searchQuery: query));
   }
 
   void removeUser(String userId) {
@@ -45,8 +43,9 @@ class FriendsNotifier extends _$FriendsNotifier {
     if (currentState == null) return;
 
     _removedUserIds.add(userId);
-    final updatedUsers =
-        currentState.users.where((u) => u.id != userId).toList();
+    final updatedUsers = currentState.users
+        .where((u) => u.id != userId)
+        .toList();
     state = AsyncData(currentState.copyWith(users: updatedUsers));
   }
 }

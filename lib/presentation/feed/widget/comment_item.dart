@@ -98,10 +98,7 @@ class CommentItem extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   comment.text,
-                  style: const TextStyle(
-                    color: AppColors.white,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(color: AppColors.white, fontSize: 14),
                 ),
                 const SizedBox(height: 6),
                 Row(
@@ -132,47 +129,49 @@ class CommentItem extends StatelessWidget {
           ),
 
           // 좋아요 / 싫어요
-          Builder(builder: (context) {
-            final likeText = _likeCountText();
-            return Column(
-              children: [
-                GestureDetector(
-                  onTap: onLikeTap,
-                  child: Icon(
-                    isLiked ? Icons.favorite : Icons.favorite_border,
-                    size: 18,
-                    color: isLiked
-                        ? AppColors.like
-                        : AppColors.whiteSecondary,
-                  ),
-                ),
-                if (likeText.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Text(
-                      likeText,
-                      style: const TextStyle(
-                        color: AppColors.whiteSecondary,
-                        fontSize: 11,
-                      ),
+          Builder(
+            builder: (context) {
+              final likeText = _likeCountText();
+              return Column(
+                children: [
+                  GestureDetector(
+                    onTap: onLikeTap,
+                    child: Icon(
+                      isLiked ? Icons.favorite : Icons.favorite_border,
+                      size: 18,
+                      color: isLiked
+                          ? AppColors.like
+                          : AppColors.whiteSecondary,
                     ),
                   ),
-                const SizedBox(height: 8),
-                GestureDetector(
-                  onTap: onDislikeTap,
-                  child: Icon(
-                    isDisliked
-                        ? Icons.thumb_down_alt
-                        : Icons.thumb_down_alt_outlined,
-                    size: 18,
-                    color: isDisliked
-                        ? AppColors.whiteSecondary
-                        : AppColors.whiteDisabled,
+                  if (likeText.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        likeText,
+                        style: const TextStyle(
+                          color: AppColors.whiteSecondary,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: onDislikeTap,
+                    child: Icon(
+                      isDisliked
+                          ? Icons.thumb_down_alt
+                          : Icons.thumb_down_alt_outlined,
+                      size: 18,
+                      color: isDisliked
+                          ? AppColors.whiteSecondary
+                          : AppColors.whiteDisabled,
+                    ),
                   ),
-                ),
-              ],
-            );
-          }),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
@@ -205,8 +204,10 @@ class CommentItem extends StatelessWidget {
                   Text(
                     isExpanded
                         ? AppStrings.commentHideReplies
-                        : AppStrings.commentShowReplies
-                            .replaceAll('{count}', totalReplies.toString()),
+                        : AppStrings.commentShowReplies.replaceAll(
+                            '{count}',
+                            totalReplies.toString(),
+                          ),
                     style: const TextStyle(
                       color: AppColors.whiteSecondary,
                       fontSize: 12,

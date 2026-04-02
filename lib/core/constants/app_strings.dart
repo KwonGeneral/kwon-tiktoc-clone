@@ -48,7 +48,6 @@ abstract final class AppStrings {
   static const userProfileFollow = '팔로우';
   static const userProfileFollowing = '팔로잉';
   static const userProfileMessage = '메시지';
-  static const userProfileVideos = '동영상';
 
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';

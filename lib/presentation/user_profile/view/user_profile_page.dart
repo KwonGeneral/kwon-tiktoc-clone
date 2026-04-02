@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
@@ -45,7 +46,7 @@ class UserProfilePage extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
         title: Text(nickname, style: AppTextStyles.profileName),
         centerTitle: true,
@@ -80,9 +81,9 @@ class UserProfilePage extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildStat('0', AppStrings.profileFollowing),
+                _buildStat('-', AppStrings.profileFollowing),
                 const SizedBox(width: 24),
-                _buildStat('0', AppStrings.profileFollowers),
+                _buildStat('-', AppStrings.profileFollowers),
                 const SizedBox(width: 24),
                 _buildStat(
                   FormatUtils.compactNumber(totalLikes),

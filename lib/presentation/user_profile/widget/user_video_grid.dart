@@ -52,7 +52,7 @@ class _VideoThumbnail extends StatelessWidget {
             )
           else
             _buildPlaceholder(),
-          // 하단 조회수
+          // 하단 좋아요 수
           Positioned(
             left: 4,
             bottom: 4,

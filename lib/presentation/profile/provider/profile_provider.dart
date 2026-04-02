@@ -131,9 +131,12 @@ class ProfileEditNotifier extends _$ProfileEditNotifier {
 @riverpod
 class NotificationSettingNotifier extends _$NotificationSettingNotifier {
   late final LocalStorageRepository _storage;
+  bool _disposed = false;
 
   @override
   bool build() {
+    _disposed = false;
+    ref.onDispose(() => _disposed = true);
     _storage = ref.read(localStorageRepositoryProvider);
     // 초기 상태를 시스템 권한과 동기화
     _syncWithSystem();
@@ -143,10 +146,12 @@ class NotificationSettingNotifier extends _$NotificationSettingNotifier {
   /// 시스템 알림 권한 상태와 동기화
   Future<void> _syncWithSystem() async {
     final status = await Permission.notification.status;
+    if (_disposed) return;
     final systemEnabled = status.isGranted;
     if (!systemEnabled && state) {
       // 시스템에서 알림이 꺼져있으면 앱 내 토글도 OFF
       await _storage.saveNotificationEnabled(enabled: false);
+      if (_disposed) return;
       state = false;
     }
   }

@@ -54,6 +54,9 @@ class CommentNotifier extends _$CommentNotifier {
     final getComments = ref.read(getCommentsProvider);
     final serverComments = await getComments(videoId);
 
+    // race condition guard: 다른 영상의 댓글이 먼저 로드되었으면 무시
+    if (state.videoId != videoId) return;
+
     // 로컬 댓글 ID 집합 (중복 방지)
     final userCommentIds = userComments.map((c) => c.id).toSet();
     final mergedComments = [

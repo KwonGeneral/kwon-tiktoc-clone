@@ -59,7 +59,6 @@ dependencies:
   # Camera
   camera: ^0.11.1
   video_compress: ^3.1.4
-  app_settings: ^7.0.0
 
   # Image Picker
   image_picker: ^1.1.2

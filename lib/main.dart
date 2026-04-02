@@ -14,7 +14,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
-        localStorageServiceProvider.overrideWithValue(localStorageService),
+        localStorageRepositoryProvider.overrideWithValue(localStorageService),
       ],
       child: const App(),
     ),

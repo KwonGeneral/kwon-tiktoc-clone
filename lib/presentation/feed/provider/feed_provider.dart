@@ -2,8 +2,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
-import 'package:kwon_tiktoc_clone/data/datasource/local_storage_service.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/domain/repository/local_storage_repository.dart';
 import 'package:kwon_tiktoc_clone/domain/usecase/get_video_feed.dart';
 import 'package:kwon_tiktoc_clone/domain/usecase/toggle_bookmark.dart';
 import 'package:kwon_tiktoc_clone/domain/usecase/toggle_like.dart';
@@ -13,11 +13,11 @@ part 'feed_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class FeedNotifier extends _$FeedNotifier {
-  late final LocalStorageService _storage;
+  late final LocalStorageRepository _storage;
 
   @override
   Future<FeedState> build() async {
-    _storage = ref.read(localStorageServiceProvider);
+    _storage = ref.read(localStorageRepositoryProvider);
     return _loadInitial();
   }
 
@@ -30,11 +30,11 @@ class FeedNotifier extends _$FeedNotifier {
       final wasBookmarked = bookmarkedIds.contains(video.id);
       if (!wasLiked && !wasBookmarked) return video;
       return video.copyWith(
-        isLiked: wasLiked ? true : video.isLiked,
+        isLiked: wasLiked || video.isLiked,
         likeCount: wasLiked && !video.isLiked
             ? video.likeCount + 1
             : video.likeCount,
-        isBookmarked: wasBookmarked ? true : video.isBookmarked,
+        isBookmarked: wasBookmarked || video.isBookmarked,
         bookmarkCount: wasBookmarked && !video.isBookmarked
             ? video.bookmarkCount + 1
             : video.bookmarkCount,
@@ -165,7 +165,7 @@ class FeedNotifier extends _$FeedNotifier {
     }
   }
 
-  void toggleFollow(String userId) {
+  Future<void> toggleFollow(String userId) async {
     final currentState = state.valueOrNull;
     if (currentState == null) return;
 
@@ -180,7 +180,7 @@ class FeedNotifier extends _$FeedNotifier {
     );
 
     // 로컬 저장
-    _storage.saveFollowedUserIds(updatedFollowed);
+    await _storage.saveFollowedUserIds(updatedFollowed);
   }
 
 }

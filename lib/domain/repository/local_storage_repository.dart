@@ -25,4 +25,7 @@ abstract class LocalStorageRepository {
 
   bool getNotificationEnabled();
   Future<void> saveNotificationEnabled({required bool enabled});
+
+  String getProfileImageUrl();
+  Future<void> saveProfileImageUrl(String url);
 }

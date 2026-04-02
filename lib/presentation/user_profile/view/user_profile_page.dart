@@ -8,6 +8,7 @@ import '../../../app/theme/app_text_styles.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/format_utils.dart';
 import '../../feed/provider/feed_provider.dart';
+import '../../profile/provider/profile_provider.dart';
 import '../widget/user_video_grid.dart';
 
 class UserProfilePage extends ConsumerWidget {
@@ -34,8 +35,12 @@ class UserProfilePage extends ConsumerWidget {
 
     final nickname = firstVideo?.nickname ?? userId;
     final username = firstVideo?.username ?? userId;
-    final avatarUrl = firstVideo?.avatarUrl ?? '';
+    final defaultAvatarUrl = firstVideo?.avatarUrl ?? '';
     final isFollowing = feedState.followedUserIds.contains(userId);
+
+    // API에서 프로필 이미지 조회
+    final profileImageAsync = ref.watch(profileImageProvider(userId));
+    final avatarUrl = profileImageAsync.valueOrNull ?? defaultAvatarUrl;
 
     // 총 좋아요 수 합산
     final totalLikes = userVideos.fold<int>(0, (sum, v) => sum + v.likeCount);

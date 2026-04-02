@@ -216,9 +216,11 @@ class VideoRemoteDataSource implements VideoDataSource {
   }
 
   @override
+  @override
   Future<VideoModel> uploadVideo({
     required String filePath,
     required String description,
+    String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
     final file = File(filePath);
@@ -230,6 +232,10 @@ class VideoRemoteDataSource implements VideoDataSource {
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['description'] = description;
+    request.fields['userId'] = 'current_user';
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      request.fields['avatarUrl'] = avatarUrl;
+    }
     request.files.add(
       await http.MultipartFile.fromPath('video', filePath),
     );

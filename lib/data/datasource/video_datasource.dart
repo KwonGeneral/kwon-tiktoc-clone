@@ -9,6 +9,7 @@ abstract interface class VideoDataSource {
   Future<VideoModel> uploadVideo({
     required String filePath,
     required String description,
+    String? avatarUrl,
     void Function(double progress)? onProgress,
   });
 }

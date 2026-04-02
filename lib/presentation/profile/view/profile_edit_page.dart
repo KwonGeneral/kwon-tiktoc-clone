@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
@@ -52,8 +53,86 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
     if (mounted) context.pop();
   }
 
+  Future<void> _onChangePhoto() async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      backgroundColor: AppColors.commentBackground,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.whiteDisabled,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              AppStrings.profileImageTitle,
+              style: AppTextStyles.username.copyWith(color: AppColors.white),
+            ),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(
+                Icons.photo_library_outlined,
+                color: AppColors.white,
+              ),
+              title: Text(
+                AppStrings.profileImageGallery,
+                style: AppTextStyles.description.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
+              onTap: () => Navigator.pop(context, ImageSource.gallery),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.camera_alt_outlined,
+                color: AppColors.white,
+              ),
+              title: Text(
+                AppStrings.profileImageCamera,
+                style: AppTextStyles.description.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
+              onTap: () => Navigator.pop(context, ImageSource.camera),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+
+    if (source == null) return;
+
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+      source: source,
+      maxWidth: 600,
+      maxHeight: 600,
+      imageQuality: 85,
+    );
+    if (image == null) return;
+
+    await ref
+        .read(profileImageNotifierProvider.notifier)
+        .upload(image.path);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final currentUserAsync = ref.watch(currentUserProvider);
+    final profileImageState = ref.watch(profileImageNotifierProvider);
+    final isUploading = profileImageState is AsyncLoading;
+
     return Scaffold(
       backgroundColor: AppColors.black,
       appBar: AppBar(
@@ -92,6 +171,69 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 프로필 사진
+            Center(
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: isUploading ? null : _onChangePhoto,
+                    child: currentUserAsync.when(
+                      data: (user) => CircleAvatar(
+                        radius: 44,
+                        backgroundColor: AppColors.gray,
+                        backgroundImage: user.avatarUrl.isNotEmpty
+                            ? NetworkImage(user.avatarUrl)
+                            : null,
+                        child: isUploading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  color: AppColors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : user.avatarUrl.isEmpty
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 44,
+                                    color: AppColors.whiteSecondary,
+                                  )
+                                : null,
+                      ),
+                      loading: () => const CircleAvatar(
+                        radius: 44,
+                        backgroundColor: AppColors.gray,
+                        child: CircularProgressIndicator(
+                          color: AppColors.white,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                      error: (_, _) => const CircleAvatar(
+                        radius: 44,
+                        backgroundColor: AppColors.gray,
+                        child: Icon(
+                          Icons.person,
+                          size: 44,
+                          color: AppColors.whiteSecondary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  GestureDetector(
+                    onTap: isUploading ? null : _onChangePhoto,
+                    child: Text(
+                      AppStrings.profileEditChangePhoto,
+                      style: AppTextStyles.description.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
             // 닉네임
             Text(
               AppStrings.profileEditNickname,

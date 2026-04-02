@@ -113,6 +113,15 @@ abstract final class AppStrings {
   static const notificationsRecommendedAccounts = '추천 계정';
   static const notificationsEmpty = '아직 알림이 없습니다';
 
+  // 프로필 이미지
+  static const profileImageTitle = '프로필 사진 변경';
+  static const profileImageGallery = '앨범에서 선택';
+  static const profileImageCamera = '사진 촬영';
+  static const profileImageCancel = '취소';
+  static const profileImageUploading = '업로드 중...';
+  static const profileImageUploadFailed = '프로필 사진 업로드에 실패했습니다';
+  static const profileEditChangePhoto = '사진 변경';
+
   // 프로필 편집
   static const profileEditTitle = '프로필 편집';
   static const profileEditNickname = '닉네임';

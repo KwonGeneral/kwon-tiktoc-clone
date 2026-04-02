@@ -18,11 +18,46 @@ Future<User> currentUser(Ref ref) async {
 
   final savedNickname = storage.getProfileNickname();
   final savedBio = storage.getProfileBio();
+  final savedProfileImage = storage.getProfileImageUrl();
 
   return user.copyWith(
     nickname: savedNickname.isNotEmpty ? savedNickname : user.nickname,
     bio: savedBio,
+    avatarUrl: savedProfileImage.isNotEmpty ? savedProfileImage : user.avatarUrl,
   );
+}
+
+@riverpod
+Future<String?> profileImage(Ref ref, String userId) async {
+  final repository = ref.watch(userRepositoryProvider);
+  return repository.getProfileImageUrl(userId);
+}
+
+@riverpod
+class ProfileImageNotifier extends _$ProfileImageNotifier {
+  @override
+  AsyncValue<String?> build() {
+    final storage = ref.read(localStorageRepositoryProvider);
+    final cachedUrl = storage.getProfileImageUrl();
+    return AsyncData(cachedUrl.isNotEmpty ? cachedUrl : null);
+  }
+
+  Future<void> upload(String imagePath) async {
+    state = const AsyncLoading();
+    try {
+      final repository = ref.read(userRepositoryProvider);
+      final storage = ref.read(localStorageRepositoryProvider);
+      final url = await repository.uploadProfileImage(
+        imagePath: imagePath,
+        userId: AppStrings.commentCurrentUserId,
+      );
+      await storage.saveProfileImageUrl(url);
+      state = AsyncData(url);
+      ref.invalidate(currentUserProvider);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
 }
 
 @riverpod

@@ -12,6 +12,7 @@ class LocalStorageService implements LocalStorageRepository {
   static const _profileNicknameKey = 'profile_nickname';
   static const _profileBioKey = 'profile_bio';
   static const _notificationEnabledKey = 'notification_enabled';
+  static const _profileImageUrlKey = 'profile_image_url';
 
   final SharedPreferences _prefs;
 
@@ -105,5 +106,15 @@ class LocalStorageService implements LocalStorageRepository {
   @override
   Future<void> saveNotificationEnabled({required bool enabled}) {
     return _prefs.setBool(_notificationEnabledKey, enabled);
+  }
+
+  @override
+  String getProfileImageUrl() {
+    return _prefs.getString(_profileImageUrlKey) ?? '';
+  }
+
+  @override
+  Future<void> saveProfileImageUrl(String url) {
+    return _prefs.setString(_profileImageUrlKey, url);
   }
 }

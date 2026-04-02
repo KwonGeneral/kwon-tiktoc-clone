@@ -33,9 +33,17 @@ class SettingsPage extends ConsumerWidget {
             subtitle: AppStrings.settingsNotificationDescription,
             trailing: Switch.adaptive(
               value: notificationEnabled,
-              onChanged: (_) => ref
-                  .read(notificationSettingNotifierProvider.notifier)
-                  .toggle(),
+              onChanged: (_) {
+                if (!notificationEnabled) {
+                  // OFF → ON: 시스템 알림 설정으로 이동
+                  AppSettings.openAppSettings(
+                    type: AppSettingsType.notification,
+                  );
+                }
+                ref
+                    .read(notificationSettingNotifierProvider.notifier)
+                    .toggle();
+              },
               activeTrackColor: AppColors.primary,
             ),
           ),

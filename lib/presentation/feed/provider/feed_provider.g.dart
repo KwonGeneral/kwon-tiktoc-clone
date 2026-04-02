@@ -6,7 +6,7 @@ part of 'feed_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$feedNotifierHash() => r'd77ed16d4e5728abab9fb9f035e0a587d29307ec';
+String _$feedNotifierHash() => r'e109ba7e17b108a096eefd4f7f5d3104619371cc';
 
 /// See also [FeedNotifier].
 @ProviderFor(FeedNotifier)

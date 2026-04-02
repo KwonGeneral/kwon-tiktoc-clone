@@ -173,7 +173,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         showUploadButton: true,
       );
     }
-    return ProfileVideoGrid(videos: videos, onVideoTap: _navigateToVideo);
+    return ProfileVideoGrid(
+      key: const ValueKey('my_videos'),
+      videos: videos,
+      onVideoTap: _navigateToVideo,
+    );
   }
 
   Widget _buildBookmarksTab() {
@@ -184,7 +188,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         message: AppStrings.profileEmptyBookmarks,
       );
     }
-    return ProfileVideoGrid(videos: videos, onVideoTap: _navigateToVideo);
+    return ProfileVideoGrid(
+      key: const ValueKey('bookmarks'),
+      videos: videos,
+      onVideoTap: _navigateToVideo,
+    );
   }
 
   Widget _buildLikesTab() {
@@ -195,7 +203,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         message: AppStrings.profileEmptyLikes,
       );
     }
-    return ProfileVideoGrid(videos: videos, onVideoTap: _navigateToVideo);
+    return ProfileVideoGrid(
+      key: const ValueKey('likes'),
+      videos: videos,
+      onVideoTap: _navigateToVideo,
+    );
   }
 
   void _navigateToVideo(Video video) {

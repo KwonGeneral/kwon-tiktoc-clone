@@ -13,10 +13,18 @@ part 'video_player_manager.g.dart';
 class VideoPlayerManager extends _$VideoPlayerManager {
   final Map<int, VideoPlayerController> _controllers = {};
   final Set<int> _initializing = {};
+  final Set<int> _disposed = {};
+  bool _isDisposed = false;
+
+  static const _initTimeout = Duration(seconds: 10);
 
   @override
   Map<int, VideoPlayerController> build() {
-    ref.onDispose(_disposeAll);
+    _isDisposed = false;
+    ref.onDispose(() {
+      _isDisposed = true;
+      _disposeAll();
+    });
 
     // feedNotifier의 currentIndex를 watch하여 변경 시 자동 반응
     ref.listen(feedNotifierProvider, (prev, next) {
@@ -33,7 +41,7 @@ class VideoPlayerManager extends _$VideoPlayerManager {
   /// 페이지 변경 시 호출: 재생/정지/dispose 관리
   /// currentIndex는 이미 실제 인덱스(0~length-1)로 변환된 값
   void _onPageChanged(int currentIndex, List<Video> videos) {
-    if (videos.isEmpty) return;
+    if (videos.isEmpty || _isDisposed) return;
 
     // 1. 유지할 범위 계산 (currentIndex ± 1, 루프 고려)
     final keepRange = <int>{};
@@ -47,6 +55,7 @@ class VideoPlayerManager extends _$VideoPlayerManager {
         .where((i) => !keepRange.contains(i))
         .toList();
     for (final index in toRemove) {
+      _disposed.add(index);
       _controllers[index]?.dispose();
       _controllers.remove(index);
     }
@@ -54,6 +63,7 @@ class VideoPlayerManager extends _$VideoPlayerManager {
     // 3. 범위 내 컨트롤러 초기화 (없으면 생성)
     for (final index in keepRange) {
       if (!_controllers.containsKey(index) && !_initializing.contains(index)) {
+        _disposed.remove(index);
         _initController(index, videos[index]);
       }
     }
@@ -73,7 +83,7 @@ class VideoPlayerManager extends _$VideoPlayerManager {
     state = Map.unmodifiable(_controllers);
   }
 
-  /// 컨트롤러 초기화
+  /// 컨트롤러 초기화 (타임아웃 + 레이스 컨디션 보호)
   Future<void> _initController(int index, Video video) async {
     _initializing.add(index);
     final controller = VideoPlayerController.networkUrl(
@@ -83,7 +93,15 @@ class VideoPlayerManager extends _$VideoPlayerManager {
     _controllers[index] = controller;
 
     try {
-      await controller.initialize();
+      await controller.initialize().timeout(_initTimeout);
+
+      // 초기화 중에 dispose되었는지 확인
+      if (_isDisposed || _disposed.contains(index)) {
+        controller.dispose();
+        _controllers.remove(index);
+        return;
+      }
+
       controller.setLooping(true);
 
       // 초기화 완료 후 현재 페이지면 자동 재생
@@ -91,18 +109,27 @@ class VideoPlayerManager extends _$VideoPlayerManager {
           .read(feedNotifierProvider)
           .valueOrNull
           ?.currentIndex;
-      if (currentIndex == index) {
+      if (currentIndex == index && !_isDisposed) {
         controller.play();
       }
     } catch (e) {
       debugPrint(
         'VideoPlayerManager: controller init failed for index $index: $e',
       );
-      _controllers[index]?.dispose();
-      _controllers.remove(index);
+      // dispose 전에 아직 관리 중인지 확인
+      if (_controllers[index] == controller) {
+        _controllers.remove(index);
+      }
+      try {
+        controller.dispose();
+      } catch (_) {
+        // dispose 실패는 무시 (이미 dispose된 경우)
+      }
     } finally {
       _initializing.remove(index);
-      state = Map.unmodifiable(_controllers);
+      if (!_isDisposed) {
+        state = Map.unmodifiable(_controllers);
+      }
     }
   }
 
@@ -132,8 +159,14 @@ class VideoPlayerManager extends _$VideoPlayerManager {
 
   void _disposeAll() {
     for (final controller in _controllers.values) {
-      controller.dispose();
+      try {
+        controller.dispose();
+      } catch (_) {
+        // dispose 실패 무시
+      }
     }
     _controllers.clear();
+    _initializing.clear();
+    _disposed.clear();
   }
 }

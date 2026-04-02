@@ -6,6 +6,7 @@ import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_state.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/top_tab_bar.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_card.dart';
 
 class FeedPage extends ConsumerStatefulWidget {
@@ -126,15 +127,25 @@ class _FeedPageState extends ConsumerState<FeedPage> {
 
           // 팔로잉 탭에서 팔로잉한 유저가 없는 경우
           if (displayVideos.isEmpty) {
-            return const Center(
-              child: Text(
-                AppStrings.feedFollowingEmpty,
-                style: TextStyle(
-                  color: AppColors.whiteSecondary,
-                  fontSize: 16,
+            return const Stack(
+              children: [
+                Center(
+                  child: Text(
+                    AppStrings.feedFollowingEmpty,
+                    style: TextStyle(
+                      color: AppColors.whiteSecondary,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                textAlign: TextAlign.center,
-              ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: TopTabBar(),
+                ),
+              ],
             );
           }
 

@@ -8,7 +8,7 @@ import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart'
 part 'video_player_manager.g.dart';
 
 /// 비디오 플레이어 컨트롤러를 중앙 관리하는 Manager.
-/// 현재 페이지 ± 1 범위의 컨트롤러만 유지하여 메모리를 관리한다.
+/// 현재 페이지 ± 2 범위의 컨트롤러만 유지하여 메모리를 관리한다.
 @Riverpod(keepAlive: true)
 class VideoPlayerManager extends _$VideoPlayerManager {
   final Map<int, VideoPlayerController> _controllers = {};
@@ -43,11 +43,12 @@ class VideoPlayerManager extends _$VideoPlayerManager {
   void _onPageChanged(int currentIndex, List<Video> videos) {
     if (videos.isEmpty || _isDisposed) return;
 
-    // 1. 유지할 범위 계산 (currentIndex ± 1, 루프 고려)
+    // 1. 유지할 범위 계산 (currentIndex ± 2, 루프 고려)
     final keepRange = <int>{};
-    for (var offset = -1; offset <= 1; offset++) {
-      final i = (currentIndex + offset) % videos.length;
-      if (i >= 0) keepRange.add(i);
+    final len = videos.length;
+    for (var offset = -2; offset <= 2; offset++) {
+      final i = ((currentIndex + offset) % len + len) % len;
+      keepRange.add(i);
     }
 
     // 2. 범위 밖 컨트롤러 dispose
@@ -86,8 +87,10 @@ class VideoPlayerManager extends _$VideoPlayerManager {
   /// 컨트롤러 초기화 (타임아웃 + 레이스 컨디션 보호)
   Future<void> _initController(int index, Video video) async {
     _initializing.add(index);
+    // HLS URL 우선 사용, 없으면 MP4 fallback
+    final playUrl = video.hlsUrl.isNotEmpty ? video.hlsUrl : video.videoUrl;
     final controller = VideoPlayerController.networkUrl(
-      Uri.parse(video.videoUrl),
+      Uri.parse(playUrl),
     );
 
     _controllers[index] = controller;

@@ -101,8 +101,24 @@ class _VideoCardState extends ConsumerState<VideoCard> {
   }
 
   Widget _buildLoading() {
-    return const Center(
-      child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
+    final thumbnailUrl = widget.video.thumbnailUrl;
+    return Stack(
+      fit: StackFit.expand,
+      alignment: Alignment.center,
+      children: [
+        if (thumbnailUrl.isNotEmpty)
+          Image.network(
+            thumbnailUrl,
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) => const SizedBox.shrink(),
+          ),
+        const Center(
+          child: CircularProgressIndicator(
+            color: AppColors.white,
+            strokeWidth: 2,
+          ),
+        ),
+      ],
     );
   }
 }

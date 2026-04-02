@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../app/route/route_paths.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../feed/provider/feed_provider.dart';
 import '../provider/publish_provider.dart';
 import '../provider/publish_state.dart';
 import '../widget/publish_cover_thumbnail.dart';
-import '../widget/publish_menu_item.dart';
 import '../widget/publish_upload_overlay.dart';
 
 class PublishPage extends ConsumerStatefulWidget {
@@ -22,14 +22,17 @@ class PublishPage extends ConsumerStatefulWidget {
 
 class _PublishPageState extends ConsumerState<PublishPage> {
   final _descriptionController = TextEditingController();
+  final _descriptionFocusNode = FocusNode();
 
   @override
   void dispose() {
     _descriptionController.dispose();
+    _descriptionFocusNode.dispose();
     super.dispose();
   }
 
   void _onPublish() {
+    FocusScope.of(context).unfocus();
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -63,6 +66,7 @@ class _PublishPageState extends ConsumerState<PublishPage> {
   }
 
   void _onHashtagTap() {
+    _descriptionFocusNode.requestFocus();
     final text = _descriptionController.text;
     final cursorPos = _descriptionController.selection.baseOffset;
     final newText = '${text.substring(0, cursorPos < 0 ? text.length : cursorPos)}'
@@ -75,6 +79,7 @@ class _PublishPageState extends ConsumerState<PublishPage> {
   }
 
   void _onMentionTap() {
+    _descriptionFocusNode.requestFocus();
     final text = _descriptionController.text;
     final cursorPos = _descriptionController.selection.baseOffset;
     final newText = '${text.substring(0, cursorPos < 0 ? text.length : cursorPos)}'
@@ -92,7 +97,8 @@ class _PublishPageState extends ConsumerState<PublishPage> {
 
     ref.listen(publishNotifierProvider, (prev, next) {
       if (next.status == PublishStatus.success) {
-        context.go(RoutePaths.feed);
+        ref.invalidate(feedNotifierProvider);
+        context.go(RoutePaths.profile);
       }
     });
 
@@ -129,6 +135,7 @@ class _PublishPageState extends ConsumerState<PublishPage> {
                       Expanded(
                         child: TextField(
                           controller: _descriptionController,
+                          focusNode: _descriptionFocusNode,
                           maxLines: 5,
                           minLines: 3,
                           decoration: const InputDecoration(
@@ -166,45 +173,7 @@ class _PublishPageState extends ConsumerState<PublishPage> {
                   ),
                   const SizedBox(height: 24),
                   const Divider(height: 1, color: Color(0xFFEEEEEE)),
-                  // 메뉴 항목들
-                  const PublishMenuItem(
-                    icon: Icons.person_pin_circle_outlined,
-                    label: AppStrings.publishLocation,
-                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  ),
-                  const PublishMenuItem(
-                    icon: Icons.add_link,
-                    label: AppStrings.publishAddLink,
-                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  ),
-                  const PublishMenuItem(
-                    icon: Icons.public,
-                    label: AppStrings.publishVisibility,
-                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  ),
-                  const PublishMenuItem(
-                    icon: Icons.settings,
-                    label: AppStrings.publishAdvancedSettings,
-                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  ),
-                  const PublishMenuItem(
-                    icon: Icons.share_outlined,
-                    label: AppStrings.publishShare,
-                    trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 16),
-                  // 경고 문구
-                  Center(
-                    child: Text(
-                      AppStrings.publishPrivacyMessage,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.grey[500],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   // 하단 버튼
                   Row(
                     children: [

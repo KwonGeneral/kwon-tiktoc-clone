@@ -6,9 +6,14 @@ import '../../../core/utils/format_utils.dart';
 import '../../../domain/entity/video.dart';
 
 class UserVideoGrid extends StatelessWidget {
-  const UserVideoGrid({required this.videos, super.key});
+  const UserVideoGrid({
+    required this.videos,
+    this.onVideoTap,
+    super.key,
+  });
 
   final List<Video> videos;
+  final void Function(Video video)? onVideoTap;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,10 @@ class UserVideoGrid extends StatelessWidget {
       itemCount: videos.length,
       itemBuilder: (context, index) {
         final video = videos[index];
-        return _VideoThumbnail(video: video);
+        return GestureDetector(
+          onTap: () => onVideoTap?.call(video),
+          child: _VideoThumbnail(video: video),
+        );
       },
     );
   }

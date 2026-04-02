@@ -5,9 +5,14 @@ import '../../../app/theme/app_text_styles.dart';
 import '../../../domain/entity/video.dart';
 
 class ProfileVideoGrid extends StatelessWidget {
-  const ProfileVideoGrid({required this.videos, super.key});
+  const ProfileVideoGrid({
+    required this.videos,
+    this.onVideoTap,
+    super.key,
+  });
 
   final List<Video> videos;
+  final void Function(Video video)? onVideoTap;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +29,10 @@ class ProfileVideoGrid extends StatelessWidget {
       itemCount: videos.length,
       itemBuilder: (context, index) {
         final video = videos[index];
-        return _VideoThumbnail(video: video);
+        return GestureDetector(
+          onTap: () => onVideoTap?.call(video),
+          child: _VideoThumbnail(video: video),
+        );
       },
     );
   }

@@ -48,16 +48,31 @@ class _FeedPageState extends ConsumerState<FeedPage> {
     }
   }
 
-  PageController _getPageController(int videoCount, FeedTab tab) {
+  int _midStartForCount(int videoCount) {
+    if (videoCount <= 0) return 0;
+    return (_virtualPageCount ~/ 2) -
+        ((_virtualPageCount ~/ 2) % videoCount);
+  }
+
+  PageController _getPageController(
+    int videoCount,
+    FeedTab tab, {
+    int initialIndex = 0,
+  }) {
     if (_pageController == null || _currentTab != tab) {
       _pageController?.dispose();
-      final midStart = videoCount > 0
-          ? (_virtualPageCount ~/ 2) - ((_virtualPageCount ~/ 2) % videoCount)
-          : 0;
+      final midStart = _midStartForCount(videoCount) + initialIndex;
       _pageController = PageController(initialPage: midStart);
       _currentTab = tab;
     }
     return _pageController!;
+  }
+
+  void _jumpToIndex(int realIndex, int videoCount) {
+    if (_pageController == null || !_pageController!.hasClients) return;
+    if (videoCount <= 0) return;
+    final midStart = _midStartForCount(videoCount);
+    _pageController!.jumpToPage(midStart + realIndex);
   }
 
   void _onPageChanged(int loopIndex, int totalVideos) {
@@ -92,6 +107,23 @@ class _FeedPageState extends ConsumerState<FeedPage> {
             });
           }
 
+          // 외부에서 currentIndex가 변경되면 PageController 점프
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_pageController != null && _pageController!.hasClients) {
+              final currentPage = _pageController!.page?.round() ?? 0;
+              final currentReal =
+                  feedState.displayVideos.isNotEmpty
+                      ? currentPage % feedState.displayVideos.length
+                      : 0;
+              if (currentReal != feedState.currentIndex) {
+                _jumpToIndex(
+                  feedState.currentIndex,
+                  feedState.displayVideos.length,
+                );
+              }
+            }
+          });
+
           final displayVideos = feedState.displayVideos;
 
           // 팔로잉 탭에서 팔로잉한 유저가 없는 경우
@@ -114,6 +146,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                 controller: _getPageController(
                   displayVideos.length,
                   feedState.selectedTab,
+                  initialIndex: feedState.currentIndex,
                 ),
                 scrollDirection: Axis.vertical,
                 itemCount: _virtualPageCount,

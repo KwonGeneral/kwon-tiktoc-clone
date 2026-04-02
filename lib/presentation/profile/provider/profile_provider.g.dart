@@ -57,7 +57,7 @@ final bookmarkedVideosProvider = AutoDisposeProvider<List<Video>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef BookmarkedVideosRef = AutoDisposeProviderRef<List<Video>>;
-String _$myVideosHash() => r'ec816041b8c4f6b9b662992f5b829f8de117b4ea';
+String _$myVideosHash() => r'b2a003808c104fca8f64860a30edc2c4c40a80f2';
 
 /// See also [myVideos].
 @ProviderFor(myVideos)

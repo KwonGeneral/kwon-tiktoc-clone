@@ -56,7 +56,7 @@ class SettingsPage extends ConsumerWidget {
           const _SettingsTile(
             icon: Icons.info_outline,
             title: AppStrings.settingsVersion,
-            subtitle: '1.0.0',
+            subtitle: AppStrings.appVersion,
           ),
         ],
       ),

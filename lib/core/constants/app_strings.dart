@@ -127,6 +127,7 @@ abstract final class AppStrings {
   static const settingsPermission = '권한 관리';
   static const settingsPermissionDescription = '카메라, 마이크 등 앱 권한을 관리합니다';
   static const settingsVersion = '앱 버전';
+  static const appVersion = '1.0.0';
 
   // 프로필 탭 빈 상태
   static const profileEmptyBookmarks = '즐겨찾기 동영상이 여기에 표시됩니다.';

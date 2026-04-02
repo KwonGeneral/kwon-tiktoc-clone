@@ -76,6 +76,25 @@ final userRepositoryProvider = Provider<UserRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UserRepositoryRef = ProviderRef<UserRepository>;
+String _$notificationRepositoryHash() =>
+    r'2f7d1f0a004351fb90669564571d47b67e035bdb';
+
+/// See also [notificationRepository].
+@ProviderFor(notificationRepository)
+final notificationRepositoryProvider =
+    Provider<NotificationRepository>.internal(
+      notificationRepository,
+      name: r'notificationRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$notificationRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef NotificationRepositoryRef = ProviderRef<NotificationRepository>;
 String _$getVideoFeedHash() => r'83206837b7bcb601c30c3b6d976a0fe89d43751a';
 
 /// See also [getVideoFeed].

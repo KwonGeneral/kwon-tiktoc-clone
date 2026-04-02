@@ -2,9 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/video_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/video_remote_datasource.dart';
+import 'package:kwon_tiktoc_clone/data/repository/notification_repository_impl.dart';
 import 'package:kwon_tiktoc_clone/data/repository/user_repository_impl.dart';
 import 'package:kwon_tiktoc_clone/data/repository/video_repository_impl.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/local_storage_repository.dart';
+import 'package:kwon_tiktoc_clone/domain/repository/notification_repository.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/video_repository.dart';
 import 'package:kwon_tiktoc_clone/domain/usecase/get_comments.dart';
@@ -35,6 +37,11 @@ VideoRepository videoRepository(Ref ref) {
 @Riverpod(keepAlive: true)
 UserRepository userRepository(Ref ref) {
   return UserRepositoryImpl();
+}
+
+@Riverpod(keepAlive: true)
+NotificationRepository notificationRepository(Ref ref) {
+  return NotificationRepositoryImpl();
 }
 
 // UseCases

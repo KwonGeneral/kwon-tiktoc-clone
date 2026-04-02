@@ -100,6 +100,16 @@ abstract final class AppStrings {
   static const publishFailed = '업로드에 실패했습니다';
   static const publishRetry = '다시 시도';
 
+  // 알림
+  static const notificationsTitle = '알림';
+  static const notificationsNewFollowers = '새 팔로워';
+  static const notificationsNewFollowersSub = '여기에서 새 팔로워를 확인하세요.';
+  static const notificationsActivity = '활동';
+  static const notificationsActivitySub = '여기에서 알림을 확인하세요.';
+  static const notificationsSystem = '시스템 알림';
+  static const notificationsRecommendedAccounts = '추천 계정';
+  static const notificationsEmpty = '아직 알림이 없습니다';
+
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';

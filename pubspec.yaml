@@ -44,6 +44,9 @@ dependencies:
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
 
+  # Network
+  http: ^1.3.0
+
   # Video
   video_player: ^2.9.5
 

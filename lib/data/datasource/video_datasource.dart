@@ -1,5 +1,5 @@
-import 'package:supersent_tiktoc_clone/data/model/comment_model.dart';
-import 'package:supersent_tiktoc_clone/data/model/video_model.dart';
+import 'package:kwon_tiktoc_clone/data/model/comment_model.dart';
+import 'package:kwon_tiktoc_clone/data/model/video_model.dart';
 
 abstract interface class VideoDataSource {
   Future<List<VideoModel>> getVideoFeed({int page = 0});

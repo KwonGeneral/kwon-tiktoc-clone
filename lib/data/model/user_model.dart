@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:supersent_tiktoc_clone/domain/entity/user.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';

@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 
 part 'video_player_manager.g.dart';
 

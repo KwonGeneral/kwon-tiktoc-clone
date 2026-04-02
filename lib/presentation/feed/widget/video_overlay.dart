@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/widget/music_info.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/widget/side_action_bar.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/widget/top_tab_bar.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/widget/video_description.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/music_info.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/side_action_bar.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/top_tab_bar.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_description.dart';
 
 class VideoOverlay extends ConsumerWidget {
   const VideoOverlay({required this.video, super.key});

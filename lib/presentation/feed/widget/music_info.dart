@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
-import 'package:supersent_tiktoc_clone/app/theme/app_text_styles.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
 
 class MusicInfo extends StatefulWidget {
   const MusicInfo({required this.musicName, super.key});

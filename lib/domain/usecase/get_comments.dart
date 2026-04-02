@@ -1,5 +1,5 @@
-import 'package:supersent_tiktoc_clone/domain/entity/comment.dart';
-import 'package:supersent_tiktoc_clone/domain/repository/video_repository.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/comment.dart';
+import 'package:kwon_tiktoc_clone/domain/repository/video_repository.dart';
 
 class GetComments {
   final VideoRepository _repository;

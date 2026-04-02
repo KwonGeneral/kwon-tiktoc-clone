@@ -1,11 +1,11 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:supersent_tiktoc_clone/core/constants/app_constants.dart';
-import 'package:supersent_tiktoc_clone/core/di/providers.dart';
-import 'package:supersent_tiktoc_clone/domain/usecase/get_video_feed.dart';
-import 'package:supersent_tiktoc_clone/domain/usecase/toggle_bookmark.dart';
-import 'package:supersent_tiktoc_clone/domain/usecase/toggle_like.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_state.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
+import 'package:kwon_tiktoc_clone/core/di/providers.dart';
+import 'package:kwon_tiktoc_clone/domain/usecase/get_video_feed.dart';
+import 'package:kwon_tiktoc_clone/domain/usecase/toggle_bookmark.dart';
+import 'package:kwon_tiktoc_clone/domain/usecase/toggle_like.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_state.dart';
 
 part 'feed_provider.g.dart';
 

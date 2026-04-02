@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 
 part 'feed_state.freezed.dart';
 

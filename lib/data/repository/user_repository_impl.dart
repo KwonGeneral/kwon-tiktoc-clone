@@ -1,6 +1,6 @@
-import 'package:supersent_tiktoc_clone/data/model/user_model.dart';
-import 'package:supersent_tiktoc_clone/domain/entity/user.dart';
-import 'package:supersent_tiktoc_clone/domain/repository/user_repository.dart';
+import 'package:kwon_tiktoc_clone/data/model/user_model.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
+import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
   static const _currentUserId = 'current_user';

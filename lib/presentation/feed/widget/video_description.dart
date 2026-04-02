@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
-import 'package:supersent_tiktoc_clone/app/theme/app_text_styles.dart';
-import 'package:supersent_tiktoc_clone/core/constants/app_strings.dart';
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 
 class VideoDescription extends StatefulWidget {
   const VideoDescription({required this.video, super.key});

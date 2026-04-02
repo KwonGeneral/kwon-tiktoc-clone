@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/widget/like_animation.dart';
-import 'package:supersent_tiktoc_clone/presentation/feed/widget/video_overlay.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/like_animation.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_overlay.dart';
 
 class VideoCard extends ConsumerStatefulWidget {
   const VideoCard({

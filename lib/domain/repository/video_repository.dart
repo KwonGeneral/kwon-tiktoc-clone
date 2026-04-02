@@ -1,5 +1,5 @@
-import 'package:supersent_tiktoc_clone/domain/entity/comment.dart';
-import 'package:supersent_tiktoc_clone/domain/entity/video.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/comment.dart';
+import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 
 abstract interface class VideoRepository {
   Future<List<Video>> getVideoFeed({int page = 0});

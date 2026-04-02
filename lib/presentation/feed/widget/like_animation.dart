@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:supersent_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 
 class LikeAnimation extends StatefulWidget {
   const LikeAnimation({required this.onCompleted, super.key});

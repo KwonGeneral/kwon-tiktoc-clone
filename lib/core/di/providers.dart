@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
 import 'package:kwon_tiktoc_clone/data/datasource/video_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/video_remote_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/repository/user_repository_impl.dart';
 import 'package:kwon_tiktoc_clone/data/repository/video_repository_impl.dart';
+import 'package:kwon_tiktoc_clone/domain/repository/local_storage_repository.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/video_repository.dart';
 import 'package:kwon_tiktoc_clone/domain/usecase/get_comments.dart';
@@ -13,6 +13,12 @@ import 'package:kwon_tiktoc_clone/domain/usecase/toggle_bookmark.dart';
 import 'package:kwon_tiktoc_clone/domain/usecase/toggle_like.dart';
 
 part 'providers.g.dart';
+
+// Local Storage
+@Riverpod(keepAlive: true)
+LocalStorageRepository localStorageRepository(Ref ref) {
+  throw UnimplementedError('localStorageRepository must be overridden');
+}
 
 // DataSource
 @Riverpod(keepAlive: true)

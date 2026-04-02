@@ -6,6 +6,25 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$localStorageRepositoryHash() =>
+    r'5ac7f46cbf698bf5360cce78593849b8c55bfbd1';
+
+/// See also [localStorageRepository].
+@ProviderFor(localStorageRepository)
+final localStorageRepositoryProvider =
+    Provider<LocalStorageRepository>.internal(
+      localStorageRepository,
+      name: r'localStorageRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$localStorageRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef LocalStorageRepositoryRef = ProviderRef<LocalStorageRepository>;
 String _$videoDataSourceHash() => r'516cf2bbd00775b4eb76b263afdb46bc498a15a1';
 
 /// See also [videoDataSource].

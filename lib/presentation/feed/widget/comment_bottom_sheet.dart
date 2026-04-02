@@ -191,7 +191,9 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
                       fontSize: 14,
                     ),
                     decoration: InputDecoration(
-                      hintText: AppStrings.commentInputHint,
+                      hintText: commentState.replyingToCommentId != null
+                          ? AppStrings.commentReply
+                          : AppStrings.commentInputHint,
                       hintStyle: const TextStyle(
                         color: AppColors.whiteDisabled,
                         fontSize: 14,

@@ -242,17 +242,17 @@
 - [x] 개인정보 팝업 문구 → "이 영상은 실제로 서버에 업로드됩니다. 개인정보가 포함되지 않았는지 확인해주세요."
 
 ### 참고 이미지 (틱톡 원본 — 이렇게 되어야 함)
-- /Users/kwontaewan/Desktop/개인/2. 개인/앱이미지-원본/틱톡3/댓글올라옴.jpeg — 댓글 바텀시트 다크 UI
-- /Users/kwontaewan/Desktop/개인/2. 개인/앱이미지-원본/틱톡3/답글달기.jpeg — 답글 입력 UI
-- /Users/kwontaewan/Desktop/개인/2. 개인/앱이미지-원본/틱톡3/답글더보기.jpeg — 답글 2depth
-- /Users/kwontaewan/Desktop/개인/2. 개인/앱이미지-원본/틱톡2/촬영-게시-default.jpeg — 게시 화면
+- 틱톡3/댓글올라옴.jpeg — 댓글 바텀시트 다크 UI
+- 틱톡3/답글달기.jpeg — 답글 입력 UI
+- 틱톡3/답글더보기.jpeg — 답글 2depth
+- 틱톡2/촬영-게시-default.jpeg — 게시 화면
 
 ### 현재 앱 문제 이미지 (QA — 현재 이렇게 되어있음)
-- /Users/kwontaewan/Downloads/qa/댓글 열렸을때의 UI가 실제 틱톡과 다름.jpeg
-- /Users/kwontaewan/Downloads/qa/답글 UI가 실제 틱톡과 다름.jpeg
-- /Users/kwontaewan/Downloads/qa/게시할때 키보드가 올라옴.jpeg
-- /Users/kwontaewan/Downloads/qa/기능 지원이 어려운 커버 편집이나 임시 저장은 없어야함.jpeg
-- /Users/kwontaewan/Downloads/qa/이런 문구가 아니라 실제로 영상이 배포된다고 안내해야함.jpeg
+- qa/댓글 열렸을때의 UI가 실제 틱톡과 다름.jpeg
+- qa/답글 UI가 실제 틱톡과 다름.jpeg
+- qa/게시할때 키보드가 올라옴.jpeg
+- qa/기능 지원이 어려운 커버 편집이나 임시 저장은 없어야함.jpeg
+- qa/이런 문구가 아니라 실제로 영상이 배포된다고 안내해야함.jpeg
 
 ### 완료 기준
 - 댓글 UI가 틱톡 원본 이미지와 일치
@@ -269,13 +269,13 @@
 - [ ] 팔로잉 탭: 팔로잉한 유저 영상이 실제로 표시되도록 수정
 
 ### 참고 이미지 (틱톡 원본)
-- /Users/kwontaewan/Desktop/개인/2. 개인/앱이미지-원본/틱톡2/마이페이지-2.jpeg — 북마크 탭
-- /Users/kwontaewan/Desktop/개인/2. 개인/앱이미지-원본/틱톡2/마이페이지-3.jpeg — 좋아요 탭
+- 틱톡2/마이페이지-2.jpeg — 북마크 탭
+- 틱톡2/마이페이지-3.jpeg — 좋아요 탭
 
 ### 현재 앱 문제 이미지 (QA)
-- /Users/kwontaewan/Downloads/qa/내가 좋아요한 영상의 표지가 안보임.jpeg
-- /Users/kwontaewan/Downloads/qa/동영상 게시 후 내 영상에 없음.jpeg
-- /Users/kwontaewan/Downloads/qa/팔로잉을 했는데도 팔로잉 영상이 없음.jpeg
+- qa/내가 좋아요한 영상의 표지가 안보임.jpeg
+- qa/동영상 게시 후 내 영상에 없음.jpeg
+- qa/팔로잉을 했는데도 팔로잉 영상이 없음.jpeg
 
 ### 완료 기준
 - 프로필 탭에서 영상 썸네일 정상 표시

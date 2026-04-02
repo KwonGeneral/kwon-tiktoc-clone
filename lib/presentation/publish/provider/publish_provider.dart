@@ -36,10 +36,15 @@ class PublishNotifier extends _$PublishNotifier {
         progress: 0.0,
       );
 
+      // 프로필 이미지 URL 가져오기
+      final storage = ref.read(localStorageRepositoryProvider);
+      final profileImageUrl = storage.getProfileImageUrl();
+
       final repository = ref.read(videoRepositoryProvider);
       await repository.uploadVideo(
         filePath: compressedPath,
         description: description,
+        avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
         onProgress: (progress) {
           state = state.copyWith(progress: progress);
         },

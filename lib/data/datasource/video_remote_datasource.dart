@@ -15,6 +15,7 @@ class VideoRemoteDataSource implements VideoDataSource {
   final http.Client _client;
 
   static const _baseUrl = 'https://api.myfortie.com';
+  static const _currentUserId = 'current_user';
 
   List<VideoModel>? _cachedVideos;
 
@@ -219,6 +220,7 @@ class VideoRemoteDataSource implements VideoDataSource {
   Future<VideoModel> uploadVideo({
     required String filePath,
     required String description,
+    String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
     final file = File(filePath);
@@ -230,6 +232,10 @@ class VideoRemoteDataSource implements VideoDataSource {
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['description'] = description;
+    request.fields['userId'] = _currentUserId;
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      request.fields['avatarUrl'] = avatarUrl;
+    }
     request.files.add(
       await http.MultipartFile.fromPath('video', filePath),
     );

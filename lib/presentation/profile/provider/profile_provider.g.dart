@@ -6,7 +6,7 @@ part of 'profile_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentUserHash() => r'5e5fb0af2ba3afac5cfcc7290de747ae957858e3';
+String _$currentUserHash() => r'b460e252856fe5822c2259c8025e655fee3e580e';
 
 /// See also [currentUser].
 @ProviderFor(currentUser)
@@ -23,6 +23,147 @@ final currentUserProvider = AutoDisposeFutureProvider<User>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentUserRef = AutoDisposeFutureProviderRef<User>;
+String _$profileImageHash() => r'64da2ad90357fb3547e91f0e3cddaf9d66b03d90';
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+/// See also [profileImage].
+@ProviderFor(profileImage)
+const profileImageProvider = ProfileImageFamily();
+
+/// See also [profileImage].
+class ProfileImageFamily extends Family<AsyncValue<String?>> {
+  /// See also [profileImage].
+  const ProfileImageFamily();
+
+  /// See also [profileImage].
+  ProfileImageProvider call(String userId) {
+    return ProfileImageProvider(userId);
+  }
+
+  @override
+  ProfileImageProvider getProviderOverride(
+    covariant ProfileImageProvider provider,
+  ) {
+    return call(provider.userId);
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'profileImageProvider';
+}
+
+/// See also [profileImage].
+class ProfileImageProvider extends AutoDisposeFutureProvider<String?> {
+  /// See also [profileImage].
+  ProfileImageProvider(String userId)
+    : this._internal(
+        (ref) => profileImage(ref as ProfileImageRef, userId),
+        from: profileImageProvider,
+        name: r'profileImageProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$profileImageHash,
+        dependencies: ProfileImageFamily._dependencies,
+        allTransitiveDependencies:
+            ProfileImageFamily._allTransitiveDependencies,
+        userId: userId,
+      );
+
+  ProfileImageProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final String userId;
+
+  @override
+  Override overrideWith(
+    FutureOr<String?> Function(ProfileImageRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ProfileImageProvider._internal(
+        (ref) => create(ref as ProfileImageRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String?> createElement() {
+    return _ProfileImageProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ProfileImageProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ProfileImageRef on AutoDisposeFutureProviderRef<String?> {
+  /// The parameter `userId` of this provider.
+  String get userId;
+}
+
+class _ProfileImageProviderElement
+    extends AutoDisposeFutureProviderElement<String?>
+    with ProfileImageRef {
+  _ProfileImageProviderElement(super.provider);
+
+  @override
+  String get userId => (origin as ProfileImageProvider).userId;
+}
+
 String _$likedVideosHash() => r'4e189ff900e1bb2e346d060cbf9701597e327818';
 
 /// See also [likedVideos].
@@ -74,6 +215,23 @@ final myVideosProvider = AutoDisposeProvider<List<Video>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef MyVideosRef = AutoDisposeProviderRef<List<Video>>;
+String _$profileImageNotifierHash() =>
+    r'19c158302aac4a72a932c407861df905c777aaf5';
+
+/// See also [ProfileImageNotifier].
+@ProviderFor(ProfileImageNotifier)
+final profileImageNotifierProvider =
+    AutoDisposeAsyncNotifierProvider<ProfileImageNotifier, String?>.internal(
+      ProfileImageNotifier.new,
+      name: r'profileImageNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$profileImageNotifierHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+typedef _$ProfileImageNotifier = AutoDisposeAsyncNotifier<String?>;
 String _$profileEditNotifierHash() =>
     r'8070470f49d4b98ec98d9e574c883baf630fb0f0';
 

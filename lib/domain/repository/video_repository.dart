@@ -9,6 +9,7 @@ abstract interface class VideoRepository {
   Future<Video> uploadVideo({
     required String filePath,
     required String description,
+    String? avatarUrl,
     void Function(double progress)? onProgress,
   });
 }

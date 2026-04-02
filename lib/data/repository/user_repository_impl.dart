@@ -1,8 +1,19 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:kwon_tiktoc_clone/data/model/user_model.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
+  UserRepositoryImpl({http.Client? client})
+    : _client = client ?? http.Client();
+
+  final http.Client _client;
+
+  static const _baseUrl = 'https://api.myfortie.com';
   static const _currentUserId = 'current_user';
 
   static final _mockUsers = <String, UserModel>{
@@ -140,5 +151,54 @@ class UserRepositoryImpl implements UserRepository {
         .where((e) => e.key != _currentUserId)
         .map((e) => e.value.toEntity())
         .toList();
+  }
+
+  @override
+  Future<String?> getProfileImageUrl(String userId) async {
+    try {
+      final response = await _client.get(
+        Uri.parse('$_baseUrl/videos/profile-image/$userId'),
+      );
+
+      if (response.statusCode != 200) return null;
+
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final url = json['profileImageUrl'] as String?;
+      return url;
+    } catch (e) {
+      debugPrint('프로필 이미지 조회 실패: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<String> uploadProfileImage({
+    required String imagePath,
+    required String userId,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/videos/profile-image/upload');
+    final request = http.MultipartRequest('POST', uri);
+
+    request.fields['userId'] = userId;
+    request.files.add(
+      await http.MultipartFile.fromPath('image', imagePath),
+    );
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('프로필 이미지 업로드 실패: ${response.statusCode}');
+    }
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    final profileImageUrl = json['profileImageUrl'] as String?;
+
+    if (profileImageUrl == null) {
+      throw Exception('프로필 이미지 URL이 응답에 없습니다');
+    }
+
+    debugPrint('프로필 이미지 업로드 완료: $profileImageUrl');
+    return profileImageUrl;
   }
 }

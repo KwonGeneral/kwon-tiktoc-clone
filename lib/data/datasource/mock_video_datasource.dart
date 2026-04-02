@@ -179,6 +179,7 @@ class MockVideoDataSource implements VideoDataSource {
   Future<VideoModel> uploadVideo({
     required String filePath,
     required String description,
+    String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
     await Future<void>.delayed(const Duration(seconds: 2));

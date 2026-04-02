@@ -66,10 +66,7 @@ class NotificationItem extends StatelessWidget {
                             ),
                           ),
                         TextSpan(
-                          text: notification.type ==
-                                  domain.NotificationType.system
-                              ? notification.message
-                              : notification.message,
+                          text: notification.message,
                           style: const TextStyle(
                             color: AppColors.whiteSecondary,
                             fontSize: 14,
@@ -109,7 +106,7 @@ class NotificationItem extends StatelessWidget {
     return switch (notification.type) {
       domain.NotificationType.follow => AppColors.secondary,
       domain.NotificationType.like => AppColors.primary,
-      domain.NotificationType.comment => const Color(0xFF6C5CE7),
+      domain.NotificationType.comment => AppColors.commentPurple,
       domain.NotificationType.system => AppColors.gray,
     };
   }

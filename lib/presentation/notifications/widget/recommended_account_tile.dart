@@ -81,7 +81,7 @@ class RecommendedAccountTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '맞팔로우 중: ${FormatUtils.compactNumber(user.followerCount)}',
+                    '${AppStrings.friendsMutualFollow}${FormatUtils.compactNumber(user.followerCount)}',
                     style: const TextStyle(
                       color: AppColors.whiteSecondary,
                       fontSize: 13,

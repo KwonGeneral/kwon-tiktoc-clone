@@ -4,6 +4,8 @@ abstract final class AppColors {
   // Background
   static const black = Color(0xFF000000);
   static const darkGray = Color(0xFF121212);
+  static const commentBackground = Color(0xFF1C1C1E);
+  static const commentInputBackground = Color(0xFF2A2A2C);
   static const gray = Color(0xFF2C2C2C);
 
   // Text

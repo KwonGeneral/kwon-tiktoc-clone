@@ -57,7 +57,7 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.6,
       decoration: const BoxDecoration(
-        color: AppColors.darkGray,
+        color: AppColors.commentBackground,
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       child: Column(
@@ -134,7 +134,7 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
           if (commentState.replyingToCommentId != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              color: AppColors.gray,
+              color: AppColors.commentInputBackground,
               child: Row(
                 children: [
                   Expanded(
@@ -166,7 +166,8 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
             ),
 
           // 입력 필드
-          Padding(
+          Container(
+            color: AppColors.commentBackground,
             padding: EdgeInsets.only(
               left: 16,
               right: 8,
@@ -202,7 +203,7 @@ class _CommentBottomSheetState extends ConsumerState<CommentBottomSheet> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: AppColors.gray,
+                      fillColor: AppColors.commentInputBackground,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 8,

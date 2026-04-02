@@ -83,7 +83,7 @@ abstract final class AppStrings {
   // 게시
   static const publishTitle = '게시';
   static const publishDescriptionHint = '설명을 추가하세요...';
-  static const publishCoverEdit = '커버 편집';
+
   static const publishHashtag = '# 해시태그';
   static const publishMention = '@ 멘션';
   static const publishLocation = '위치';
@@ -91,11 +91,10 @@ abstract final class AppStrings {
   static const publishVisibility = '팔로워만 이 게시물을 볼 수 있습니다';
   static const publishAdvancedSettings = '고급 설정';
   static const publishShare = '공유';
-  static const publishDraft = '임시 저장';
   static const publishButton = '게시';
   static const publishPrivacyTitle = '개인정보 안내';
   static const publishPrivacyMessage =
-      '불법 촬영 콘텐츠를 업로드하면 법률에 따라 처벌되고 삭제될 수 있습니다.';
+      '이 영상은 실제로 서버에 업로드됩니다. 개인정보가 포함되지 않았는지 확인해주세요.';
   static const publishPrivacyCancel = '취소';
   static const publishPrivacyConfirm = '게시';
   static const publishCompressing = '영상 압축 중...';

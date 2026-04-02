@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_compress/video_compress.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 
 class PublishCoverThumbnail extends StatefulWidget {
   const PublishCoverThumbnail({super.key, required this.videoFilePath});
@@ -49,35 +47,11 @@ class _PublishCoverThumbnailState extends State<PublishCoverThumbnail> {
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.hardEdge,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          if (_thumbnail != null)
-            Image.file(_thumbnail!, fit: BoxFit.cover)
-          else
-            const Center(
+      child: _thumbnail != null
+          ? Image.file(_thumbnail!, fit: BoxFit.cover)
+          : const Center(
               child: Icon(Icons.videocam, color: Colors.grey, size: 32),
             ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              color: AppColors.overlay,
-              child: const Text(
-                AppStrings.publishCoverEdit,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -174,42 +174,22 @@ class _PublishPageState extends ConsumerState<PublishPage> {
                   const SizedBox(height: 24),
                   const Divider(height: 1, color: Color(0xFFEEEEEE)),
                   const SizedBox(height: 24),
-                  // 하단 버튼
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => context.pop(),
-                          icon: const Icon(Icons.drafts_outlined, size: 18),
-                          label: const Text(AppStrings.publishDraft),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppColors.black,
-                            side: const BorderSide(color: Color(0xFFDDDDDD)),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
+                  // 하단 게시 버튼
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _onPublish,
+                      icon: const Icon(Icons.upload, size: 18),
+                      label: const Text(AppStrings.publishButton),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        flex: 2,
-                        child: ElevatedButton.icon(
-                          onPressed: _onPublish,
-                          icon: const Icon(Icons.upload, size: 18),
-                          label: const Text(AppStrings.publishButton),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                   const SizedBox(height: 24),
                 ],

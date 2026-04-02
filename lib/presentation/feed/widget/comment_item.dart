@@ -132,32 +132,30 @@ class CommentItem extends StatelessWidget {
           ),
 
           // 좋아요 / 싫어요
-          Row(
-            mainAxisSize: MainAxisSize.min,
+          Column(
             children: [
               GestureDetector(
                 onTap: onLikeTap,
-                child: Column(
-                  children: [
-                    Icon(
-                      isLiked ? Icons.favorite : Icons.favorite_border,
-                      size: 18,
-                      color: isLiked
-                          ? AppColors.like
-                          : AppColors.whiteSecondary,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      _likeCountText(),
-                      style: const TextStyle(
-                        color: AppColors.whiteSecondary,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
+                child: Icon(
+                  isLiked ? Icons.favorite : Icons.favorite_border,
+                  size: 18,
+                  color: isLiked
+                      ? AppColors.like
+                      : AppColors.whiteSecondary,
                 ),
               ),
-              const SizedBox(width: 12),
+              if (_likeCountText().isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    _likeCountText(),
+                    style: const TextStyle(
+                      color: AppColors.whiteSecondary,
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 8),
               GestureDetector(
                 onTap: onDislikeTap,
                 child: Icon(

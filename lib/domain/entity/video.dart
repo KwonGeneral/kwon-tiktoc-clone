@@ -8,6 +8,7 @@ sealed class Video with _$Video {
     required String id,
     required String userId,
     required String videoUrl,
+    @Default('') String hlsUrl,
     @Default('') String thumbnailUrl,
     @Default('') String description,
     @Default('') String musicName,

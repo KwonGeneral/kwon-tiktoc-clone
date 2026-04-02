@@ -105,6 +105,8 @@ class VideoRemoteDataSource implements VideoDataSource {
         id: 'video_${v['id']}',
         userId: metadata['userId'] as String? ?? 'user_${v['id']}',
         videoUrl: v['url'] as String,
+        hlsUrl: v['hlsUrl'] as String? ?? '',
+        thumbnailUrl: v['thumbnailUrl'] as String? ?? '',
         description: fullDescription,
         musicName: musicName,
         username: username,
@@ -214,7 +216,7 @@ class VideoRemoteDataSource implements VideoDataSource {
   }
 
   @override
-  Future<void> uploadVideo({
+  Future<VideoModel> uploadVideo({
     required String filePath,
     required String description,
     void Function(double progress)? onProgress,
@@ -247,7 +249,27 @@ class VideoRemoteDataSource implements VideoDataSource {
 
     debugPrint('업로드 완료: ${file.lengthSync()} bytes');
 
+    // 서버 응답 파싱하여 Video 정보 반환
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    final metadata = json['metadata'] as Map<String, dynamic>? ?? {};
+
+    final uploadedVideo = VideoModel(
+      id: 'video_${json['id']}',
+      userId: metadata['userId'] as String? ?? '',
+      videoUrl: json['url'] as String? ?? '',
+      hlsUrl: json['hlsUrl'] as String? ?? '',
+      thumbnailUrl: json['thumbnailUrl'] as String? ?? '',
+      description: description,
+      musicName: 'Original Sound',
+      username: metadata['username'] as String? ?? '',
+      nickname: metadata['nickname'] as String? ?? '',
+      avatarUrl: metadata['avatarUrl'] as String? ?? '',
+      createdAt: DateTime.now(),
+    );
+
     // 캐시 초기화하여 다음 피드 로드 시 새 영상 포함
     _cachedVideos = null;
+
+    return uploadedVideo;
   }
 }

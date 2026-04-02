@@ -176,12 +176,19 @@ class MockVideoDataSource implements VideoDataSource {
   }
 
   @override
-  Future<void> uploadVideo({
+  Future<VideoModel> uploadVideo({
     required String filePath,
     required String description,
     void Function(double progress)? onProgress,
   }) async {
     await Future<void>.delayed(const Duration(seconds: 2));
     onProgress?.call(1.0);
+    return VideoModel(
+      id: 'video_mock_${DateTime.now().millisecondsSinceEpoch}',
+      userId: 'mock_user',
+      videoUrl: filePath,
+      description: description,
+      createdAt: DateTime.now(),
+    );
   }
 }

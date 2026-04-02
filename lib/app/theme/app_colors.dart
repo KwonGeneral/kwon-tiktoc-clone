@@ -22,6 +22,9 @@ abstract final class AppColors {
   // Social
   static const facebookBlue = Color(0xFF1877F2);
 
+  // Notification
+  static const commentPurple = Color(0xFF6C5CE7);
+
   // Utility
   static const divider = Color(0xFF2C2C2C);
   static const overlay = Color(0x80000000); // 50% 블랙

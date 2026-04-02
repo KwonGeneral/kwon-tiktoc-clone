@@ -137,6 +137,11 @@ abstract final class AppStrings {
   static const profileEmptyLikes = '내가 \'좋아요\'를 누른 게시물은 내게만\n표시됩니다';
   static const profileEmptyMyVideos = '데일리 루틴을 공유하세요';
 
+  // 업로드 영상
+  static const uploadedMusicName = 'Original Sound';
+  static const uploadedUsername = 'me';
+  static const uploadedNickname = '나';
+
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';

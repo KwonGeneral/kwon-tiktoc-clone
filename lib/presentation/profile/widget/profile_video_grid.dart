@@ -74,9 +74,13 @@ class _VideoThumbnailState extends State<_VideoThumbnail>
       await controller.initialize();
       if (mounted) {
         setState(() => _initialized = true);
+      } else {
+        controller.dispose();
       }
     } catch (_) {
-      // 초기화 실패 시 플레이스홀더 유지
+      if (!mounted) {
+        controller.dispose();
+      }
     }
   }
 

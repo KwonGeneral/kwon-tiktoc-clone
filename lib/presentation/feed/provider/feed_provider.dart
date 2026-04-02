@@ -48,9 +48,10 @@ class FeedNotifier extends _$FeedNotifier {
     final getVideoFeed = GetVideoFeed(repository);
 
     // 전체 영상 로드 (팔로잉 탭 필터링을 위해 모든 페이지 로드)
+    const maxPages = 10;
     final allVideos = <Video>[];
     var page = 0;
-    while (true) {
+    while (page < maxPages) {
       final videos = await getVideoFeed(page: page);
       if (videos.isEmpty) break;
       allVideos.addAll(videos);
@@ -212,9 +213,9 @@ class FeedNotifier extends _$FeedNotifier {
       userId: AppStrings.commentCurrentUserId,
       videoUrl: videoUrl,
       description: description,
-      musicName: 'Original Sound',
-      username: 'me',
-      nickname: '나',
+      musicName: AppStrings.uploadedMusicName,
+      username: AppStrings.uploadedUsername,
+      nickname: AppStrings.uploadedNickname,
       createdAt: now,
     );
 

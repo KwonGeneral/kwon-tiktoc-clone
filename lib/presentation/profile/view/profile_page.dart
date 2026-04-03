@@ -6,6 +6,7 @@ import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/presentation/profile/view/follow_list_page.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
@@ -46,7 +47,17 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             children: [
               ProfileHeader(user: user),
               const SizedBox(height: 16),
-              ProfileStats(user: user),
+              ProfileStats(
+                user: user,
+                onFollowingTap: () => context.push(
+                  RoutePaths.followList,
+                  extra: FollowListTab.following,
+                ),
+                onFollowersTap: () => context.push(
+                  RoutePaths.followList,
+                  extra: FollowListTab.followers,
+                ),
+              ),
               const SizedBox(height: 16),
               _buildBioRow(user.bio, user.nickname),
               const SizedBox(height: 16),

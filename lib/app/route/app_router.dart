@@ -8,6 +8,7 @@ import 'package:kwon_tiktoc_clone/presentation/friends/view/friends_page.dart';
 import 'package:kwon_tiktoc_clone/presentation/image_detail/view/image_detail_page.dart';
 import 'package:kwon_tiktoc_clone/presentation/main/main_shell.dart';
 import 'package:kwon_tiktoc_clone/presentation/notifications/view/notifications_page.dart';
+import 'package:kwon_tiktoc_clone/presentation/profile/view/follow_list_page.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/view/profile_edit_page.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/view/profile_page.dart';
 import 'package:kwon_tiktoc_clone/presentation/publish/view/publish_image_page.dart';
@@ -66,6 +67,14 @@ GoRouter createRouter() {
             initialNickname: extra['nickname'] ?? '',
             initialBio: extra['bio'] ?? '',
           );
+        },
+      ),
+      // 팔로잉/팔로워 목록
+      GoRoute(
+        path: RoutePaths.followList,
+        builder: (context, state) {
+          final tab = state.extra as FollowListTab? ?? FollowListTab.following;
+          return FollowListPage(initialTab: tab);
         },
       ),
       // 설정

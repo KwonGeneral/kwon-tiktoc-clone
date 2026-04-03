@@ -78,10 +78,15 @@ class _PublishPageState extends ConsumerState<PublishPage> {
     final publishState = ref.read(publishNotifierProvider);
     final videoUrl = publishState.uploadedVideoUrl;
     final desc = publishState.uploadedDescription;
+    final thumbnailPath = publishState.thumbnailPath;
     if (videoUrl != null && videoUrl.isNotEmpty) {
       ref
           .read(feedNotifierProvider.notifier)
-          .addUploadedVideo(videoUrl: videoUrl, description: desc ?? '');
+          .addUploadedVideo(
+            videoUrl: videoUrl,
+            description: desc ?? '',
+            thumbnailUrl: thumbnailPath,
+          );
     }
 
     // 서버에서 최신 피드도 비동기로 갱신 (실패해도 무시)

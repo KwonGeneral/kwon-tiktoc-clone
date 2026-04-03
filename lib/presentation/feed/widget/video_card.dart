@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -237,16 +239,23 @@ class _VideoCardState extends ConsumerState<VideoCard>
 
   Widget _buildLoading() {
     final thumbnailUrl = widget.video.thumbnailUrl;
+    final isLocalFile = thumbnailUrl.startsWith('/');
     return Stack(
       fit: StackFit.expand,
       alignment: Alignment.center,
       children: [
         if (thumbnailUrl.isNotEmpty)
-          Image.network(
-            thumbnailUrl,
-            fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => const SizedBox.shrink(),
-          ),
+          isLocalFile
+              ? Image.file(
+                  File(thumbnailUrl),
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                )
+              : Image.network(
+                  thumbnailUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                ),
         const Center(
           child: CircularProgressIndicator(
             color: AppColors.white,

@@ -36,7 +36,6 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
   @override
   Widget build(BuildContext context) {
     final commentState = ref.watch(commentNotifierProvider);
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     final topLevelComments = commentState.comments
         .where((c) => c.parentCommentId == null)
@@ -152,11 +151,11 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
           // 입력 필드
           Container(
             color: AppColors.commentBackground,
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               left: 16,
               right: 8,
               top: 8,
-              bottom: 8 + bottomInset,
+              bottom: 8,
             ),
             child: Row(
               children: [

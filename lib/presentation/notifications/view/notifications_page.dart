@@ -138,7 +138,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                   padding: EdgeInsets.symmetric(vertical: 40),
                   child: Center(
                     child: Text(
-                      '알림이 없습니다',
+                      AppStrings.notificationsFilterEmpty,
                       style: TextStyle(
                         color: AppColors.whiteDisabled,
                         fontSize: 14,
@@ -243,7 +243,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
           GestureDetector(
             onTap: () => setState(() => _filter = _NotificationFilter.all),
             child: const Text(
-              '전체 보기',
+              AppStrings.notificationsShowAll,
               style: TextStyle(color: AppColors.whiteSecondary, fontSize: 13),
             ),
           ),

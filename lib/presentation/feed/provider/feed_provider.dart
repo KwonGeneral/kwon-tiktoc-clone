@@ -63,7 +63,8 @@ class FeedNotifier extends _$FeedNotifier {
     final followedUserIds = _storage.getFollowedUserIds();
     final savedIndex = _storage.getLastVideoIndex();
     // 저장된 인덱스가 범위 내인지 확인
-    final restoredIndex = savedIndex < localVideos.length ? savedIndex : 0;
+    final restoredIndex =
+        savedIndex >= 0 && savedIndex < localVideos.length ? savedIndex : 0;
 
     return FeedState(
       videos: localVideos,

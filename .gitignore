@@ -1,3 +1,7 @@
+# Video files
+*.MP4
+*.mp4
+
 # Miscellaneous
 *.class
 *.lock

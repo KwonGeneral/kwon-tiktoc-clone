@@ -11,5 +11,8 @@ abstract interface class PostImageRepository {
     String? avatarUrl,
     void Function(double progress)? onProgress,
   });
-  Future<void> deletePostImage({required String imageId, required String userId});
+  Future<void> deletePostImage({
+    required String imageId,
+    required String userId,
+  });
 }

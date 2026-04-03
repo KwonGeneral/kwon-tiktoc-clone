@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
 import 'package:kwon_tiktoc_clone/presentation/camera/provider/camera_state.dart';
 
@@ -39,7 +40,7 @@ class CameraControls extends StatelessWidget {
               _formatElapsed(elapsed),
               style: const TextStyle(
                 color: AppColors.white,
-                fontSize: 16,
+                fontSize: AppFontSizes.subtitle,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -262,8 +263,8 @@ class _RingPainter extends CustomPainter {
     // 배경 링 (회색)
     final bgPaint = Paint()
       ..color = isActive
-          ? const Color(0x55FFFFFF)
-          : const Color(0x44FFFFFF)
+          ? AppColors.whiteOverlayHigh
+          : AppColors.whiteOverlayLow
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6;
     canvas.drawCircle(center, radius, bgPaint);

@@ -94,8 +94,7 @@ class VideoPlayerManager extends _$VideoPlayerManager {
       final existing = _controllers[index];
 
       // 기존 컨트롤러의 URL이 현재 영상과 다르면 재생성
-      if (existing != null &&
-          existing.dataSource != expectedUrl) {
+      if (existing != null && existing.dataSource != expectedUrl) {
         _disposed.add(index);
         existing.dispose();
         _controllers.remove(index);
@@ -140,7 +139,10 @@ class VideoPlayerManager extends _$VideoPlayerManager {
     }
 
     // 모두 실패 시 2초 후 1회 재시도
-    if (!success && gen == _generation && !_isDisposed && !_disposed.contains(index)) {
+    if (!success &&
+        gen == _generation &&
+        !_isDisposed &&
+        !_disposed.contains(index)) {
       await Future<void>.delayed(const Duration(seconds: 2));
       if (gen == _generation && !_isDisposed && !_disposed.contains(index)) {
         success = await _tryInitController(index, playUrl, gen);

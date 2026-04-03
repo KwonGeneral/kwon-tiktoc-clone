@@ -27,7 +27,10 @@ class ProfileHeader extends ConsumerWidget {
         const SizedBox(height: 12),
         _buildNameRow(context),
         const SizedBox(height: 4),
-        Text('@${user.username.isNotEmpty ? user.username : user.id}', style: AppTextStyles.profileId),
+        Text(
+          '@${user.username.isNotEmpty ? user.username : user.id}',
+          style: AppTextStyles.profileId,
+        ),
       ],
     );
   }

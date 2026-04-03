@@ -29,7 +29,9 @@ class FeedNotifier extends _$FeedNotifier {
     final profileNickname = _storage.getProfileNickname();
     final displayName = profileNickname.isNotEmpty
         ? profileNickname
-        : deviceId.length >= 8 ? deviceId.substring(0, 8) : deviceId;
+        : deviceId.length >= 8
+        ? deviceId.substring(0, 8)
+        : deviceId;
 
     return videos.map((video) {
       final wasLiked = likedIds.contains(video.id);
@@ -90,8 +92,9 @@ class FeedNotifier extends _$FeedNotifier {
     final followedUserIds = _storage.getFollowedUserIds();
     final savedIndex = _storage.getLastVideoIndex();
     // 저장된 인덱스가 범위 내인지 확인
-    final restoredIndex =
-        savedIndex >= 0 && savedIndex < localVideos.length ? savedIndex : 0;
+    final restoredIndex = savedIndex >= 0 && savedIndex < localVideos.length
+        ? savedIndex
+        : 0;
 
     return FeedState(
       videos: localVideos,
@@ -251,8 +254,11 @@ class FeedNotifier extends _$FeedNotifier {
     final now = DateTime.now();
     final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
     final nickname = _storage.getProfileNickname();
-    final displayName =
-        nickname.isNotEmpty ? nickname : deviceId.length >= 8 ? deviceId.substring(0, 8) : deviceId;
+    final displayName = nickname.isNotEmpty
+        ? nickname
+        : deviceId.length >= 8
+        ? deviceId.substring(0, 8)
+        : deviceId;
     final newVideo = Video(
       id: 'uploaded_${now.millisecondsSinceEpoch}',
       userId: deviceId,
@@ -295,15 +301,14 @@ class FeedNotifier extends _$FeedNotifier {
     final repository = ref.read(videoRepositoryProvider);
 
     // Optimistic: 즉시 UI에서 제거
-    final updatedVideos =
-        currentState.videos.where((v) => v.id != videoId).toList();
+    final updatedVideos = currentState.videos
+        .where((v) => v.id != videoId)
+        .toList();
 
     // 삭제 후 currentIndex가 범위를 벗어나지 않도록 조정
     final newDisplayCount = currentState.selectedTab == FeedTab.following
         ? updatedVideos
-              .where(
-                (v) => currentState.followedUserIds.contains(v.userId),
-              )
+              .where((v) => currentState.followedUserIds.contains(v.userId))
               .length
         : updatedVideos.length;
     final adjustedIndex = newDisplayCount > 0

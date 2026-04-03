@@ -46,7 +46,9 @@ class PublishNotifier extends _$PublishNotifier {
         description: description,
         title: description,
         userId: deviceId,
-        username: profileUsername.isNotEmpty ? profileUsername : profileNickname,
+        username: profileUsername.isNotEmpty
+            ? profileUsername
+            : profileNickname,
         nickname: profileNickname,
         avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
         onProgress: (progress) {

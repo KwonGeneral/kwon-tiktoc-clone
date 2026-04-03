@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 
@@ -145,7 +146,7 @@ class _VideoThumbnailState extends State<_VideoThumbnail>
                 _formatCount(widget.video.likeCount),
                 style: AppTextStyles.profileLabel.copyWith(
                   color: AppColors.white,
-                  fontSize: 11,
+                  fontSize: AppFontSizes.sm,
                   fontWeight: FontWeight.w600,
                 ),
               ),

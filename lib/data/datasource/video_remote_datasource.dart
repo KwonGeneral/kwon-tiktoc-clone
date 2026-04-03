@@ -319,9 +319,9 @@ class VideoRemoteDataSource implements VideoDataSource {
     // videoId 형식: "video_19" → 서버에는 숫자 id만 전달
     final serverId = videoId.replaceFirst('video_', '');
 
-    final uri = Uri.parse('$_baseUrl/videos/$serverId').replace(
-      queryParameters: {'userId': userId},
-    );
+    final uri = Uri.parse(
+      '$_baseUrl/videos/$serverId',
+    ).replace(queryParameters: {'userId': userId});
 
     final response = await _client.delete(uri);
 

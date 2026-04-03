@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 
@@ -23,7 +24,10 @@ class ImageDetailPage extends StatelessWidget {
         ),
         title: const Text(
           AppStrings.imageDetailTitle,
-          style: TextStyle(color: AppColors.white, fontSize: 16),
+          style: TextStyle(
+            color: AppColors.white,
+            fontSize: AppFontSizes.subtitle,
+          ),
         ),
         centerTitle: true,
       ),
@@ -66,7 +70,7 @@ class ImageDetailPage extends StatelessWidget {
                         postImage.nickname,
                         style: const TextStyle(
                           color: AppColors.white,
-                          fontSize: 14,
+                          fontSize: AppFontSizes.bodyMd,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -75,7 +79,7 @@ class ImageDetailPage extends StatelessWidget {
                     postImage.caption,
                     style: const TextStyle(
                       color: AppColors.whiteSecondary,
-                      fontSize: 14,
+                      fontSize: AppFontSizes.bodyMd,
                     ),
                   ),
                 ],

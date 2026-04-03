@@ -12,7 +12,8 @@ import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_state.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/provider/profile_provider.dart';
-import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_image_provider.dart' show postImageListNotifierProvider;
+import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_image_provider.dart'
+    show postImageListNotifierProvider;
 import 'package:kwon_tiktoc_clone/presentation/profile/widget/profile_header.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/widget/profile_image_grid.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/widget/profile_stats.dart';
@@ -289,7 +290,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('취소', style: TextStyle(color: AppColors.whiteSecondary)),
+            child: const Text(
+              '취소',
+              style: TextStyle(color: AppColors.whiteSecondary),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -316,7 +320,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('취소', style: TextStyle(color: AppColors.whiteSecondary)),
+            child: const Text(
+              '취소',
+              style: TextStyle(color: AppColors.whiteSecondary),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -384,14 +391,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 /// 프로필 그리드에서 비디오/이미지를 통합 정렬하기 위한 간단한 union 타입
 class _ProfileGridItem {
   _ProfileGridItem.video(Video video)
-      : _video = video,
-        _image = null,
-        createdAt = video.createdAt;
+    : _video = video,
+      _image = null,
+      createdAt = video.createdAt;
 
   _ProfileGridItem.image(PostImage image)
-      : _video = null,
-        _image = image,
-        createdAt = image.createdAt;
+    : _video = null,
+      _image = image,
+      createdAt = image.createdAt;
 
   final Video? _video;
   final PostImage? _image;

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/presentation/camera/provider/camera_provider.dart';
@@ -277,7 +278,7 @@ class _ErrorView extends StatelessWidget {
             message,
             style: const TextStyle(
               color: AppColors.whiteSecondary,
-              fontSize: 16,
+              fontSize: AppFontSizes.subtitle,
             ),
             textAlign: TextAlign.center,
           ),
@@ -381,4 +382,3 @@ class _CameraBody extends StatelessWidget {
     );
   }
 }
-

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
+
 class PublishMenuItem extends StatelessWidget {
   const PublishMenuItem({
     super.key,
@@ -22,12 +25,15 @@ class PublishMenuItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 14),
         child: Row(
           children: [
-            Icon(icon, size: 22, color: Colors.black87),
+            Icon(icon, size: 22, color: AppColors.blackHigh),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 label,
-                style: const TextStyle(fontSize: 15, color: Colors.black87),
+                style: const TextStyle(
+                  fontSize: AppFontSizes.bodyLg,
+                  color: AppColors.blackHigh,
+                ),
               ),
             ),
             ?trailing,

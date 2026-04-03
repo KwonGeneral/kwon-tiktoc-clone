@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
@@ -111,10 +112,7 @@ class _VideoCardState extends ConsumerState<VideoCard>
             builder: (context, _) {
               return Container(
                 color: AppColors.black,
-                child: _buildWithComments(
-                  controller,
-                  constraints.maxHeight,
-                ),
+                child: _buildWithComments(controller, constraints.maxHeight),
               );
             },
           );
@@ -269,7 +267,10 @@ class _VideoCardState extends ConsumerState<VideoCard>
           SizedBox(height: 8),
           Text(
             '영상을 재생할 수 없습니다',
-            style: TextStyle(color: AppColors.whiteSecondary, fontSize: 14),
+            style: TextStyle(
+              color: AppColors.whiteSecondary,
+              fontSize: AppFontSizes.bodyMd,
+            ),
           ),
         ],
       ),
@@ -278,7 +279,8 @@ class _VideoCardState extends ConsumerState<VideoCard>
 
   Widget _buildLoading() {
     final thumbnailUrl = widget.video.thumbnailUrl;
-    final isLocalFile = thumbnailUrl.isNotEmpty && !thumbnailUrl.startsWith('http');
+    final isLocalFile =
+        thumbnailUrl.isNotEmpty && !thumbnailUrl.startsWith('http');
     return Stack(
       fit: StackFit.expand,
       alignment: Alignment.center,

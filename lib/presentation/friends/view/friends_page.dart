@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/friends/provider/friends_provider.dart';
@@ -51,7 +52,7 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                 AppStrings.friendsTitle,
                 style: TextStyle(
                   color: AppColors.white,
-                  fontSize: 18,
+                  fontSize: AppFontSizes.titleLg,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -107,7 +108,7 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                     AppStrings.friendsEmpty,
                     style: TextStyle(
                       color: AppColors.whiteSecondary,
-                      fontSize: 14,
+                      fontSize: AppFontSizes.bodyMd,
                     ),
                   ),
                 ),
@@ -154,7 +155,10 @@ class _SearchField extends StatelessWidget {
     return TextField(
       controller: controller,
       autofocus: true,
-      style: const TextStyle(color: AppColors.white, fontSize: 16),
+      style: const TextStyle(
+        color: AppColors.white,
+        fontSize: AppFontSizes.subtitle,
+      ),
       decoration: InputDecoration(
         hintText: AppStrings.friendsSearchHint,
         hintStyle: const TextStyle(color: AppColors.whiteDisabled),
@@ -184,7 +188,7 @@ class _Banner extends StatelessWidget {
         AppStrings.friendsBanner,
         style: TextStyle(
           color: AppColors.white,
-          fontSize: 24,
+          fontSize: AppFontSizes.display,
           fontWeight: FontWeight.w800,
           height: 1.3,
         ),
@@ -223,7 +227,7 @@ class _FindFriendsCard extends StatelessWidget {
                   AppStrings.friendsFindFacebook,
                   style: TextStyle(
                     color: AppColors.white,
-                    fontSize: 15,
+                    fontSize: AppFontSizes.bodyLg,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -232,7 +236,7 @@ class _FindFriendsCard extends StatelessWidget {
                   AppStrings.friendsFindFacebookSub,
                   style: TextStyle(
                     color: AppColors.whiteSecondary,
-                    fontSize: 13,
+                    fontSize: AppFontSizes.body,
                   ),
                 ),
               ],
@@ -255,7 +259,7 @@ class _FindFriendsCard extends StatelessWidget {
                 AppStrings.friendsFindButton,
                 style: TextStyle(
                   color: AppColors.white,
-                  fontSize: 14,
+                  fontSize: AppFontSizes.bodyMd,
                   fontWeight: FontWeight.bold,
                 ),
               ),

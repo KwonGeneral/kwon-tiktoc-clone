@@ -35,16 +35,25 @@ class PublishImageNotifier extends _$PublishImageNotifier {
       // EXIF 방향 정규화 (세로 사진이 가로로 보이는 문제 해결)
       final normalizedPath = await _normalizeOrientation(imageFilePath);
 
-      final repository = ref.read(postImageRepositoryProvider);
-      await repository.uploadPostImage(
-        filePath: normalizedPath,
-        caption: caption,
-        userId: deviceId,
-        avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
-        onProgress: (progress) {
-          state = state.copyWith(progress: progress);
-        },
-      );
+      try {
+        final repository = ref.read(postImageRepositoryProvider);
+        await repository.uploadPostImage(
+          filePath: normalizedPath,
+          caption: caption,
+          userId: deviceId,
+          avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
+          onProgress: (progress) {
+            state = state.copyWith(progress: progress);
+          },
+        );
+      } finally {
+        // 정규화된 임시 파일 정리
+        if (normalizedPath != imageFilePath) {
+          try {
+            File(normalizedPath).deleteSync();
+          } catch (_) {}
+        }
+      }
 
       state = state.copyWith(status: PublishStatus.success, progress: 1.0);
     } catch (e) {

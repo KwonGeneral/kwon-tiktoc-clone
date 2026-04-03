@@ -43,7 +43,6 @@ class _VideoCardState extends ConsumerState<VideoCard>
       curve: Curves.easeOutCubic,
       reverseCurve: Curves.easeInCubic,
     );
-    _commentAnimController.addListener(_onAnimationTick);
     _commentAnimController.addStatusListener((status) {
       _animScheduled = false;
       if (status == AnimationStatus.dismissed && mounted) {
@@ -59,13 +58,8 @@ class _VideoCardState extends ConsumerState<VideoCard>
     setState(() => _showLikeAnimation = true);
   }
 
-  void _onAnimationTick() {
-    // AnimatedBuilder가 아닌 위젯 영역은 최소한만 갱신
-  }
-
   @override
   void dispose() {
-    _commentAnimController.removeListener(_onAnimationTick);
     _commentAnimController.dispose();
     super.dispose();
   }

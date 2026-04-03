@@ -70,14 +70,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: AppColors.white),
-            onPressed: () {
-              // 검색 기능 (현재 미구현 — 탭 시 피드백)
-            },
-          ),
-        ],
+        actions: const [],
       ),
       body: notificationsAsync.when(
         loading: () => const Center(

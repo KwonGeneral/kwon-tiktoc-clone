@@ -176,8 +176,8 @@ class VideoRemoteDataSource implements VideoDataSource {
     if (_comments.containsKey(videoId)) return _comments[videoId]!;
 
     final now = DateTime.now();
-    final videoNum = int.tryParse(videoId.replaceAll('video_', '')) ?? 0;
-    final count = 5 + (videoNum % 6); // 5~10개
+    final videoHash = videoId.hashCode.abs();
+    final count = 5 + (videoHash % 6); // 5~10개
 
     final comments = <CommentModel>[];
 
@@ -191,6 +191,7 @@ class VideoRemoteDataSource implements VideoDataSource {
           videoId: videoId,
           userId: 'commenter_$i',
           userName: _commentUserNames[i % _commentUserNames.length],
+          userAvatarUrl: 'https://i.pravatar.cc/150?img=${(i % 10) + 1}',
           text: _sampleComments[i % _sampleComments.length],
           likeCount: (i + 1) * 120,
           createdAt: now.subtract(Duration(hours: i * 2, minutes: i * 17)),
@@ -207,6 +208,8 @@ class VideoRemoteDataSource implements VideoDataSource {
             videoId: videoId,
             userId: 'replier_${i}_$r',
             userName: _commentUserNames[replyUserIdx],
+            userAvatarUrl:
+                'https://i.pravatar.cc/150?img=${((i + r + 3) % 10) + 1}',
             text: _sampleReplies[r % _sampleReplies.length],
             likeCount: (r + 1) * 30,
             createdAt: now.subtract(

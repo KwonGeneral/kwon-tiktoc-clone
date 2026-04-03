@@ -110,55 +110,62 @@ class CommentItem extends StatelessWidget {
                         fontSize: 12,
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    GestureDetector(
-                      onTap: onReplyTap,
-                      child: const Text(
-                        AppStrings.commentReply,
-                        style: TextStyle(
-                          color: AppColors.whiteSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                    if (!isReply) ...[
+                      const SizedBox(width: 16),
+                      GestureDetector(
+                        onTap: onReplyTap,
+                        child: const Text(
+                          AppStrings.commentReply,
+                          style: TextStyle(
+                            color: AppColors.whiteSecondary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ],
             ),
           ),
 
-          // 좋아요 / 싫어요
-          Builder(
-            builder: (context) {
-              final likeText = _likeCountText();
-              return Column(
-                children: [
-                  GestureDetector(
-                    onTap: onLikeTap,
-                    child: Icon(
+          // 좋아요 / 싫어요 (가로 정렬)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 좋아요
+              GestureDetector(
+                onTap: onLikeTap,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
                       isLiked ? Icons.favorite : Icons.favorite_border,
                       size: 18,
                       color: isLiked
                           ? AppColors.like
                           : AppColors.whiteSecondary,
                     ),
-                  ),
-                  if (likeText.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        likeText,
-                        style: const TextStyle(
-                          color: AppColors.whiteSecondary,
-                          fontSize: 11,
-                        ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _likeCountText(),
+                      style: const TextStyle(
+                        color: AppColors.whiteSecondary,
+                        fontSize: 11,
                       ),
                     ),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: onDislikeTap,
-                    child: Icon(
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              // 싫어요
+              GestureDetector(
+                onTap: onDislikeTap,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
                       isDisliked
                           ? Icons.thumb_down_alt
                           : Icons.thumb_down_alt_outlined,
@@ -167,10 +174,18 @@ class CommentItem extends StatelessWidget {
                           ? AppColors.whiteSecondary
                           : AppColors.whiteDisabled,
                     ),
-                  ),
-                ],
-              );
-            },
+                    const SizedBox(height: 2),
+                    Text(
+                      _dislikeCountText(),
+                      style: const TextStyle(
+                        color: AppColors.whiteSecondary,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -241,7 +256,10 @@ class CommentItem extends StatelessWidget {
   String _likeCountText() {
     var count = comment.likeCount;
     if (isLiked) count += 1;
-    if (count == 0) return '';
     return count.toString();
+  }
+
+  String _dislikeCountText() {
+    return isDisliked ? '1' : '0';
   }
 }

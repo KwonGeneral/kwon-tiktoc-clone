@@ -16,6 +16,9 @@ class ProfileImageGrid extends StatelessWidget {
   final void Function(PostImage image)? onImageTap;
   final void Function(PostImage image)? onImageLongPress;
 
+  /// 외부에서 단일 이미지 썸네일을 사용할 수 있는 static builder
+  static Widget buildThumbnail(PostImage image) => _ImageThumbnail(image: image);
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(

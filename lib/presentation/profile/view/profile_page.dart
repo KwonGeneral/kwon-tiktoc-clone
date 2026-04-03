@@ -10,6 +10,7 @@ import 'package:kwon_tiktoc_clone/presentation/profile/view/follow_list_page.dar
 import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_state.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/provider/profile_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_image_provider.dart' show postImageListNotifierProvider;
 import 'package:kwon_tiktoc_clone/presentation/profile/widget/profile_header.dart';
@@ -190,23 +191,39 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         showUploadButton: true,
       );
     }
-    return Column(
-      children: [
-        if (videos.isNotEmpty)
-          ProfileVideoGrid(
-            key: const ValueKey('my_videos'),
-            videos: videos,
-            onVideoTap: _navigateToVideo,
-            onVideoLongPress: _showDeleteVideoDialog,
+
+    // 비디오와 이미지를 createdAt 기준 내림차순 통합
+    final items = <_ProfileGridItem>[
+      for (final v in videos) _ProfileGridItem.video(v),
+      for (final img in images) _ProfileGridItem.image(img),
+    ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(1),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 9 / 16,
+        crossAxisSpacing: 1,
+        mainAxisSpacing: 1,
+      ),
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return item.when(
+          video: (video) => GestureDetector(
+            onTap: () => _navigateToVideo(video),
+            onLongPress: () => _showDeleteVideoDialog(video),
+            child: ProfileVideoGrid.buildThumbnail(video),
           ),
-        if (images.isNotEmpty)
-          ProfileImageGrid(
-            key: const ValueKey('my_images'),
-            images: images,
-            onImageTap: _navigateToImageDetail,
-            onImageLongPress: _showDeleteImageDialog,
+          image: (image) => GestureDetector(
+            onTap: () => _navigateToImageDetail(image),
+            onLongPress: () => _showDeleteImageDialog(image),
+            child: ProfileImageGrid.buildThumbnail(image),
           ),
-      ],
+        );
+      },
     );
   }
 
@@ -247,6 +264,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final index = feedState.videos.indexWhere((v) => v.id == video.id);
     if (index < 0) return;
 
+    // 추천 탭으로 전환하여 전체 영상 목록과 index가 정확히 일치하도록 처리
+    if (feedState.selectedTab != FeedTab.recommend) {
+      ref.read(feedNotifierProvider.notifier).selectTab(FeedTab.recommend);
+    }
     ref.read(feedNotifierProvider.notifier).updateCurrentIndex(index);
     context.go(RoutePaths.feed);
   }
@@ -357,5 +378,30 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         ),
       ),
     );
+  }
+}
+
+/// 프로필 그리드에서 비디오/이미지를 통합 정렬하기 위한 간단한 union 타입
+class _ProfileGridItem {
+  _ProfileGridItem.video(Video video)
+      : _video = video,
+        _image = null,
+        createdAt = video.createdAt;
+
+  _ProfileGridItem.image(PostImage image)
+      : _video = null,
+        _image = image,
+        createdAt = image.createdAt;
+
+  final Video? _video;
+  final PostImage? _image;
+  final DateTime createdAt;
+
+  T when<T>({
+    required T Function(Video video) video,
+    required T Function(PostImage image) image,
+  }) {
+    if (_video != null) return video(_video);
+    return image(_image!);
   }
 }

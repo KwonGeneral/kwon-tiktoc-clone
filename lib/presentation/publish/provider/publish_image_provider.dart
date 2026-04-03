@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
@@ -30,9 +32,12 @@ class PublishImageNotifier extends _$PublishImageNotifier {
       final profileImageUrl = storage.getProfileImageUrl();
       final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
 
+      // EXIF 방향 정규화 (세로 사진이 가로로 보이는 문제 해결)
+      final normalizedPath = await _normalizeOrientation(imageFilePath);
+
       final repository = ref.read(postImageRepositoryProvider);
       await repository.uploadPostImage(
-        filePath: imageFilePath,
+        filePath: normalizedPath,
         caption: caption,
         userId: deviceId,
         avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
@@ -48,6 +53,20 @@ class PublishImageNotifier extends _$PublishImageNotifier {
         errorMessage: e.toString(),
       );
     }
+  }
+
+  /// EXIF 방향을 실제 픽셀에 적용하여 정규화된 이미지 경로를 반환
+  Future<String> _normalizeOrientation(String filePath) async {
+    final result = await FlutterImageCompress.compressAndGetFile(
+      filePath,
+      '${filePath}_normalized.jpg',
+      quality: 95,
+      autoCorrectionAngle: true,
+    );
+    if (result != null && File(result.path).existsSync()) {
+      return result.path;
+    }
+    return filePath;
   }
 
   void reset() {

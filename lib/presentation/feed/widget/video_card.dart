@@ -43,9 +43,7 @@ class _VideoCardState extends ConsumerState<VideoCard>
       curve: Curves.easeOutCubic,
       reverseCurve: Curves.easeInCubic,
     );
-    _commentAnimController.addListener(() {
-      if (mounted) setState(() {});
-    });
+    _commentAnimController.addListener(_onAnimationTick);
     _commentAnimController.addStatusListener((status) {
       _animScheduled = false;
       if (status == AnimationStatus.dismissed && mounted) {
@@ -61,8 +59,13 @@ class _VideoCardState extends ConsumerState<VideoCard>
     setState(() => _showLikeAnimation = true);
   }
 
+  void _onAnimationTick() {
+    // AnimatedBuilder가 아닌 위젯 영역은 최소한만 갱신
+  }
+
   @override
   void dispose() {
+    _commentAnimController.removeListener(_onAnimationTick);
     _commentAnimController.dispose();
     super.dispose();
   }
@@ -101,22 +104,40 @@ class _VideoCardState extends ConsumerState<VideoCard>
             .togglePlayPause(widget.index);
       },
       onDoubleTap: isCommentOpen ? null : _handleDoubleTap,
-      child: Container(
-        color: AppColors.black,
-        child: _showCommentView
-            ? _buildWithComments(controller)
-            : _buildContent(controller),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (!_showCommentView) {
+            return Container(
+              color: AppColors.black,
+              child: _buildContent(controller),
+            );
+          }
+          return AnimatedBuilder(
+            animation: _commentSlideAnimation,
+            builder: (context, _) {
+              return Container(
+                color: AppColors.black,
+                child: _buildWithComments(
+                  controller,
+                  constraints.maxHeight,
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
 
   /// 댓글창이 열렸을 때: 영상 축소 + 댓글 (슬라이드 애니메이션)
-  Widget _buildWithComments(VideoPlayerController? controller) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final videoHeight = screenHeight * 0.38;
-    final commentHeight = screenHeight - videoHeight;
+  Widget _buildWithComments(
+    VideoPlayerController? controller,
+    double availableHeight,
+  ) {
+    final videoHeight = availableHeight * 0.38;
+    final commentHeight = availableHeight - videoHeight;
     final progress = _commentSlideAnimation.value;
-    final currentVideoHeight = screenHeight - (commentHeight * progress);
+    final currentVideoHeight = availableHeight - (commentHeight * progress);
 
     return Column(
       children: [
@@ -128,7 +149,7 @@ class _VideoCardState extends ConsumerState<VideoCard>
               if (controller != null && controller.value.isInitialized)
                 SizedBox.expand(
                   child: FittedBox(
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                     child: SizedBox(
                       width: controller.value.size.width,
                       height: controller.value.size.height,
@@ -171,9 +192,9 @@ class _VideoCardState extends ConsumerState<VideoCard>
           height: commentHeight * progress,
           child: progress > 0.1
               ? ClipRect(
-                  child: Align(
+                  child: OverflowBox(
                     alignment: Alignment.topCenter,
-                    heightFactor: 1.0,
+                    maxHeight: commentHeight,
                     child: SizedBox(
                       height: commentHeight,
                       child: CommentInlineView(videoId: widget.video.id),
@@ -188,52 +209,76 @@ class _VideoCardState extends ConsumerState<VideoCard>
 
   Widget _buildContent(VideoPlayerController? controller) {
     if (controller == null || !controller.value.isInitialized) {
+      if (controller != null && controller.value.hasError) {
+        return _buildVideoError();
+      }
       return _buildLoading();
     }
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // 비디오 플레이어
-        SizedBox.expand(
-          child: FittedBox(
-            fit: BoxFit.cover,
-            child: SizedBox(
-              width: controller.value.size.width,
-              height: controller.value.size.height,
-              child: VideoPlayer(controller),
+    return ValueListenableBuilder<VideoPlayerValue>(
+      valueListenable: controller,
+      builder: (context, value, _) {
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            // 비디오 플레이어
+            SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: value.size.width,
+                  height: value.size.height,
+                  child: VideoPlayer(controller),
+                ),
+              ),
             ),
-          ),
-        ),
 
-        // 버퍼링 인디케이터
-        if (controller.value.isBuffering)
-          const CircularProgressIndicator(
-            color: AppColors.white,
-            strokeWidth: 2,
-          ),
+            // 버퍼링 인디케이터 (재생 중이 아닐 때만)
+            if (value.isBuffering && !value.isPlaying)
+              const CircularProgressIndicator(
+                color: AppColors.white,
+                strokeWidth: 2,
+              ),
 
-        // 일시정지 아이콘
-        if (!controller.value.isPlaying && !controller.value.isBuffering)
-          const Icon(
-            Icons.play_arrow_rounded,
-            color: AppColors.whiteSecondary,
-            size: 72,
-          ),
+            // 일시정지 아이콘
+            if (!value.isPlaying && !value.isBuffering)
+              const Icon(
+                Icons.play_arrow_rounded,
+                color: AppColors.whiteSecondary,
+                size: 72,
+              ),
 
-        // 오버레이 UI
-        Positioned.fill(child: VideoOverlay(video: widget.video)),
+            // 오버레이 UI
+            Positioned.fill(child: VideoOverlay(video: widget.video)),
 
-        // 더블탭 좋아요 애니메이션
-        if (_showLikeAnimation)
-          LikeAnimation(
-            onCompleted: () {
-              if (mounted) {
-                setState(() => _showLikeAnimation = false);
-              }
-            },
+            // 더블탭 좋아요 애니메이션
+            if (_showLikeAnimation)
+              LikeAnimation(
+                onCompleted: () {
+                  if (mounted) {
+                    setState(() => _showLikeAnimation = false);
+                  }
+                },
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildVideoError() {
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.error_outline, color: AppColors.whiteSecondary, size: 48),
+          SizedBox(height: 8),
+          Text(
+            '영상을 재생할 수 없습니다',
+            style: TextStyle(color: AppColors.whiteSecondary, fontSize: 14),
           ),
-      ],
+        ],
+      ),
     );
   }
 

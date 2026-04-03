@@ -258,7 +258,7 @@ PageView 스크롤 → onPageChanged → VideoPlayerManager.playAt(index)
 - **코드 생성 도구 실행**: `build_runner`, `dart analyze`, `dart format` 등
 - **버그 수정**: QA에서 발견된 UI 오버플로우, 메모리 누수, 동시성 문제 등 수정
 - **리팩토링**: 하드코딩 상수화, import 경로 정리, 코드 품질 개선
-- **PR 생성 및 리뷰**: GitHub PR 생성, 독립적 코드 리뷰 수행
+- **PR 생성 및 리뷰**: PR 생성, 독립적 코드 리뷰 수행
 
 ### 본인이 직접 작성/수행한 부분
 

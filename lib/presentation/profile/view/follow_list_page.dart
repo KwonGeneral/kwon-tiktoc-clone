@@ -99,7 +99,7 @@ class _FollowingList extends ConsumerWidget {
     if (followedUserIds.isEmpty) {
       return const Center(
         child: Text(
-          '팔로잉한 유저가 없습니다',
+          AppStrings.followListEmptyFollowing,
           style: TextStyle(color: AppColors.whiteSecondary, fontSize: 14),
         ),
       );
@@ -172,7 +172,7 @@ class _FollowerList extends ConsumerWidget {
     if (users.isEmpty) {
       return const Center(
         child: Text(
-          '팔로워가 없습니다',
+          AppStrings.followListEmptyFollowers,
           style: TextStyle(color: AppColors.whiteSecondary, fontSize: 14),
         ),
       );

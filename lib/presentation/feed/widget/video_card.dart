@@ -239,7 +239,7 @@ class _VideoCardState extends ConsumerState<VideoCard>
 
   Widget _buildLoading() {
     final thumbnailUrl = widget.video.thumbnailUrl;
-    final isLocalFile = thumbnailUrl.startsWith('/');
+    final isLocalFile = thumbnailUrl.isNotEmpty && !thumbnailUrl.startsWith('http');
     return Stack(
       fit: StackFit.expand,
       alignment: Alignment.center,

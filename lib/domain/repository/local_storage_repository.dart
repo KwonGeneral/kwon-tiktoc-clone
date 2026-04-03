@@ -28,4 +28,10 @@ abstract class LocalStorageRepository {
 
   String getProfileImageUrl();
   Future<void> saveProfileImageUrl(String url);
+
+  int getLastVideoIndex();
+  Future<void> saveLastVideoIndex(int index);
+
+  String getLastVideoThumbnailUrl();
+  Future<void> saveLastVideoThumbnailUrl(String url);
 }

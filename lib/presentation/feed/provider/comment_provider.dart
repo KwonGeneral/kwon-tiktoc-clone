@@ -7,6 +7,7 @@ import 'package:kwon_tiktoc_clone/domain/entity/comment.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/local_storage_repository.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_state.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/profile/provider/profile_provider.dart';
 
 part 'comment_provider.g.dart';
 
@@ -79,6 +80,7 @@ class CommentNotifier extends _$CommentNotifier {
               videoId: item['videoId'] as String,
               userId: item['userId'] as String,
               userName: item['userName'] as String? ?? '',
+              userAvatarUrl: item['userAvatarUrl'] as String? ?? '',
               text: item['text'] as String,
               likeCount: 0,
               createdAt: DateTime.parse(item['createdAt'] as String),
@@ -99,12 +101,16 @@ class CommentNotifier extends _$CommentNotifier {
     final replyingTo = state.replyingToCommentId;
 
     final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
+    final currentUser = ref.read(currentUserProvider).valueOrNull;
+    final myNickname = currentUser?.nickname ?? '나';
+    final myAvatarUrl = currentUser?.avatarUrl ?? '';
 
     final comment = Comment(
       id: 'user_comment_${now.millisecondsSinceEpoch}',
       videoId: videoId,
       userId: deviceId,
-      userName: '나',
+      userName: myNickname,
+      userAvatarUrl: myAvatarUrl,
       text: text.trim(),
       likeCount: 0,
       createdAt: now,
@@ -162,6 +168,7 @@ class CommentNotifier extends _$CommentNotifier {
       'videoId': comment.videoId,
       'userId': comment.userId,
       'userName': comment.userName,
+      'userAvatarUrl': comment.userAvatarUrl,
       'text': comment.text,
       'createdAt': comment.createdAt.toIso8601String(),
       'parentCommentId': comment.parentCommentId,

@@ -10,7 +10,6 @@ import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/presentation/camera/provider/camera_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/camera/provider/camera_state.dart';
 import 'package:kwon_tiktoc_clone/presentation/camera/widget/camera_controls.dart';
-import 'package:kwon_tiktoc_clone/presentation/camera/widget/recording_timer_indicator.dart';
 
 class CameraPage extends ConsumerStatefulWidget {
   const CameraPage({super.key});
@@ -19,15 +18,12 @@ class CameraPage extends ConsumerStatefulWidget {
   ConsumerState<CameraPage> createState() => _CameraPageState();
 }
 
-enum CameraMode { video, photo }
-
 class _CameraPageState extends ConsumerState<CameraPage>
     with WidgetsBindingObserver {
   CameraController? _controller;
   List<CameraDescription> _cameras = [];
   bool _isInitializing = true;
   String? _errorMessage;
-  CameraMode _cameraMode = CameraMode.video;
 
   @override
   void initState() {
@@ -88,16 +84,21 @@ class _CameraPageState extends ConsumerState<CameraPage>
   }
 
   Future<void> _setupController(CameraDescription camera) async {
+    // 기존 컨트롤러를 먼저 dispose (카메라 하드웨어 해제)
     final previousController = _controller;
-    _controller = CameraController(
+    _controller = null;
+    if (mounted) setState(() {});
+    await previousController?.dispose();
+
+    final newController = CameraController(
       camera,
       ResolutionPreset.high,
       enableAudio: true,
     );
 
     try {
-      await _controller!.initialize();
-      await previousController?.dispose();
+      await newController.initialize();
+      _controller = newController;
 
       if (mounted) {
         setState(() {
@@ -106,6 +107,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
         });
       }
     } catch (e) {
+      await newController.dispose();
       if (mounted) {
         setState(() {
           _isInitializing = false;
@@ -173,21 +175,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
     }
   }
 
-  Future<void> _takePhoto() async {
-    if (_controller == null || !_controller!.value.isInitialized) return;
-
-    try {
-      final file = await _controller!.takePicture();
-      if (mounted) {
-        context.push(
-          '${RoutePaths.publishImage}?filePath=${Uri.encodeComponent(file.path)}',
-        );
-      }
-    } catch (e) {
-      debugPrint('사진 촬영 실패: $e');
-    }
-  }
-
   Future<void> _handleCancel() async {
     final cameraState = ref.read(cameraNotifierProvider);
     if (cameraState.status == RecordingStatus.idle) {
@@ -247,7 +234,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     return Scaffold(
       backgroundColor: AppColors.black,
-      body: _isInitializing
+      body: (_isInitializing || _controller == null)
           ? const Center(
               child: CircularProgressIndicator(color: AppColors.white),
             )
@@ -256,7 +243,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
           : _CameraBody(
               controller: _controller!,
               cameraState: cameraState,
-              cameraMode: _cameraMode,
               onClose: _handleCancel,
               onSwitchCamera: _switchCamera,
               onStartRecording: _startRecording,
@@ -264,8 +250,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
               onResumeRecording: _resumeRecording,
               onStopRecording: _stopRecording,
               onCancel: _handleCancel,
-              onTakePhoto: _takePhoto,
-              onModeChanged: (mode) => setState(() => _cameraMode = mode),
             ),
     );
   }
@@ -312,7 +296,6 @@ class _CameraBody extends StatelessWidget {
   const _CameraBody({
     required this.controller,
     required this.cameraState,
-    required this.cameraMode,
     required this.onClose,
     required this.onSwitchCamera,
     required this.onStartRecording,
@@ -320,13 +303,10 @@ class _CameraBody extends StatelessWidget {
     required this.onResumeRecording,
     required this.onStopRecording,
     required this.onCancel,
-    required this.onTakePhoto,
-    required this.onModeChanged,
   });
 
   final CameraController controller;
   final CameraState cameraState;
-  final CameraMode cameraMode;
   final VoidCallback onClose;
   final VoidCallback onSwitchCamera;
   final VoidCallback onStartRecording;
@@ -334,8 +314,6 @@ class _CameraBody extends StatelessWidget {
   final VoidCallback onResumeRecording;
   final VoidCallback onStopRecording;
   final VoidCallback onCancel;
-  final VoidCallback onTakePhoto;
-  final ValueChanged<CameraMode> onModeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -354,176 +332,53 @@ class _CameraBody extends StatelessWidget {
           ),
         ),
 
-        // 상단 바
+        // 좌상단: 닫기/뒤로가기
         Positioned(
-          top: MediaQuery.of(context).padding.top + 8,
+          top: MediaQuery.of(context).padding.top + 12,
           left: 16,
-          right: 16,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // 닫기 버튼
-              GestureDetector(
-                onTap: onClose,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    color: AppColors.overlay,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.close,
-                    color: AppColors.white,
-                    size: 24,
-                  ),
-                ),
-              ),
-              // 카메라 전환
-              if (cameraState.status == RecordingStatus.idle)
-                GestureDetector(
-                  onTap: onSwitchCamera,
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: const BoxDecoration(
-                      color: AppColors.overlay,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.flip_camera_ios,
-                      color: AppColors.white,
-                      size: 24,
-                    ),
-                  ),
-                )
-              else
-                const SizedBox(width: 40),
-            ],
+          child: GestureDetector(
+            onTap: onClose,
+            child: Icon(
+              cameraState.status == RecordingStatus.idle
+                  ? Icons.close
+                  : Icons.arrow_back,
+              color: AppColors.white,
+              size: 28,
+            ),
           ),
         ),
 
-        // 타이머 표시 (녹화 중/일시정지)
-        if (cameraState.status != RecordingStatus.idle)
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 60,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: RecordingTimerIndicator(elapsed: cameraState.elapsed),
+        // 우상단: 카메라 전환
+        Positioned(
+          top: MediaQuery.of(context).padding.top + 8,
+          right: 16,
+          child: GestureDetector(
+            onTap: onSwitchCamera,
+            child: const Icon(
+              Icons.flip_camera_ios,
+              color: AppColors.white,
+              size: 30,
             ),
           ),
+        ),
 
         // 하단 컨트롤
         Positioned(
           bottom: MediaQuery.of(context).padding.bottom + 40,
           left: 0,
           right: 0,
-          child: cameraMode == CameraMode.photo
-              ? _PhotoCaptureButton(onTakePhoto: onTakePhoto)
-              : CameraControls(
-                  status: cameraState.status,
-                  elapsed: cameraState.elapsed,
-                  onStartRecording: onStartRecording,
-                  onPauseRecording: onPauseRecording,
-                  onResumeRecording: onResumeRecording,
-                  onStopRecording: onStopRecording,
-                  onCancel: onCancel,
-                ),
-        ),
-
-        // 모드 전환 탭 (녹화 중이 아닐 때만)
-        if (cameraState.status == RecordingStatus.idle)
-          Positioned(
-            bottom: MediaQuery.of(context).padding.bottom + 16,
-            left: 0,
-            right: 0,
-            child: _CameraModeSwitcher(
-              currentMode: cameraMode,
-              onModeChanged: onModeChanged,
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _PhotoCaptureButton extends StatelessWidget {
-  const _PhotoCaptureButton({required this.onTakePhoto});
-
-  final VoidCallback onTakePhoto;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: onTakePhoto,
-        child: Container(
-          width: 72,
-          height: 72,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.white, width: 4),
-          ),
-          child: Container(
-            margin: const EdgeInsets.all(4),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CameraModeSwitcher extends StatelessWidget {
-  const _CameraModeSwitcher({
-    required this.currentMode,
-    required this.onModeChanged,
-  });
-
-  final CameraMode currentMode;
-  final ValueChanged<CameraMode> onModeChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () => onModeChanged(CameraMode.video),
-          child: Text(
-            AppStrings.cameraVideoMode,
-            style: TextStyle(
-              color: currentMode == CameraMode.video
-                  ? AppColors.white
-                  : AppColors.whiteSecondary,
-              fontSize: 13,
-              fontWeight: currentMode == CameraMode.video
-                  ? FontWeight.w600
-                  : FontWeight.normal,
-            ),
-          ),
-        ),
-        const SizedBox(width: 24),
-        GestureDetector(
-          onTap: () => onModeChanged(CameraMode.photo),
-          child: Text(
-            AppStrings.cameraPhotoMode,
-            style: TextStyle(
-              color: currentMode == CameraMode.photo
-                  ? AppColors.white
-                  : AppColors.whiteSecondary,
-              fontSize: 13,
-              fontWeight: currentMode == CameraMode.photo
-                  ? FontWeight.w600
-                  : FontWeight.normal,
-            ),
+          child: CameraControls(
+            status: cameraState.status,
+            elapsed: cameraState.elapsed,
+            onStartRecording: onStartRecording,
+            onPauseRecording: onPauseRecording,
+            onResumeRecording: onResumeRecording,
+            onStopRecording: onStopRecording,
+            onCancel: onCancel,
           ),
         ),
       ],
     );
   }
 }
+

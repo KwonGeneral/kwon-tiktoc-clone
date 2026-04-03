@@ -17,6 +17,10 @@ class ProfileVideoGrid extends StatelessWidget {
   final void Function(Video video)? onVideoTap;
   final void Function(Video video)? onVideoLongPress;
 
+  /// 외부에서 단일 비디오 썸네일을 사용할 수 있는 static builder
+  static Widget buildThumbnail(Video video) =>
+      _VideoThumbnail(key: ValueKey(video.id), video: video);
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -122,6 +126,12 @@ class _VideoThumbnailState extends State<_VideoThumbnail>
           )
         else
           _buildPlaceholder(),
+        // 우상단 동영상 아이콘
+        const Positioned(
+          top: 4,
+          right: 4,
+          child: Icon(Icons.videocam, color: AppColors.white, size: 16),
+        ),
         // 하단 좋아요 표시
         Positioned(
           left: 4,

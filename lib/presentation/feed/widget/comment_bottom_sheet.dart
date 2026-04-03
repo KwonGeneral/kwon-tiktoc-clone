@@ -6,6 +6,7 @@ import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/comment_item.dart';
+import 'package:kwon_tiktoc_clone/presentation/profile/provider/profile_provider.dart';
 
 /// 댓글창 열기 (provider 기반 - 영상 축소 + 인라인 댓글)
 Future<void> openCommentView(WidgetRef ref, String videoId) async {
@@ -159,11 +160,7 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
             ),
             child: Row(
               children: [
-                const CircleAvatar(
-                  radius: 14,
-                  backgroundColor: AppColors.gray,
-                  child: Icon(Icons.person, color: AppColors.white, size: 16),
-                ),
+                _buildMyAvatar(),
                 const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
@@ -191,37 +188,8 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      suffixIcon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.alternate_email,
-                              color: AppColors.whiteSecondary,
-                              size: 20,
-                            ),
-                            onPressed: () {},
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(
-                              minWidth: 32,
-                              minHeight: 32,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.emoji_emotions_outlined,
-                              color: AppColors.whiteSecondary,
-                              size: 20,
-                            ),
-                            onPressed: () {},
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(
-                              minWidth: 32,
-                              minHeight: 32,
-                            ),
-                          ),
-                        ],
-                      ),
+                      suffixIcon: const SizedBox.shrink(),
+                      suffixIconConstraints: const BoxConstraints(),
                     ),
                     onSubmitted: _submitComment,
                   ),
@@ -272,6 +240,20 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMyAvatar() {
+    final userAsync = ref.watch(currentUserProvider);
+    final avatarUrl = userAsync.valueOrNull?.avatarUrl ?? '';
+    return CircleAvatar(
+      radius: 14,
+      backgroundColor: AppColors.gray,
+      backgroundImage:
+          avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
+      child: avatarUrl.isEmpty
+          ? const Icon(Icons.person, color: AppColors.white, size: 16)
+          : null,
     );
   }
 

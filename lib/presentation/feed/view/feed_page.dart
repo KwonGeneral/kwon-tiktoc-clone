@@ -20,6 +20,7 @@ class FeedPage extends ConsumerStatefulWidget {
 class _FeedPageState extends ConsumerState<FeedPage> {
   bool _initialized = false;
   PageController? _pageController;
+  int _pageViewGeneration = 0; // PageView 강제 재생성용
 
   /// 무한 루프를 위한 큰 가상 페이지 수
   static const _virtualPageCount = 100000;
@@ -98,9 +99,25 @@ class _FeedPageState extends ConsumerState<FeedPage> {
       // 영상 삭제 등으로 목록 크기가 변경된 경우 PageController 재생성
       if (prevCount != nextCount && nextCount > 0) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
           _pageController?.dispose();
           _pageController = null;
-          if (mounted) setState(() {});
+          _pageViewGeneration++;
+          setState(() {});
+          // PageController 재생성 후 VideoPlayerManager 초기화
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            final currentState =
+                ref.read(feedNotifierProvider).valueOrNull;
+            if (currentState != null && currentState.videos.isNotEmpty) {
+              ref
+                  .read(videoPlayerManagerProvider.notifier)
+                  .forceReinitialize(
+                    currentState.currentIndex,
+                    currentState.videos,
+                  );
+            }
+          });
         });
         return;
       }
@@ -146,6 +163,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
           return Stack(
             children: [
               PageView.builder(
+                key: ValueKey(_pageViewGeneration),
                 controller: _getPageController(
                   displayVideos.length,
                   initialIndex: feedState.currentIndex,

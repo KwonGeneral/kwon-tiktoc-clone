@@ -70,6 +70,8 @@ class MockVideoDataSource implements VideoDataSource {
           videoId: videoId,
           userId: 'commenter_$commentIndex',
           userName: _commentUserNames[commentIndex % _commentUserNames.length],
+          userAvatarUrl:
+              _commentAvatarUrls[commentIndex % _commentAvatarUrls.length],
           text: _sampleComments[commentIndex % _sampleComments.length],
           likeCount: (commentIndex + 1) * 120,
           createdAt: now.subtract(
@@ -81,6 +83,19 @@ class MockVideoDataSource implements VideoDataSource {
 
     return comments;
   }
+
+  static const _commentAvatarUrls = [
+    'https://i.pravatar.cc/150?img=1',
+    'https://i.pravatar.cc/150?img=2',
+    'https://i.pravatar.cc/150?img=3',
+    'https://i.pravatar.cc/150?img=4',
+    'https://i.pravatar.cc/150?img=5',
+    'https://i.pravatar.cc/150?img=6',
+    'https://i.pravatar.cc/150?img=7',
+    'https://i.pravatar.cc/150?img=8',
+    'https://i.pravatar.cc/150?img=9',
+    'https://i.pravatar.cc/150?img=10',
+  ];
 
   static const _commentUserNames = [
     '꿈나라',

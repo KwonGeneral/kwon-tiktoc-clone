@@ -24,12 +24,24 @@ Future<User> currentUser(Ref ref) async {
   final savedBio = storage.getProfileBio();
   final savedProfileImage = storage.getProfileImageUrl();
 
+  // 실제 데이터 기반 숫자 계산
+  final feedState =
+      ref.watch(feedNotifierProvider).valueOrNull;
+  final followingCount = feedState?.followedUserIds.length ?? 0;
+  final likeCount =
+      feedState?.videos.where((v) => v.isLiked).length ?? 0;
+  // 팔로워는 Mock (기본 8명 유저)
+  const followerCount = 8;
+
   return user.copyWith(
     nickname: savedNickname.isNotEmpty ? savedNickname : user.nickname,
     bio: savedBio,
     avatarUrl: savedProfileImage.isNotEmpty
         ? savedProfileImage
         : user.avatarUrl,
+    followingCount: followingCount,
+    followerCount: followerCount,
+    likeCount: likeCount,
   );
 }
 

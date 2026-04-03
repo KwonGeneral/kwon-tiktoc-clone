@@ -11,7 +11,10 @@ class SideActionBar extends StatelessWidget {
     this.isFollowing = false,
     this.onLikeTap,
     this.onBookmarkTap,
+    this.onCommentTap,
     this.onFollowTap,
+    this.onShareTap,
+    this.onProfileTap,
     super.key,
   });
 
@@ -19,7 +22,10 @@ class SideActionBar extends StatelessWidget {
   final bool isFollowing;
   final VoidCallback? onLikeTap;
   final VoidCallback? onBookmarkTap;
+  final VoidCallback? onCommentTap;
   final VoidCallback? onFollowTap;
+  final VoidCallback? onShareTap;
+  final VoidCallback? onProfileTap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +37,10 @@ class SideActionBar extends StatelessWidget {
           // 프로필 아바타 + 팔로우 뱃지
           _ProfileAvatar(
             userId: video.userId,
+            avatarUrl: video.avatarUrl,
             isFollowing: isFollowing,
-            onTap: onFollowTap,
+            onTap: onProfileTap,
+            onFollowTap: onFollowTap,
           ),
           const SizedBox(height: 20),
 
@@ -49,6 +57,7 @@ class SideActionBar extends StatelessWidget {
           _ActionItem(
             icon: Icons.chat_bubble,
             count: video.commentCount,
+            onTap: onCommentTap,
           ),
           const SizedBox(height: 16),
 
@@ -66,6 +75,7 @@ class SideActionBar extends StatelessWidget {
             icon: Icons.reply,
             count: video.shareCount,
             isMirrored: true,
+            onTap: onShareTap,
           ),
         ],
       ),
@@ -76,23 +86,28 @@ class SideActionBar extends StatelessWidget {
 class _ProfileAvatar extends StatelessWidget {
   const _ProfileAvatar({
     required this.userId,
+    this.avatarUrl = '',
     this.isFollowing = false,
     this.onTap,
+    this.onFollowTap,
   });
 
   final String userId;
+  final String avatarUrl;
   final bool isFollowing;
   final VoidCallback? onTap;
+  final VoidCallback? onFollowTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.bottomCenter,
+      children: [
+        // 아바타 탭 → 유저 프로필 이동
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
             width: 44,
             height: 44,
             decoration: BoxDecoration(
@@ -103,11 +118,28 @@ class _ProfileAvatar extends StatelessWidget {
               ),
               color: AppColors.gray,
             ),
-            child: const Icon(Icons.person, color: AppColors.white, size: 24),
+            child: avatarUrl.isNotEmpty
+                ? ClipOval(
+                    child: Image.network(
+                      avatarUrl,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const Icon(
+                        Icons.person,
+                        color: AppColors.white,
+                        size: 24,
+                      ),
+                    ),
+                  )
+                : const Icon(Icons.person, color: AppColors.white, size: 24),
           ),
-          // 팔로우 + 뱃지
-          Positioned(
-            bottom: -8,
+        ),
+        // 팔로우 뱃지 탭 → 팔로우 토글
+        Positioned(
+          bottom: -8,
+          child: GestureDetector(
+            onTap: onFollowTap,
             child: Container(
               width: 20,
               height: 20,
@@ -122,8 +154,8 @@ class _ProfileAvatar extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -157,10 +189,7 @@ class _ActionItem extends StatelessWidget {
           else
             iconWidget,
           const SizedBox(height: 2),
-          Text(
-            FormatUtils.compactNumber(count),
-            style: AppTextStyles.count,
-          ),
+          Text(FormatUtils.compactNumber(count), style: AppTextStyles.count),
         ],
       ),
     );

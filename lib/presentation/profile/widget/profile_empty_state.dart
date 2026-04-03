@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_text_styles.dart';
-import '../../../core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 
 class ProfileEmptyState extends StatelessWidget {
   const ProfileEmptyState({super.key});
@@ -42,9 +42,7 @@ class ProfileEmptyState extends StatelessWidget {
       ),
       child: Text(
         AppStrings.profileUpload,
-        style: AppTextStyles.description.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        style: AppTextStyles.description.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

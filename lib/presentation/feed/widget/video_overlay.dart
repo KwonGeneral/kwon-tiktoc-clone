@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
 
+import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/feed/widget/comment_bottom_sheet.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/music_info.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/side_action_bar.dart';
-import 'package:kwon_tiktoc_clone/presentation/feed/widget/top_tab_bar.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_description.dart';
 
 class VideoOverlay extends ConsumerWidget {
@@ -17,40 +21,42 @@ class VideoOverlay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Stack(
       children: [
-        // 상단 탭바
-        const Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: TopTabBar(),
-        ),
-
         // 우측 사이드 액션바
         Positioned(
           right: 0,
           bottom: 100,
           child: SideActionBar(
             video: video,
-            isFollowing: ref
+            isFollowing:
+                ref
                     .watch(feedNotifierProvider)
                     .valueOrNull
                     ?.followedUserIds
                     .contains(video.userId) ??
                 false,
             onLikeTap: () {
-              ref
-                  .read(feedNotifierProvider.notifier)
-                  .toggleLike(video.id);
+              ref.read(feedNotifierProvider.notifier).toggleLike(video.id);
             },
             onBookmarkTap: () {
-              ref
-                  .read(feedNotifierProvider.notifier)
-                  .toggleBookmark(video.id);
+              ref.read(feedNotifierProvider.notifier).toggleBookmark(video.id);
+            },
+            onCommentTap: () {
+              openCommentView(ref, video.id);
             },
             onFollowTap: () {
               ref
                   .read(feedNotifierProvider.notifier)
                   .toggleFollow(video.userId);
+            },
+            onShareTap: () {
+              final text = AppStrings.shareText.replaceAll(
+                '{nickname}',
+                video.nickname,
+              );
+              Share.share('$text\n${video.videoUrl}');
+            },
+            onProfileTap: () {
+              context.push(RoutePaths.userProfilePath(video.userId));
             },
           ),
         ),

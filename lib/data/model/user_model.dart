@@ -10,7 +10,9 @@ sealed class UserModel with _$UserModel {
   const factory UserModel({
     required String id,
     required String nickname,
+    @Default('') String username,
     @Default('') String avatarUrl,
+    @Default('') String bio,
     @Default(false) bool isVerified,
     @Default(0) int followingCount,
     @Default(0) int followerCount,
@@ -23,22 +25,26 @@ sealed class UserModel with _$UserModel {
       _$UserModelFromJson(json);
 
   factory UserModel.fromEntity(User entity) => UserModel(
-        id: entity.id,
-        nickname: entity.nickname,
-        avatarUrl: entity.avatarUrl,
-        isVerified: entity.isVerified,
-        followingCount: entity.followingCount,
-        followerCount: entity.followerCount,
-        likeCount: entity.likeCount,
-      );
+    id: entity.id,
+    nickname: entity.nickname,
+    username: entity.username,
+    avatarUrl: entity.avatarUrl,
+    bio: entity.bio,
+    isVerified: entity.isVerified,
+    followingCount: entity.followingCount,
+    followerCount: entity.followerCount,
+    likeCount: entity.likeCount,
+  );
 
   User toEntity() => User(
-        id: id,
-        nickname: nickname,
-        avatarUrl: avatarUrl,
-        isVerified: isVerified,
-        followingCount: followingCount,
-        followerCount: followerCount,
-        likeCount: likeCount,
-      );
+    id: id,
+    nickname: nickname,
+    username: username,
+    avatarUrl: avatarUrl,
+    bio: bio,
+    isVerified: isVerified,
+    followingCount: followingCount,
+    followerCount: followerCount,
+    likeCount: likeCount,
+  );
 }

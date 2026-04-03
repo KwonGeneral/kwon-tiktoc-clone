@@ -1,73 +1,35 @@
 import 'package:flutter/material.dart';
 
-import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 
-class TopTabBar extends StatefulWidget {
+class TopTabBar extends StatelessWidget {
   const TopTabBar({super.key});
 
   @override
-  State<TopTabBar> createState() => _TopTabBarState();
-}
-
-class _TopTabBarState extends State<TopTabBar> {
-  int _selectedIndex = 2; // 기본: 추천
-
-  static const _tabs = [
-    AppStrings.feedTabExplore,
-    AppStrings.feedTabFollowing,
-    AppStrings.feedTabRecommend,
-  ];
-
-  @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       bottom: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // 탭 목록
-            for (var i = 0; i < _tabs.length; i++) ...[
-              if (i > 0) const SizedBox(width: 20),
-              GestureDetector(
-                onTap: () => setState(() => _selectedIndex = i),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _tabs[i],
-                      style: i == _selectedIndex
-                          ? AppTextStyles.tabActive
-                          : AppTextStyles.tabInactive,
-                    ),
-                    const SizedBox(height: 4),
-                    // 활성 탭 밑줄
-                    Container(
-                      width: 24,
-                      height: 2.5,
-                      decoration: BoxDecoration(
-                        color: i == _selectedIndex
-                            ? AppColors.white
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(1),
-                      ),
-                    ),
-                  ],
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(AppStrings.feedTabRecommend, style: AppTextStyles.tabActive),
+              SizedBox(height: 4),
+              SizedBox(
+                width: 24,
+                height: 2.5,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(1)),
+                  ),
                 ),
               ),
             ],
-
-            // 검색 아이콘
-            const SizedBox(width: 16),
-            const Icon(
-              Icons.search,
-              color: AppColors.white,
-              size: 24,
-            ),
-          ],
+          ),
         ),
       ),
     );

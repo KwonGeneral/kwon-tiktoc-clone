@@ -16,6 +16,8 @@ _CommentModel _$CommentModelFromJson(Map<String, dynamic> json) =>
       text: json['text'] as String,
       likeCount: (json['likeCount'] as num?)?.toInt() ?? 0,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      parentCommentId: json['parentCommentId'] as String?,
+      replyCount: (json['replyCount'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$CommentModelToJson(_CommentModel instance) =>
@@ -28,4 +30,6 @@ Map<String, dynamic> _$CommentModelToJson(_CommentModel instance) =>
       'text': instance.text,
       'likeCount': instance.likeCount,
       'createdAt': instance.createdAt.toIso8601String(),
+      'parentCommentId': instance.parentCommentId,
+      'replyCount': instance.replyCount,
     };

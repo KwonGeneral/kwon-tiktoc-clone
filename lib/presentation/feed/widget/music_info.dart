@@ -47,14 +47,12 @@ class _MusicInfoState extends State<MusicInfo>
           child: ClipRect(
             child: SlideTransition(
               position: _animation,
-              child: Row(
-                children: [
-                  Text(
-                    '${widget.musicName}    ${widget.musicName}',
-                    style: AppTextStyles.musicInfo,
-                    maxLines: 1,
-                  ),
-                ],
+              child: Text(
+                '${widget.musicName}    ${widget.musicName}',
+                style: AppTextStyles.musicInfo,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.visible,
               ),
             ),
           ),

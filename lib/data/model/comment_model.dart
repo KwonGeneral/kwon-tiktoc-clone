@@ -16,6 +16,8 @@ sealed class CommentModel with _$CommentModel {
     required String text,
     @Default(0) int likeCount,
     required DateTime createdAt,
+    String? parentCommentId,
+    @Default(0) int replyCount,
   }) = _CommentModel;
 
   const CommentModel._();
@@ -24,24 +26,28 @@ sealed class CommentModel with _$CommentModel {
       _$CommentModelFromJson(json);
 
   factory CommentModel.fromEntity(Comment entity) => CommentModel(
-        id: entity.id,
-        videoId: entity.videoId,
-        userId: entity.userId,
-        userName: entity.userName,
-        userAvatarUrl: entity.userAvatarUrl,
-        text: entity.text,
-        likeCount: entity.likeCount,
-        createdAt: entity.createdAt,
-      );
+    id: entity.id,
+    videoId: entity.videoId,
+    userId: entity.userId,
+    userName: entity.userName,
+    userAvatarUrl: entity.userAvatarUrl,
+    text: entity.text,
+    likeCount: entity.likeCount,
+    createdAt: entity.createdAt,
+    parentCommentId: entity.parentCommentId,
+    replyCount: entity.replyCount,
+  );
 
   Comment toEntity() => Comment(
-        id: id,
-        videoId: videoId,
-        userId: userId,
-        userName: userName,
-        userAvatarUrl: userAvatarUrl,
-        text: text,
-        likeCount: likeCount,
-        createdAt: createdAt,
-      );
+    id: id,
+    videoId: videoId,
+    userId: userId,
+    userName: userName,
+    userAvatarUrl: userAvatarUrl,
+    text: text,
+    likeCount: likeCount,
+    createdAt: createdAt,
+    parentCommentId: parentCommentId,
+    replyCount: replyCount,
+  );
 }

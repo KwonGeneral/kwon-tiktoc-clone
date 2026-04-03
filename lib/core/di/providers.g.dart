@@ -6,7 +6,43 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$videoDataSourceHash() => r'67f61fe5c03741f275c7c0bd09b0b6b27b942c5f';
+String _$deviceIdServiceHash() => r'e553b1632680c4e7d9c56ebccdac52c28efdc36a';
+
+/// See also [deviceIdService].
+@ProviderFor(deviceIdService)
+final deviceIdServiceProvider = Provider<DeviceIdService>.internal(
+  deviceIdService,
+  name: r'deviceIdServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deviceIdServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DeviceIdServiceRef = ProviderRef<DeviceIdService>;
+String _$localStorageRepositoryHash() =>
+    r'5ac7f46cbf698bf5360cce78593849b8c55bfbd1';
+
+/// See also [localStorageRepository].
+@ProviderFor(localStorageRepository)
+final localStorageRepositoryProvider =
+    Provider<LocalStorageRepository>.internal(
+      localStorageRepository,
+      name: r'localStorageRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$localStorageRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef LocalStorageRepositoryRef = ProviderRef<LocalStorageRepository>;
+String _$videoDataSourceHash() => r'516cf2bbd00775b4eb76b263afdb46bc498a15a1';
 
 /// See also [videoDataSource].
 @ProviderFor(videoDataSource)
@@ -40,7 +76,7 @@ final videoRepositoryProvider = Provider<VideoRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef VideoRepositoryRef = ProviderRef<VideoRepository>;
-String _$userRepositoryHash() => r'f85bcb6cd5eadec39ff05f02dcffe78a37ff8eba';
+String _$userRepositoryHash() => r'b988a67eba7d828ffcc27a3e100e738a91863056';
 
 /// See also [userRepository].
 @ProviderFor(userRepository)
@@ -57,6 +93,61 @@ final userRepositoryProvider = Provider<UserRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UserRepositoryRef = ProviderRef<UserRepository>;
+String _$notificationRepositoryHash() =>
+    r'2f7d1f0a004351fb90669564571d47b67e035bdb';
+
+/// See also [notificationRepository].
+@ProviderFor(notificationRepository)
+final notificationRepositoryProvider =
+    Provider<NotificationRepository>.internal(
+      notificationRepository,
+      name: r'notificationRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$notificationRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef NotificationRepositoryRef = ProviderRef<NotificationRepository>;
+String _$postImageDataSourceHash() =>
+    r'18ec268f0536c1bd39ffa78c780b3011a8b06d61';
+
+/// See also [postImageDataSource].
+@ProviderFor(postImageDataSource)
+final postImageDataSourceProvider = Provider<PostImageDataSource>.internal(
+  postImageDataSource,
+  name: r'postImageDataSourceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$postImageDataSourceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef PostImageDataSourceRef = ProviderRef<PostImageDataSource>;
+String _$postImageRepositoryHash() =>
+    r'4a96fd2ec7d2d97ad4f1add261c18345e0db591c';
+
+/// See also [postImageRepository].
+@ProviderFor(postImageRepository)
+final postImageRepositoryProvider = Provider<PostImageRepository>.internal(
+  postImageRepository,
+  name: r'postImageRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$postImageRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef PostImageRepositoryRef = ProviderRef<PostImageRepository>;
 String _$getVideoFeedHash() => r'83206837b7bcb601c30c3b6d976a0fe89d43751a';
 
 /// See also [getVideoFeed].

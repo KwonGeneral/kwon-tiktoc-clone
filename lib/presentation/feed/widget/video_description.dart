@@ -26,16 +26,18 @@ class _VideoDescriptionState extends State<VideoDescription> {
         // 유저명
         Row(
           children: [
-            Text(
-              '@user_${widget.video.userId}',
-              style: AppTextStyles.username,
+            Flexible(
+              child: Text(
+                widget.video.username.isNotEmpty
+                    ? '@${widget.video.username}'
+                    : '@user_${widget.video.userId}',
+                style: AppTextStyles.username,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             const SizedBox(width: 4),
-            const Icon(
-              Icons.verified,
-              color: AppColors.secondary,
-              size: 14,
-            ),
+            const Icon(Icons.verified, color: AppColors.secondary, size: 14),
           ],
         ),
         const SizedBox(height: 6),
@@ -44,10 +46,7 @@ class _VideoDescriptionState extends State<VideoDescription> {
         GestureDetector(
           onTap: () => setState(() => _isExpanded = !_isExpanded),
           child: _isExpanded
-              ? Text(
-                  widget.video.description,
-                  style: AppTextStyles.description,
-                )
+              ? Text(widget.video.description, style: AppTextStyles.description)
               : LayoutBuilder(
                   builder: (context, constraints) {
                     final textPainter = TextPainter(

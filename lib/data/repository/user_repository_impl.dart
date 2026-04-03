@@ -1,14 +1,26 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:kwon_tiktoc_clone/data/model/user_model.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  static const _currentUserId = 'current_user';
+  UserRepositoryImpl({required String deviceId, http.Client? client})
+    : _deviceId = deviceId,
+      _client = client ?? http.Client();
 
-  static final _mockUsers = <String, UserModel>{
-    _currentUserId: const UserModel(
-      id: _currentUserId,
-      nickname: '나의계정',
+  final http.Client _client;
+  final String _deviceId;
+
+  static const _baseUrl = 'https://api.myfortie.com';
+
+  late final _mockUsers = <String, UserModel>{
+    _deviceId: UserModel(
+      id: _deviceId,
+      nickname: '',
       isVerified: false,
       followingCount: 128,
       followerCount: 1542,
@@ -130,6 +142,62 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<User> getCurrentUser() async {
-    return getUserById(_currentUserId);
+    return getUserById(_deviceId);
+  }
+
+  @override
+  Future<List<User>> getRecommendedUsers() async {
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    return _mockUsers.entries
+        .where((e) => e.key != _deviceId)
+        .map((e) => e.value.toEntity())
+        .toList();
+  }
+
+  @override
+  Future<String?> getProfileImageUrl(String userId) async {
+    try {
+      final response = await _client.get(
+        Uri.parse('$_baseUrl/videos/profile-image/$userId'),
+      );
+
+      if (response.statusCode != 200) return null;
+
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final url = json['profileImageUrl'] as String?;
+      return url;
+    } catch (e) {
+      debugPrint('프로필 이미지 조회 실패: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<String> uploadProfileImage({
+    required String imagePath,
+    required String userId,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/videos/profile-image/upload');
+    final request = http.MultipartRequest('POST', uri);
+
+    request.fields['userId'] = userId;
+    request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('프로필 이미지 업로드 실패: ${response.statusCode}');
+    }
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    final profileImageUrl = json['profileImageUrl'] as String?;
+
+    if (profileImageUrl == null) {
+      throw Exception('프로필 이미지 URL이 응답에 없습니다');
+    }
+
+    debugPrint('프로필 이미지 업로드 완료: $profileImageUrl');
+    return profileImageUrl;
   }
 }

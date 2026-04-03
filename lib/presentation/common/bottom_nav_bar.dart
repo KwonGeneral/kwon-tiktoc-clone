@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../app/theme/app_colors.dart';
-import '../../core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
+import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
@@ -18,9 +19,7 @@ class BottomNavBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.black,
-        border: Border(
-          top: BorderSide(color: AppColors.divider, width: 0.5),
-        ),
+        border: Border(top: BorderSide(color: AppColors.divider, width: 0.5)),
       ),
       child: SafeArea(
         child: SizedBox(
@@ -91,7 +90,7 @@ class _NavItem extends StatelessWidget {
               label,
               style: TextStyle(
                 color: color,
-                fontSize: 10,
+                fontSize: AppFontSizes.xs,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
             ),
@@ -151,11 +150,7 @@ class _CreateButton extends StatelessWidget {
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(
-                  Icons.add,
-                  color: AppColors.black,
-                  size: 22,
-                ),
+                child: const Icon(Icons.add, color: AppColors.black, size: 22),
               ),
             ),
           ],

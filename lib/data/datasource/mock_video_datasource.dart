@@ -63,15 +63,20 @@ class MockVideoDataSource implements VideoDataSource {
 
     for (var videoIndex = 0; videoIndex < 13; videoIndex++) {
       final videoId = 'video_${videoIndex + 1}';
-      comments[videoId] = List.generate(5, (commentIndex) {
+      final count = 5 + (videoIndex % 6); // 5~10개
+      comments[videoId] = List.generate(count, (commentIndex) {
         return CommentModel(
           id: 'comment_${videoId}_$commentIndex',
           videoId: videoId,
           userId: 'commenter_$commentIndex',
-          userName: '유저${commentIndex + 1}',
+          userName: _commentUserNames[commentIndex % _commentUserNames.length],
+          userAvatarUrl:
+              _commentAvatarUrls[commentIndex % _commentAvatarUrls.length],
           text: _sampleComments[commentIndex % _sampleComments.length],
           likeCount: (commentIndex + 1) * 120,
-          createdAt: now.subtract(Duration(hours: commentIndex)),
+          createdAt: now.subtract(
+            Duration(hours: commentIndex * 2, minutes: commentIndex * 17),
+          ),
         );
       });
     }
@@ -79,12 +84,43 @@ class MockVideoDataSource implements VideoDataSource {
     return comments;
   }
 
+  static const _commentAvatarUrls = [
+    'https://i.pravatar.cc/150?img=1',
+    'https://i.pravatar.cc/150?img=2',
+    'https://i.pravatar.cc/150?img=3',
+    'https://i.pravatar.cc/150?img=4',
+    'https://i.pravatar.cc/150?img=5',
+    'https://i.pravatar.cc/150?img=6',
+    'https://i.pravatar.cc/150?img=7',
+    'https://i.pravatar.cc/150?img=8',
+    'https://i.pravatar.cc/150?img=9',
+    'https://i.pravatar.cc/150?img=10',
+  ];
+
+  static const _commentUserNames = [
+    '꿈나라',
+    '카르페디엠',
+    'Mango Day',
+    'ga든',
+    '해피바이러스',
+    '별빛소녀',
+    '맛집헌터',
+    '댄스킹',
+    '여행러버',
+    '일상기록',
+  ];
+
   static const _sampleComments = [
     '와 대박 ㅋㅋㅋ',
     '이거 진짜 잘했다 👏',
     '나도 해보고 싶다!',
     '팔로우 했어요~',
     '다음 영상도 기대할게요 ❤️',
+    '진짜 웃기다 ㅋㅋㅋㅋ',
+    '이거 어디서 찍은거에요?',
+    '오늘도 좋은 영상 감사해요!',
+    '대박... 이건 못참지',
+    '저도 해봤는데 너무 어렵더라고요 😂',
   ];
 
   /// 총 제공할 최대 비디오 수 (순환하여 생성)
@@ -97,8 +133,7 @@ class MockVideoDataSource implements VideoDataSource {
     final start = page * AppConstants.videoPageSize;
     if (start >= _maxTotalVideos) return [];
 
-    final end =
-        (start + AppConstants.videoPageSize).clamp(0, _maxTotalVideos);
+    final end = (start + AppConstants.videoPageSize).clamp(0, _maxTotalVideos);
     final result = <VideoModel>[];
 
     for (var i = start; i < end; i++) {
@@ -141,10 +176,9 @@ class MockVideoDataSource implements VideoDataSource {
     final video = _videos[index];
     final updated = video.copyWith(
       isBookmarked: !video.isBookmarked,
-      bookmarkCount:
-          video.isBookmarked
-              ? video.bookmarkCount - 1
-              : video.bookmarkCount + 1,
+      bookmarkCount: video.isBookmarked
+          ? video.bookmarkCount - 1
+          : video.bookmarkCount + 1,
     );
     _videos[index] = updated;
     return updated;
@@ -154,5 +188,37 @@ class MockVideoDataSource implements VideoDataSource {
   Future<List<CommentModel>> getComments(String videoId) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     return _comments[videoId] ?? [];
+  }
+
+  @override
+  Future<VideoModel> uploadVideo({
+    required String filePath,
+    required String description,
+    String? title,
+    String? tags,
+    String? location,
+    String? userId,
+    String? username,
+    String? nickname,
+    String? avatarUrl,
+    void Function(double progress)? onProgress,
+  }) async {
+    await Future<void>.delayed(const Duration(seconds: 2));
+    onProgress?.call(1.0);
+    return VideoModel(
+      id: 'video_mock_${DateTime.now().millisecondsSinceEpoch}',
+      userId: 'mock_user',
+      videoUrl: filePath,
+      description: description,
+      createdAt: DateTime.now(),
+    );
+  }
+
+  @override
+  Future<void> deleteVideo({
+    required String videoId,
+    required String userId,
+  }) async {
+    _videos.removeWhere((v) => v.id == videoId);
   }
 }

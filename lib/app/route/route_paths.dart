@@ -12,6 +12,7 @@ abstract final class RoutePaths {
   static const imageDetail = '/image/:imageId';
   static const profileEdit = '/profile/edit';
   static const settings = '/settings';
+  static const followList = '/follow-list';
 
   static String userProfilePath(String userId) => '/user/$userId';
   static String imageDetailPath(String imageId) => '/image/$imageId';

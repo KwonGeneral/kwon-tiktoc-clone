@@ -12,5 +12,6 @@ sealed class PublishState with _$PublishState {
     String? errorMessage,
     String? uploadedVideoUrl,
     String? uploadedDescription,
+    String? thumbnailPath,
   }) = _PublishState;
 }

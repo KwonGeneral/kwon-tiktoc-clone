@@ -243,6 +243,7 @@ class FeedNotifier extends _$FeedNotifier {
   void addUploadedVideo({
     required String videoUrl,
     required String description,
+    String? thumbnailUrl,
   }) {
     final currentState = state.valueOrNull;
     if (currentState == null) return;
@@ -256,6 +257,7 @@ class FeedNotifier extends _$FeedNotifier {
       id: 'uploaded_${now.millisecondsSinceEpoch}',
       userId: deviceId,
       videoUrl: videoUrl,
+      thumbnailUrl: thumbnailUrl ?? '',
       description: description,
       musicName: '${AppStrings.uploadedMusicName} - $displayName',
       username: displayName,

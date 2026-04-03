@@ -57,11 +57,25 @@ class PublishNotifier extends _$PublishNotifier {
         },
       );
 
+      // 썸네일 생성 (업로드 영상용)
+      String? thumbnailPath;
+      try {
+        final thumbnailFile = await VideoCompress.getFileThumbnail(
+          videoFilePath,
+          quality: 50,
+          position: -1,
+        );
+        thumbnailPath = thumbnailFile.path;
+      } catch (e) {
+        debugPrint('썸네일 생성 실패: $e');
+      }
+
       state = state.copyWith(
         status: PublishStatus.success,
         progress: 1.0,
         uploadedVideoUrl: uploadedVideo.videoUrl,
         uploadedDescription: description,
+        thumbnailPath: thumbnailPath,
       );
     } catch (e) {
       state = state.copyWith(

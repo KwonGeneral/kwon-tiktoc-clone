@@ -167,6 +167,10 @@ abstract final class AppStrings {
   // 프로필 이미지 게시물
   static const profileEmptyPostImages = '아직 이미지 게시물이 없습니다';
 
+  // 팔로잉/팔로워 목록
+  static const followListEmptyFollowing = '팔로잉한 유저가 없습니다';
+  static const followListEmptyFollowers = '팔로워가 없습니다';
+
   // Placeholder
   static const placeholderFriends = '친구 기능 준비 중';
   static const placeholderNotifications = '알림 기능 준비 중';

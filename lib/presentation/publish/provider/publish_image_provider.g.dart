@@ -24,7 +24,7 @@ final publishImageNotifierProvider =
 
 typedef _$PublishImageNotifier = AutoDisposeNotifier<PublishState>;
 String _$postImageListNotifierHash() =>
-    r'5377d4d2bb0f347563aa0d62d489572289067462';
+    r'6b81f437fab457f8b671f153031c6c7c89545f0e';
 
 /// See also [PostImageListNotifier].
 @ProviderFor(PostImageListNotifier)

@@ -6,7 +6,6 @@ import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
-import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_state.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/video_player_manager.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/top_tab_bar.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/widget/video_card.dart';
@@ -21,7 +20,6 @@ class FeedPage extends ConsumerStatefulWidget {
 class _FeedPageState extends ConsumerState<FeedPage> {
   bool _initialized = false;
   PageController? _pageController;
-  FeedTab? _currentTab;
 
   /// 무한 루프를 위한 큰 가상 페이지 수
   static const _virtualPageCount = 100000;
@@ -43,12 +41,12 @@ class _FeedPageState extends ConsumerState<FeedPage> {
   void _tryInitialize() {
     if (_initialized) return;
     final feedState = ref.read(feedNotifierProvider).valueOrNull;
-    if (feedState != null && feedState.displayVideos.isNotEmpty) {
+    if (feedState != null && feedState.videos.isNotEmpty) {
       _initialized = true;
       final startIndex = feedState.currentIndex;
       ref
           .read(videoPlayerManagerProvider.notifier)
-          .initializeForIndex(startIndex, feedState.displayVideos);
+          .initializeForIndex(startIndex, feedState.videos);
     }
   }
 
@@ -58,15 +56,12 @@ class _FeedPageState extends ConsumerState<FeedPage> {
   }
 
   PageController _getPageController(
-    int videoCount,
-    FeedTab tab, {
+    int videoCount, {
     int initialIndex = 0,
   }) {
-    if (_pageController == null || _currentTab != tab) {
-      _pageController?.dispose();
+    if (_pageController == null) {
       final midStart = _midStartForCount(videoCount) + initialIndex;
       _pageController = PageController(initialPage: midStart);
-      _currentTab = tab;
     }
     return _pageController!;
   }
@@ -96,8 +91,8 @@ class _FeedPageState extends ConsumerState<FeedPage> {
       final nextState = next.valueOrNull;
       if (prevState == null || nextState == null) return;
 
-      final prevCount = prevState.displayVideos.length;
-      final nextCount = nextState.displayVideos.length;
+      final prevCount = prevState.videos.length;
+      final nextCount = nextState.videos.length;
       final nextIndex = nextState.currentIndex;
 
       // 영상 삭제 등으로 목록 크기가 변경된 경우 PageController 재생성
@@ -105,7 +100,6 @@ class _FeedPageState extends ConsumerState<FeedPage> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _pageController?.dispose();
           _pageController = null;
-          _currentTab = null;
           if (mounted) setState(() {});
         });
         return;
@@ -142,38 +136,18 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                   .read(videoPlayerManagerProvider.notifier)
                   .initializeForIndex(
                     feedState.currentIndex,
-                    feedState.displayVideos,
+                    feedState.videos,
                   );
             });
           }
 
-          final displayVideos = feedState.displayVideos;
-
-          // 팔로잉 탭에서 팔로잉한 유저가 없는 경우
-          if (displayVideos.isEmpty) {
-            return const Stack(
-              children: [
-                Center(
-                  child: Text(
-                    AppStrings.feedFollowingEmpty,
-                    style: TextStyle(
-                      color: AppColors.whiteSecondary,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Positioned(top: 0, left: 0, right: 0, child: TopTabBar()),
-              ],
-            );
-          }
+          final displayVideos = feedState.videos;
 
           return Stack(
             children: [
               PageView.builder(
                 controller: _getPageController(
                   displayVideos.length,
-                  feedState.selectedTab,
                   initialIndex: feedState.currentIndex,
                 ),
                 scrollDirection: Axis.vertical,

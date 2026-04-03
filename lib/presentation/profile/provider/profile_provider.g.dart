@@ -198,7 +198,7 @@ final bookmarkedVideosProvider = AutoDisposeProvider<List<Video>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef BookmarkedVideosRef = AutoDisposeProviderRef<List<Video>>;
-String _$myVideosHash() => r'b2a003808c104fca8f64860a30edc2c4c40a80f2';
+String _$myVideosHash() => r'318566adb554af24fb7e4af0d70fe3c4a2daff35';
 
 /// See also [myVideos].
 @ProviderFor(myVideos)
@@ -215,7 +215,7 @@ final myVideosProvider = AutoDisposeProvider<List<Video>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef MyVideosRef = AutoDisposeProviderRef<List<Video>>;
-String _$myPostImagesHash() => r'587b39e284cc6196abb8539599de5e3a2fad91a2';
+String _$myPostImagesHash() => r'1db760aaaed0d2131c960bad1fecc1a83cc06a05';
 
 /// See also [myPostImages].
 @ProviderFor(myPostImages)
@@ -233,7 +233,7 @@ final myPostImagesProvider = AutoDisposeProvider<List<PostImage>>.internal(
 // ignore: unused_element
 typedef MyPostImagesRef = AutoDisposeProviderRef<List<PostImage>>;
 String _$profileImageNotifierHash() =>
-    r'19c158302aac4a72a932c407861df905c777aaf5';
+    r'd50ad0627b7f5fb48470448fb0d37aaea959ec1d';
 
 /// See also [ProfileImageNotifier].
 @ProviderFor(ProfileImageNotifier)

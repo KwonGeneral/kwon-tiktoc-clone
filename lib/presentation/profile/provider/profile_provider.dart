@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
@@ -54,9 +53,10 @@ class ProfileImageNotifier extends _$ProfileImageNotifier {
     try {
       final repository = ref.read(userRepositoryProvider);
       final storage = ref.read(localStorageRepositoryProvider);
+      final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
       final url = await repository.uploadProfileImage(
         imagePath: imagePath,
-        userId: AppStrings.commentCurrentUserId,
+        userId: deviceId,
       );
       await storage.saveProfileImageUrl(url);
       state = AsyncData(url);
@@ -87,10 +87,11 @@ List<Video> bookmarkedVideos(Ref ref) {
 
 @riverpod
 List<Video> myVideos(Ref ref) {
+  final deviceId = ref.watch(deviceIdServiceProvider).getDeviceId();
   final feedAsync = ref.watch(feedNotifierProvider);
   return feedAsync.maybeWhen(
     data: (state) => state.videos
-        .where((v) => v.userId == AppStrings.commentCurrentUserId)
+        .where((v) => v.userId == deviceId)
         .toList(),
     orElse: () => [],
   );
@@ -98,10 +99,11 @@ List<Video> myVideos(Ref ref) {
 
 @riverpod
 List<PostImage> myPostImages(Ref ref) {
+  final deviceId = ref.watch(deviceIdServiceProvider).getDeviceId();
   final imagesAsync = ref.watch(postImageListNotifierProvider);
   return imagesAsync.maybeWhen(
     data: (images) => images
-        .where((img) => img.userId == AppStrings.commentCurrentUserId)
+        .where((img) => img.userId == deviceId)
         .toList(),
     orElse: () => [],
   );

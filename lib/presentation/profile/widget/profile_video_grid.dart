@@ -6,10 +6,16 @@ import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 
 class ProfileVideoGrid extends StatelessWidget {
-  const ProfileVideoGrid({required this.videos, this.onVideoTap, super.key});
+  const ProfileVideoGrid({
+    required this.videos,
+    this.onVideoTap,
+    this.onVideoLongPress,
+    super.key,
+  });
 
   final List<Video> videos;
   final void Function(Video video)? onVideoTap;
+  final void Function(Video video)? onVideoLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +34,7 @@ class ProfileVideoGrid extends StatelessWidget {
         final video = videos[index];
         return GestureDetector(
           onTap: () => onVideoTap?.call(video),
+          onLongPress: () => onVideoLongPress?.call(video),
           child: _VideoThumbnail(key: ValueKey(video.id), video: video),
         );
       },

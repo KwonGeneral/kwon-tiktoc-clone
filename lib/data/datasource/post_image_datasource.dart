@@ -5,7 +5,9 @@ abstract interface class PostImageDataSource {
   Future<PostImageModel> uploadPostImage({
     required String filePath,
     required String caption,
+    String? userId,
     String? avatarUrl,
     void Function(double progress)? onProgress,
   });
+  Future<void> deletePostImage({required String imageId, required String userId});
 }

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:video_compress/video_compress.dart';
 
-import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'publish_state.dart';
 
@@ -38,17 +37,18 @@ class PublishNotifier extends _$PublishNotifier {
       final storage = ref.read(localStorageRepositoryProvider);
       final profileImageUrl = storage.getProfileImageUrl();
       final profileNickname = storage.getProfileNickname();
+      final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
 
       final repository = ref.read(videoRepositoryProvider);
       final uploadedVideo = await repository.uploadVideo(
         filePath: compressedPath,
         description: description,
         title: description,
-        userId: AppStrings.commentCurrentUserId,
-        username: AppStrings.uploadedUsername,
+        userId: deviceId,
+        username: deviceId,
         nickname: profileNickname.isNotEmpty
             ? profileNickname
-            : AppStrings.uploadedNickname,
+            : deviceId.substring(0, 8),
         avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
         onProgress: (progress) {
           state = state.copyWith(progress: progress);

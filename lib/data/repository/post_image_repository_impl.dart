@@ -17,15 +17,25 @@ class PostImageRepositoryImpl implements PostImageRepository {
   Future<PostImage> uploadPostImage({
     required String filePath,
     required String caption,
+    String? userId,
     String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
     final model = await _dataSource.uploadPostImage(
       filePath: filePath,
       caption: caption,
+      userId: userId,
       avatarUrl: avatarUrl,
       onProgress: onProgress,
     );
     return model.toEntity();
+  }
+
+  @override
+  Future<void> deletePostImage({
+    required String imageId,
+    required String userId,
+  }) async {
+    await _dataSource.deletePostImage(imageId: imageId, userId: userId);
   }
 }

@@ -198,4 +198,12 @@ class MockVideoDataSource implements VideoDataSource {
       createdAt: DateTime.now(),
     );
   }
+
+  @override
+  Future<void> deleteVideo({
+    required String videoId,
+    required String userId,
+  }) async {
+    _videos.removeWhere((v) => v.id == videoId);
+  }
 }

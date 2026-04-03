@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:kwon_tiktoc_clone/core/services/device_id_service.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/post_image_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/post_image_remote_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/video_datasource.dart';
@@ -19,6 +20,12 @@ import 'package:kwon_tiktoc_clone/domain/usecase/toggle_bookmark.dart';
 import 'package:kwon_tiktoc_clone/domain/usecase/toggle_like.dart';
 
 part 'providers.g.dart';
+
+// Device ID
+@Riverpod(keepAlive: true)
+DeviceIdService deviceIdService(Ref ref) {
+  throw UnimplementedError('deviceIdService must be overridden');
+}
 
 // Local Storage
 @Riverpod(keepAlive: true)
@@ -40,7 +47,8 @@ VideoRepository videoRepository(Ref ref) {
 
 @Riverpod(keepAlive: true)
 UserRepository userRepository(Ref ref) {
-  return UserRepositoryImpl();
+  final deviceId = ref.watch(deviceIdServiceProvider).getDeviceId();
+  return UserRepositoryImpl(deviceId: deviceId);
 }
 
 @Riverpod(keepAlive: true)

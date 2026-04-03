@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/data/datasource/post_image_datasource.dart';
 import 'package:kwon_tiktoc_clone/data/model/post_image_model.dart';
 
@@ -60,6 +59,7 @@ class PostImageRemoteDataSource implements PostImageDataSource {
   Future<PostImageModel> uploadPostImage({
     required String filePath,
     required String caption,
+    String? userId,
     String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
@@ -72,7 +72,7 @@ class PostImageRemoteDataSource implements PostImageDataSource {
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['caption'] = caption;
-    request.fields['userId'] = AppStrings.commentCurrentUserId;
+    request.fields['userId'] = userId ?? '';
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       request.fields['avatarUrl'] = avatarUrl;
     }
@@ -100,7 +100,7 @@ class PostImageRemoteDataSource implements PostImageDataSource {
       thumbUrl: json['thumbUrl'] as String? ?? '',
       fullUrl: json['fullUrl'] as String? ?? '',
       caption: metadata['caption'] as String? ?? caption,
-      userId: metadata['userId'] as String? ?? AppStrings.commentCurrentUserId,
+      userId: metadata['userId'] as String? ?? '',
       username: metadata['username'] as String? ?? '',
       nickname: metadata['nickname'] as String? ?? '',
       avatarUrl: metadata['avatarUrl'] as String? ?? '',
@@ -110,5 +110,26 @@ class PostImageRemoteDataSource implements PostImageDataSource {
     _cachedImages = null;
 
     return uploaded;
+  }
+
+  @override
+  Future<void> deletePostImage({
+    required String imageId,
+    required String userId,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/videos/images/$imageId').replace(
+      queryParameters: {'userId': userId},
+    );
+
+    final response = await _client.delete(uri);
+
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('이미지 삭제 실패: ${response.statusCode}');
+    }
+
+    // 캐시에서도 제거
+    _cachedImages?.removeWhere((img) => img.id == imageId);
+
+    debugPrint('이미지 삭제 완료: $imageId');
   }
 }

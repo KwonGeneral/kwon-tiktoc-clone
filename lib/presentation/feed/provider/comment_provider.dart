@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/comment.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/local_storage_repository.dart';
@@ -99,11 +98,13 @@ class CommentNotifier extends _$CommentNotifier {
     final now = DateTime.now();
     final replyingTo = state.replyingToCommentId;
 
+    final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
+
     final comment = Comment(
       id: 'user_comment_${now.millisecondsSinceEpoch}',
       videoId: videoId,
-      userId: AppStrings.commentCurrentUserId,
-      userName: AppStrings.commentCurrentUserName,
+      userId: deviceId,
+      userName: '나',
       text: text.trim(),
       likeCount: 0,
       createdAt: now,

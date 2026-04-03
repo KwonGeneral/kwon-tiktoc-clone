@@ -28,11 +28,13 @@ class PublishImageNotifier extends _$PublishImageNotifier {
 
       final storage = ref.read(localStorageRepositoryProvider);
       final profileImageUrl = storage.getProfileImageUrl();
+      final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
 
       final repository = ref.read(postImageRepositoryProvider);
       await repository.uploadPostImage(
         filePath: imageFilePath,
         caption: caption,
+        userId: deviceId,
         avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
         onProgress: (progress) {
           state = state.copyWith(progress: progress);
@@ -67,5 +69,23 @@ class PostImageListNotifier extends _$PostImageListNotifier {
       final repository = ref.read(postImageRepositoryProvider);
       return repository.getPostImages();
     });
+  }
+
+  Future<void> deleteImage(String imageId) async {
+    final currentImages = state.valueOrNull;
+    if (currentImages == null) return;
+
+    final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
+    final repository = ref.read(postImageRepositoryProvider);
+
+    // Optimistic: 즉시 UI에서 제거
+    state = AsyncData(currentImages.where((img) => img.id != imageId).toList());
+
+    try {
+      await repository.deletePostImage(imageId: imageId, userId: deviceId);
+    } catch (_) {
+      // 실패 시 롤백
+      state = AsyncData(currentImages);
+    }
   }
 }

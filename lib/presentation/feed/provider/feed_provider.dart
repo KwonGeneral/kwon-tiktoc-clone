@@ -221,14 +221,15 @@ class FeedNotifier extends _$FeedNotifier {
     if (currentState == null) return;
 
     final now = DateTime.now();
+    final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
     final newVideo = Video(
       id: 'uploaded_${now.millisecondsSinceEpoch}',
-      userId: AppStrings.commentCurrentUserId,
+      userId: deviceId,
       videoUrl: videoUrl,
       description: description,
       musicName: AppStrings.uploadedMusicName,
-      username: AppStrings.uploadedUsername,
-      nickname: AppStrings.uploadedNickname,
+      username: deviceId,
+      nickname: deviceId.substring(0, 8),
       createdAt: now,
     );
 
@@ -252,5 +253,24 @@ class FeedNotifier extends _$FeedNotifier {
       return video.copyWith(commentCount: video.commentCount + 1);
     }).toList();
     state = AsyncData(currentState.copyWith(videos: updatedVideos));
+  }
+
+  Future<void> deleteVideo(String videoId) async {
+    final currentState = state.valueOrNull;
+    if (currentState == null) return;
+
+    final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
+    final repository = ref.read(videoRepositoryProvider);
+
+    // Optimistic: 즉시 UI에서 제거
+    final updatedVideos = currentState.videos.where((v) => v.id != videoId).toList();
+    state = AsyncData(currentState.copyWith(videos: updatedVideos));
+
+    try {
+      await repository.deleteVideo(videoId: videoId, userId: deviceId);
+    } catch (_) {
+      // 실패 시 롤백
+      state = AsyncData(currentState);
+    }
   }
 }

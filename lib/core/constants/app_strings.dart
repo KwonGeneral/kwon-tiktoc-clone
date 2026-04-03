@@ -35,7 +35,6 @@ abstract final class AppStrings {
   static const commentTitleWithCount = '댓글 {count}개';
   static const commentInputHint = '따뜻한 말 한마디 해주세요...';
   static const commentEmpty = '아직 댓글이 없습니다.\n첫 댓글을 남겨보세요!';
-  static const commentCurrentUserId = 'current_user';
   static const commentCurrentUserName = '나';
   static const commentReply = '답글';
   static const commentShowReplies = '답글 {count}개 더보기';
@@ -151,8 +150,6 @@ abstract final class AppStrings {
 
   // 업로드 영상
   static const uploadedMusicName = 'Original Sound';
-  static const uploadedUsername = 'me';
-  static const uploadedNickname = '나';
 
   // 카메라 모드
   static const cameraPhotoMode = '사진';

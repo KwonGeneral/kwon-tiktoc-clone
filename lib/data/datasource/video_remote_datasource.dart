@@ -15,7 +15,6 @@ class VideoRemoteDataSource implements VideoDataSource {
   final http.Client _client;
 
   static const _baseUrl = 'https://api.myfortie.com';
-  static const _currentUserId = 'current_user';
 
   List<VideoModel>? _cachedVideos;
 
@@ -245,7 +244,7 @@ class VideoRemoteDataSource implements VideoDataSource {
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['description'] = description;
-    request.fields['userId'] = userId ?? _currentUserId;
+    request.fields['userId'] = userId ?? '';
     if (title != null && title.isNotEmpty) {
       request.fields['title'] = title;
     }
@@ -307,5 +306,29 @@ class VideoRemoteDataSource implements VideoDataSource {
     _cachedVideos = null;
 
     return uploadedVideo;
+  }
+
+  @override
+  Future<void> deleteVideo({
+    required String videoId,
+    required String userId,
+  }) async {
+    // videoId 형식: "video_19" → 서버에는 숫자 id만 전달
+    final serverId = videoId.replaceFirst('video_', '');
+
+    final uri = Uri.parse('$_baseUrl/videos/$serverId').replace(
+      queryParameters: {'userId': userId},
+    );
+
+    final response = await _client.delete(uri);
+
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('영상 삭제 실패: ${response.statusCode}');
+    }
+
+    // 캐시에서도 제거
+    _cachedVideos?.removeWhere((v) => v.id == videoId);
+
+    debugPrint('영상 삭제 완료: $videoId');
   }
 }

@@ -59,4 +59,12 @@ class VideoRepositoryImpl implements VideoRepository {
     );
     return model.toEntity();
   }
+
+  @override
+  Future<void> deleteVideo({
+    required String videoId,
+    required String userId,
+  }) async {
+    await _dataSource.deleteVideo(videoId: videoId, userId: userId);
+  }
 }

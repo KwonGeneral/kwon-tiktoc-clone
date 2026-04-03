@@ -5,10 +5,16 @@ import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 
 class ProfileImageGrid extends StatelessWidget {
-  const ProfileImageGrid({required this.images, this.onImageTap, super.key});
+  const ProfileImageGrid({
+    required this.images,
+    this.onImageTap,
+    this.onImageLongPress,
+    super.key,
+  });
 
   final List<PostImage> images;
   final void Function(PostImage image)? onImageTap;
+  final void Function(PostImage image)? onImageLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,7 @@ class ProfileImageGrid extends StatelessWidget {
         final image = images[index];
         return GestureDetector(
           onTap: () => onImageTap?.call(image),
+          onLongPress: () => onImageLongPress?.call(image),
           child: _ImageThumbnail(image: image),
         );
       },

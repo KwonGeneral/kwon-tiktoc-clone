@@ -18,4 +18,5 @@ abstract interface class VideoDataSource {
     String? avatarUrl,
     void Function(double progress)? onProgress,
   });
+  Future<void> deleteVideo({required String videoId, required String userId});
 }

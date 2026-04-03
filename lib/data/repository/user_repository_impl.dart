@@ -8,16 +8,18 @@ import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
 import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  UserRepositoryImpl({http.Client? client}) : _client = client ?? http.Client();
+  UserRepositoryImpl({required String deviceId, http.Client? client})
+      : _deviceId = deviceId,
+        _client = client ?? http.Client();
 
   final http.Client _client;
+  final String _deviceId;
 
   static const _baseUrl = 'https://api.myfortie.com';
-  static const _currentUserId = 'current_user';
 
-  static final _mockUsers = <String, UserModel>{
-    _currentUserId: const UserModel(
-      id: _currentUserId,
+  late final _mockUsers = <String, UserModel>{
+    _deviceId: UserModel(
+      id: _deviceId,
       nickname: '나의계정',
       isVerified: false,
       followingCount: 128,
@@ -140,14 +142,14 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<User> getCurrentUser() async {
-    return getUserById(_currentUserId);
+    return getUserById(_deviceId);
   }
 
   @override
   Future<List<User>> getRecommendedUsers() async {
     await Future<void>.delayed(const Duration(milliseconds: 100));
     return _mockUsers.entries
-        .where((e) => e.key != _currentUserId)
+        .where((e) => e.key != _deviceId)
         .map((e) => e.value.toEntity())
         .toList();
   }

@@ -6,6 +6,23 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$deviceIdServiceHash() => r'e553b1632680c4e7d9c56ebccdac52c28efdc36a';
+
+/// See also [deviceIdService].
+@ProviderFor(deviceIdService)
+final deviceIdServiceProvider = Provider<DeviceIdService>.internal(
+  deviceIdService,
+  name: r'deviceIdServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deviceIdServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DeviceIdServiceRef = ProviderRef<DeviceIdService>;
 String _$localStorageRepositoryHash() =>
     r'5ac7f46cbf698bf5360cce78593849b8c55bfbd1';
 
@@ -59,7 +76,7 @@ final videoRepositoryProvider = Provider<VideoRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef VideoRepositoryRef = ProviderRef<VideoRepository>;
-String _$userRepositoryHash() => r'f85bcb6cd5eadec39ff05f02dcffe78a37ff8eba';
+String _$userRepositoryHash() => r'b988a67eba7d828ffcc27a3e100e738a91863056';
 
 /// See also [userRepository].
 @ProviderFor(userRepository)

@@ -446,6 +446,31 @@ API V4에서 게시물 이미지 업로드/조회 API 추가됨. 서버에서 We
 
 ---
 
+## Feature 25: 디바이스 UUID + 영상/이미지 삭제 ✅ (완료)
+
+### 배경
+현재 하드코딩된 userId 대신, 앱 설치 시 UUID를 생성하여 고유 사용자 식별.
+이 UUID로 영상/이미지 업로드 및 삭제 수행.
+
+### API 정의서
+- DELETE /videos/:id?userId={uuid}
+- DELETE /videos/images/:id?userId={uuid}
+
+### 작업 내용
+- [x] 앱 최초 실행 시 UUID v4 생성 → SharedPreferences에 저장 (앱 삭제 전까지 유지)
+- [x] 기존 하드코딩된 userId를 디바이스 UUID로 교체 (영상 업로드, 이미지 업로드, 프로필 등)
+- [x] 영상 삭제: 프로필 "내 영상" 탭에서 길게 누르기 → 삭제 확인 → DELETE /videos/:id 호출
+- [x] 이미지 삭제: 프로필에서 이미지 길게 누르기 → 삭제 확인 → DELETE /videos/images/:id 호출
+- [x] 삭제 후 목록 갱신
+- [x] 서버 테스트 영상(id 13~18, 메타데이터 없는 것들) 삭제
+
+### 완료 기준
+- 모든 업로드/삭제에 디바이스 UUID 사용
+- 본인 영상/이미지만 삭제 가능
+- 삭제 후 UI 즉시 갱신
+
+---
+
 ## Phase 22: 마무리 & 제출
 
 ### 작업 내용

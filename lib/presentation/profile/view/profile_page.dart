@@ -10,6 +10,7 @@ import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/provider/profile_provider.dart';
+import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_image_provider.dart' show postImageListNotifierProvider;
 import 'package:kwon_tiktoc_clone/presentation/profile/widget/profile_header.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/widget/profile_image_grid.dart';
 import 'package:kwon_tiktoc_clone/presentation/profile/widget/profile_stats.dart';
@@ -185,12 +186,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             key: const ValueKey('my_videos'),
             videos: videos,
             onVideoTap: _navigateToVideo,
+            onVideoLongPress: _showDeleteVideoDialog,
           ),
         if (images.isNotEmpty)
           ProfileImageGrid(
             key: const ValueKey('my_images'),
             images: images,
             onImageTap: _navigateToImageDetail,
+            onImageLongPress: _showDeleteImageDialog,
           ),
       ],
     );
@@ -239,6 +242,62 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   void _navigateToImageDetail(PostImage image) {
     context.push(RoutePaths.imageDetailPath(image.id), extra: image);
+  }
+
+  void _showDeleteVideoDialog(Video video) {
+    showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.darkGray,
+        title: const Text('영상 삭제', style: TextStyle(color: AppColors.white)),
+        content: const Text(
+          '이 영상을 삭제하시겠습니까?\n삭제하면 복구할 수 없습니다.',
+          style: TextStyle(color: AppColors.whiteSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('취소', style: TextStyle(color: AppColors.whiteSecondary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('삭제', style: TextStyle(color: AppColors.primary)),
+          ),
+        ],
+      ),
+    ).then((confirmed) {
+      if (confirmed == true) {
+        ref.read(feedNotifierProvider.notifier).deleteVideo(video.id);
+      }
+    });
+  }
+
+  void _showDeleteImageDialog(PostImage image) {
+    showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.darkGray,
+        title: const Text('이미지 삭제', style: TextStyle(color: AppColors.white)),
+        content: const Text(
+          '이 이미지를 삭제하시겠습니까?\n삭제하면 복구할 수 없습니다.',
+          style: TextStyle(color: AppColors.whiteSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('취소', style: TextStyle(color: AppColors.whiteSecondary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('삭제', style: TextStyle(color: AppColors.primary)),
+          ),
+        ],
+      ),
+    ).then((confirmed) {
+      if (confirmed == true) {
+        ref.read(postImageListNotifierProvider.notifier).deleteImage(image.id);
+      }
+    });
   }
 
   Widget _buildEmptyState({

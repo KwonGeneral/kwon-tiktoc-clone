@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_image_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_state.dart';
@@ -124,9 +125,9 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             elevation: 0,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: AppColors.black),
@@ -136,7 +137,7 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
               AppStrings.publishTitle,
               style: TextStyle(
                 color: AppColors.black,
-                fontSize: 17,
+                fontSize: AppFontSizes.title,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -161,13 +162,13 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
                           decoration: const InputDecoration(
                             hintText: AppStrings.publishCaptionHint,
                             hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15,
+                              color: AppColors.grey,
+                              fontSize: AppFontSizes.bodyLg,
                             ),
                             border: InputBorder.none,
                           ),
                           style: const TextStyle(
-                            fontSize: 15,
+                            fontSize: AppFontSizes.bodyLg,
                             color: AppColors.black,
                           ),
                         ),
@@ -178,7 +179,7 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
                         width: 90,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF0F0F0),
+                          color: AppColors.lightGray,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         clipBehavior: Clip.hardEdge,
@@ -188,7 +189,7 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
                           errorBuilder: (_, _, _) => const Center(
                             child: Icon(
                               Icons.image,
-                              color: Colors.grey,
+                              color: AppColors.grey,
                               size: 32,
                             ),
                           ),
@@ -211,7 +212,7 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  const Divider(height: 1, color: Color(0xFFEEEEEE)),
+                  const Divider(height: 1, color: AppColors.lightGrayBorder),
                   const SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
@@ -221,11 +222,13 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
                       label: const Text(AppStrings.publishButton),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        disabledBackgroundColor:
-                            AppColors.primary.withValues(alpha: 0.5),
-                        disabledForegroundColor:
-                            Colors.white.withValues(alpha: 0.5),
+                        foregroundColor: AppColors.white,
+                        disabledBackgroundColor: AppColors.primary.withValues(
+                          alpha: 0.5,
+                        ),
+                        disabledForegroundColor: AppColors.white.withValues(
+                          alpha: 0.5,
+                        ),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4),
@@ -259,13 +262,13 @@ class _TagButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFFF5F5F5),
+          color: AppColors.lightGrayBackground,
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
           label,
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: AppFontSizes.bodyMd,
             color: AppColors.black,
             fontWeight: FontWeight.w500,
           ),

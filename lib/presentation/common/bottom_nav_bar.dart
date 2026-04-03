@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -89,7 +90,7 @@ class _NavItem extends StatelessWidget {
               label,
               style: TextStyle(
                 color: color,
-                fontSize: 10,
+                fontSize: AppFontSizes.xs,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
             ),

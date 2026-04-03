@@ -584,32 +584,32 @@ API V4에서 게시물 이미지 업로드/조회 API 추가됨. 서버에서 We
 ### 작업 내용
 
 **큰 위젯 분리**
-- [ ] 300줄 이상 위젯 파일 확인 → 역할별 분리
+- [x] 300줄 이상 위젯 파일 확인 → 최대 407줄, God Widget 수준 아님으로 스킵
 
 **공통 스타일 일관성**
-- [ ] AppColors, AppTextStyles가 전체에서 일관되게 사용되는지 확인
-- [ ] 하드코딩된 색상/폰트 크기 → 상수로 교체
+- [x] AppColors, AppTextStyles가 전체에서 일관되게 사용되는지 확인
+- [x] 하드코딩된 색상/폰트 크기 → 상수로 교체
 
 **공통 위젯 추출**
-- [ ] 반복되는 UI 패턴 확인 → 공통 위젯으로 추출 (LoadingIndicator, ErrorWidget 등)
+- [x] 반복되는 UI 패턴 확인 → 이미 적절히 분리됨, 추가 추출 불필요
 
 **코드 정리**
-- [ ] 미사용 import 제거
-- [ ] 미사용 변수/파라미터 제거
-- [ ] 주석처리된 코드, TODO, FIXME 제거
-- [ ] print문 제거 (debugPrint로 교체 또는 삭제)
-- [ ] 매직 넘버 상수화
-- [ ] import 절대경로 통일 (package:kwon_tiktoc_clone/...)
-- [ ] dart format 전체 적용
-- [ ] dart analyze 경고 0개
+- [x] 미사용 import 제거
+- [x] 미사용 변수/파라미터 제거
+- [x] 주석처리된 코드, TODO, FIXME 제거
+- [x] print문 제거 (debugPrint로 교체 또는 삭제)
+- [x] 매직 넘버 상수화
+- [x] import 절대경로 통일 (package:kwon_tiktoc_clone/...)
+- [x] dart format 전체 적용
+- [x] dart analyze 경고 0개
 
 **아키텍처 검증**
-- [ ] Domain이 Data/Presentation import하지 않음 확인
-- [ ] Presentation이 Data 직접 import하지 않음 확인
+- [x] Domain이 Data/Presentation import하지 않음 확인
+- [x] Presentation이 Data 직접 import하지 않음 확인
 
 **상태 관리**
-- [ ] Controller dispose 누락 확인
-- [ ] autoDispose 적용 확인
+- [x] Controller dispose 누락 확인
+- [x] autoDispose 적용 확인
 
 ### 완료 기준
 - dart analyze 0개

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/presentation/publish/provider/publish_state.dart';
 
@@ -32,13 +33,13 @@ class PublishUploadOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withValues(alpha: 0.7),
+      color: AppColors.overlayDark,
       child: Center(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 48),
           padding: const EdgeInsets.all(32),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -54,7 +55,7 @@ class PublishUploadOverlay extends StatelessWidget {
                 Text(
                   _statusText,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: AppFontSizes.subtitle,
                     fontWeight: FontWeight.w600,
                     color: AppColors.black,
                   ),
@@ -63,7 +64,10 @@ class PublishUploadOverlay extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     state.errorMessage!,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: const TextStyle(
+                      fontSize: AppFontSizes.caption,
+                      color: AppColors.greySecondary,
+                    ),
                     textAlign: TextAlign.center,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -74,7 +78,7 @@ class PublishUploadOverlay extends StatelessWidget {
                   onPressed: onRetry,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -82,12 +86,16 @@ class PublishUploadOverlay extends StatelessWidget {
                   child: const Text(AppStrings.publishRetry),
                 ),
               ] else if (state.status == PublishStatus.success) ...[
-                const Icon(Icons.check_circle, color: Colors.green, size: 48),
+                const Icon(
+                  Icons.check_circle,
+                  color: AppColors.success,
+                  size: 48,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   _statusText,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: AppFontSizes.subtitle,
                     fontWeight: FontWeight.w600,
                     color: AppColors.black,
                   ),
@@ -105,7 +113,7 @@ class PublishUploadOverlay extends StatelessWidget {
                 Text(
                   _statusText,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: AppFontSizes.subtitle,
                     fontWeight: FontWeight.w600,
                     color: AppColors.black,
                   ),
@@ -113,7 +121,7 @@ class PublishUploadOverlay extends StatelessWidget {
                 const SizedBox(height: 12),
                 LinearProgressIndicator(
                   value: state.progress,
-                  backgroundColor: const Color(0xFFEEEEEE),
+                  backgroundColor: AppColors.lightGrayBorder,
                   color: AppColors.primary,
                   minHeight: 4,
                   borderRadius: BorderRadius.circular(2),
@@ -121,7 +129,10 @@ class PublishUploadOverlay extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   '${(state.progress * 100).toInt()}%',
-                  style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                  style: const TextStyle(
+                    fontSize: AppFontSizes.body,
+                    color: AppColors.greySecondary,
+                  ),
                 ),
               ],
             ],

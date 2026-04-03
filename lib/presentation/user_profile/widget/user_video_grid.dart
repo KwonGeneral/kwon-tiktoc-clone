@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
 import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
@@ -67,7 +68,9 @@ class _VideoThumbnail extends StatelessWidget {
                 const SizedBox(width: 2),
                 Text(
                   FormatUtils.compactNumber(video.likeCount),
-                  style: AppTextStyles.count.copyWith(fontSize: 11),
+                  style: AppTextStyles.count.copyWith(
+                    fontSize: AppFontSizes.sm,
+                  ),
                 ),
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/notification.dart' as domain;
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
@@ -29,19 +30,18 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   List<domain.Notification> _applyFilter(List<domain.Notification> all) {
     return switch (_filter) {
       _NotificationFilter.all => all,
-      _NotificationFilter.followers => all
-          .where((n) => n.type == domain.NotificationType.follow)
-          .toList(),
-      _NotificationFilter.activity => all
-          .where(
-            (n) =>
-                n.type == domain.NotificationType.like ||
-                n.type == domain.NotificationType.comment,
-          )
-          .toList(),
-      _NotificationFilter.system => all
-          .where((n) => n.type == domain.NotificationType.system)
-          .toList(),
+      _NotificationFilter.followers =>
+        all.where((n) => n.type == domain.NotificationType.follow).toList(),
+      _NotificationFilter.activity =>
+        all
+            .where(
+              (n) =>
+                  n.type == domain.NotificationType.like ||
+                  n.type == domain.NotificationType.comment,
+            )
+            .toList(),
+      _NotificationFilter.system =>
+        all.where((n) => n.type == domain.NotificationType.system).toList(),
     };
   }
 
@@ -66,7 +66,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
           AppStrings.notificationsTitle,
           style: TextStyle(
             color: AppColors.white,
-            fontSize: 18,
+            fontSize: AppFontSizes.titleLg,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -93,8 +93,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
               const Divider(color: AppColors.divider, height: 1),
 
               // 필터 활성화 시 헤더 표시
-              if (_filter != _NotificationFilter.all)
-                _buildFilterHeader(),
+              if (_filter != _NotificationFilter.all) _buildFilterHeader(),
 
               // 필터 미적용 시 추천 계정 표시
               if (_filter == _NotificationFilter.all) ...[
@@ -134,7 +133,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                       AppStrings.notificationsFilterEmpty,
                       style: TextStyle(
                         color: AppColors.whiteDisabled,
-                        fontSize: 14,
+                        fontSize: AppFontSizes.bodyMd,
                       ),
                     ),
                   ),
@@ -228,7 +227,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             label,
             style: const TextStyle(
               color: AppColors.white,
-              fontSize: 16,
+              fontSize: AppFontSizes.subtitle,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -237,7 +236,10 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             onTap: () => setState(() => _filter = _NotificationFilter.all),
             child: const Text(
               AppStrings.notificationsShowAll,
-              style: TextStyle(color: AppColors.whiteSecondary, fontSize: 13),
+              style: TextStyle(
+                color: AppColors.whiteSecondary,
+                fontSize: AppFontSizes.body,
+              ),
             ),
           ),
         ],
@@ -254,7 +256,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             AppStrings.notificationsRecommendedAccounts,
             style: TextStyle(
               color: AppColors.white,
-              fontSize: 16,
+              fontSize: AppFontSizes.subtitle,
               fontWeight: FontWeight.bold,
             ),
           ),

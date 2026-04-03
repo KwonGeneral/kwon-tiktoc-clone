@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
@@ -43,7 +44,7 @@ class RecommendedAccountTile extends StatelessWidget {
                           : '?',
                       style: const TextStyle(
                         color: AppColors.white,
-                        fontSize: 18,
+                        fontSize: AppFontSizes.titleLg,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -63,7 +64,7 @@ class RecommendedAccountTile extends StatelessWidget {
                           user.nickname,
                           style: const TextStyle(
                             color: AppColors.white,
-                            fontSize: 15,
+                            fontSize: AppFontSizes.bodyLg,
                             fontWeight: FontWeight.w600,
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -84,7 +85,7 @@ class RecommendedAccountTile extends StatelessWidget {
                     '${AppStrings.friendsMutualFollow}${FormatUtils.compactNumber(user.followerCount)}',
                     style: const TextStyle(
                       color: AppColors.whiteSecondary,
-                      fontSize: 13,
+                      fontSize: AppFontSizes.body,
                     ),
                   ),
                 ],
@@ -119,7 +120,7 @@ class RecommendedAccountTile extends StatelessWidget {
                     color: isFollowed
                         ? AppColors.whiteSecondary
                         : AppColors.white,
-                    fontSize: 13,
+                    fontSize: AppFontSizes.body,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/comment.dart';
@@ -91,14 +92,17 @@ class CommentItem extends StatelessWidget {
                   comment.userName,
                   style: const TextStyle(
                     color: AppColors.whiteSecondary,
-                    fontSize: 12,
+                    fontSize: AppFontSizes.caption,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   comment.text,
-                  style: const TextStyle(color: AppColors.white, fontSize: 14),
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: AppFontSizes.bodyMd,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Row(
@@ -107,7 +111,7 @@ class CommentItem extends StatelessWidget {
                       FormatUtils.timeAgo(comment.createdAt),
                       style: const TextStyle(
                         color: AppColors.whiteSecondary,
-                        fontSize: 12,
+                        fontSize: AppFontSizes.caption,
                       ),
                     ),
                     if (!isReply) ...[
@@ -118,7 +122,7 @@ class CommentItem extends StatelessWidget {
                           AppStrings.commentReply,
                           style: TextStyle(
                             color: AppColors.whiteSecondary,
-                            fontSize: 12,
+                            fontSize: AppFontSizes.caption,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -152,7 +156,7 @@ class CommentItem extends StatelessWidget {
                       _likeCountText(),
                       style: const TextStyle(
                         color: AppColors.whiteSecondary,
-                        fontSize: 11,
+                        fontSize: AppFontSizes.sm,
                       ),
                     ),
                   ],
@@ -179,7 +183,7 @@ class CommentItem extends StatelessWidget {
                       _dislikeCountText(),
                       style: const TextStyle(
                         color: AppColors.whiteSecondary,
-                        fontSize: 11,
+                        fontSize: AppFontSizes.sm,
                       ),
                     ),
                   ],
@@ -225,7 +229,7 @@ class CommentItem extends StatelessWidget {
                           ),
                     style: const TextStyle(
                       color: AppColors.whiteSecondary,
-                      fontSize: 12,
+                      fontSize: AppFontSizes.caption,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

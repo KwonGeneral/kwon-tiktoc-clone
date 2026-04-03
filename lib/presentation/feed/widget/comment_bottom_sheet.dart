@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
@@ -65,7 +66,7 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
                       AppStrings.commentEmpty,
                       style: TextStyle(
                         color: AppColors.whiteSecondary,
-                        fontSize: 14,
+                        fontSize: AppFontSizes.bodyMd,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -131,7 +132,7 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
                       ),
                       style: const TextStyle(
                         color: AppColors.whiteSecondary,
-                        fontSize: 12,
+                        fontSize: AppFontSizes.caption,
                       ),
                     ),
                   ),
@@ -168,7 +169,7 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
                     focusNode: _focusNode,
                     style: const TextStyle(
                       color: AppColors.white,
-                      fontSize: 14,
+                      fontSize: AppFontSizes.bodyMd,
                     ),
                     decoration: InputDecoration(
                       hintText: commentState.replyingToCommentId != null
@@ -176,7 +177,7 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
                           : AppStrings.commentInputHint,
                       hintStyle: const TextStyle(
                         color: AppColors.whiteDisabled,
-                        fontSize: 14,
+                        fontSize: AppFontSizes.bodyMd,
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -228,7 +229,7 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
                 titleText,
                 style: const TextStyle(
                   color: AppColors.white,
-                  fontSize: 14,
+                  fontSize: AppFontSizes.bodyMd,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -249,8 +250,7 @@ class _CommentInlineViewState extends ConsumerState<CommentInlineView> {
     return CircleAvatar(
       radius: 14,
       backgroundColor: AppColors.gray,
-      backgroundImage:
-          avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
+      backgroundImage: avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
       child: avatarUrl.isEmpty
           ? const Icon(Icons.person, color: AppColors.white, size: 16)
           : null,

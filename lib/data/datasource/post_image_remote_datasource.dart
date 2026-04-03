@@ -125,9 +125,9 @@ class PostImageRemoteDataSource implements PostImageDataSource {
     required String imageId,
     required String userId,
   }) async {
-    final uri = Uri.parse('$_baseUrl/videos/images/$imageId').replace(
-      queryParameters: {'userId': userId},
-    );
+    final uri = Uri.parse(
+      '$_baseUrl/videos/images/$imageId',
+    ).replace(queryParameters: {'userId': userId});
 
     final response = await _client.delete(uri);
 

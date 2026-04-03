@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:kwon_tiktoc_clone/app/route/route_paths.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/app/theme/app_text_styles.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
@@ -12,10 +13,7 @@ import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart'
 enum FollowListTab { following, followers }
 
 class FollowListPage extends ConsumerStatefulWidget {
-  const FollowListPage({
-    required this.initialTab,
-    super.key,
-  });
+  const FollowListPage({required this.initialTab, super.key});
 
   final FollowListTab initialTab;
 
@@ -75,10 +73,7 @@ class _FollowListPageState extends ConsumerState<FollowListPage>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
-          _FollowingList(),
-          _FollowerList(),
-        ],
+        children: [_FollowingList(), _FollowerList()],
       ),
     );
   }
@@ -100,7 +95,10 @@ class _FollowingList extends ConsumerWidget {
       return const Center(
         child: Text(
           AppStrings.followListEmptyFollowing,
-          style: TextStyle(color: AppColors.whiteSecondary, fontSize: 14),
+          style: TextStyle(
+            color: AppColors.whiteSecondary,
+            fontSize: AppFontSizes.bodyMd,
+          ),
         ),
       );
     }
@@ -129,9 +127,7 @@ class _FollowingList extends ConsumerWidget {
           user: user,
           isFollowing: true,
           onFollowTap: () {
-            ref
-                .read(feedNotifierProvider.notifier)
-                .toggleFollow(user.userId);
+            ref.read(feedNotifierProvider.notifier).toggleFollow(user.userId);
           },
           onTap: () {
             context.push(RoutePaths.userProfilePath(user.userId));
@@ -173,7 +169,10 @@ class _FollowerList extends ConsumerWidget {
       return const Center(
         child: Text(
           AppStrings.followListEmptyFollowers,
-          style: TextStyle(color: AppColors.whiteSecondary, fontSize: 14),
+          style: TextStyle(
+            color: AppColors.whiteSecondary,
+            fontSize: AppFontSizes.bodyMd,
+          ),
         ),
       );
     }
@@ -182,15 +181,12 @@ class _FollowerList extends ConsumerWidget {
       itemCount: users.length,
       itemBuilder: (context, index) {
         final user = users[index];
-        final isFollowing =
-            feedState.followedUserIds.contains(user.userId);
+        final isFollowing = feedState.followedUserIds.contains(user.userId);
         return _FollowUserTile(
           user: user,
           isFollowing: isFollowing,
           onFollowTap: () {
-            ref
-                .read(feedNotifierProvider.notifier)
-                .toggleFollow(user.userId);
+            ref.read(feedNotifierProvider.notifier).toggleFollow(user.userId);
           },
           onTap: () {
             context.push(RoutePaths.userProfilePath(user.userId));
@@ -241,14 +237,18 @@ class _FollowUserTile extends StatelessWidget {
             ? NetworkImage(user.avatarUrl)
             : null,
         child: user.avatarUrl.isEmpty
-            ? const Icon(Icons.person, color: AppColors.whiteSecondary, size: 22)
+            ? const Icon(
+                Icons.person,
+                color: AppColors.whiteSecondary,
+                size: 22,
+              )
             : null,
       ),
       title: Text(
         user.nickname,
         style: const TextStyle(
           color: AppColors.white,
-          fontSize: 15,
+          fontSize: AppFontSizes.bodyLg,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -256,7 +256,7 @@ class _FollowUserTile extends StatelessWidget {
         '@${user.username}',
         style: const TextStyle(
           color: AppColors.whiteSecondary,
-          fontSize: 13,
+          fontSize: AppFontSizes.body,
         ),
       ),
       trailing: GestureDetector(
@@ -273,7 +273,7 @@ class _FollowUserTile extends StatelessWidget {
                 : AppStrings.userProfileFollow,
             style: const TextStyle(
               color: AppColors.white,
-              fontSize: 13,
+              fontSize: AppFontSizes.body,
               fontWeight: FontWeight.w600,
             ),
           ),

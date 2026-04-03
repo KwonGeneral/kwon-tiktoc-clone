@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_compress/video_compress.dart';
 
+import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+
 class PublishCoverThumbnail extends StatefulWidget {
   const PublishCoverThumbnail({super.key, required this.videoFilePath});
 
@@ -42,14 +44,14 @@ class _PublishCoverThumbnailState extends State<PublishCoverThumbnail> {
       width: 90,
       height: 120,
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
+        color: AppColors.lightGray,
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.hardEdge,
       child: _thumbnail != null
           ? Image.file(_thumbnail!, fit: BoxFit.cover)
           : const Center(
-              child: Icon(Icons.videocam, color: Colors.grey, size: 32),
+              child: Icon(Icons.videocam, color: AppColors.grey, size: 32),
             ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_constants.dart';
 
 class RecordingTimerIndicator extends StatelessWidget {
@@ -21,7 +22,7 @@ class RecordingTimerIndicator extends StatelessWidget {
           '${seconds.toStringAsFixed(1)}s / ${maxSeconds.toInt()}s',
           style: const TextStyle(
             color: AppColors.white,
-            fontSize: 14,
+            fontSize: AppFontSizes.bodyMd,
             fontWeight: FontWeight.w600,
           ),
         ),

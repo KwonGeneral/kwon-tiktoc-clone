@@ -9,8 +9,8 @@ import 'package:kwon_tiktoc_clone/domain/repository/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl({required String deviceId, http.Client? client})
-      : _deviceId = deviceId,
-        _client = client ?? http.Client();
+    : _deviceId = deviceId,
+      _client = client ?? http.Client();
 
   final http.Client _client;
   final String _deviceId;

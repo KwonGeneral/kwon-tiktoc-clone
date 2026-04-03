@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 
 class NotificationCategoryTile extends StatelessWidget {
   const NotificationCategoryTile({
@@ -51,7 +52,7 @@ class NotificationCategoryTile extends StatelessWidget {
                     title,
                     style: const TextStyle(
                       color: AppColors.white,
-                      fontSize: 16,
+                      fontSize: AppFontSizes.subtitle,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -60,7 +61,7 @@ class NotificationCategoryTile extends StatelessWidget {
                     subtitle,
                     style: const TextStyle(
                       color: AppColors.whiteSecondary,
-                      fontSize: 13,
+                      fontSize: AppFontSizes.body,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

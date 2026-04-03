@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/utils/format_utils.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/notification.dart' as domain;
 
@@ -35,7 +36,7 @@ class NotificationItem extends StatelessWidget {
                           : '?',
                       style: const TextStyle(
                         color: AppColors.white,
-                        fontSize: 18,
+                        fontSize: AppFontSizes.titleLg,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -57,7 +58,7 @@ class NotificationItem extends StatelessWidget {
                             text: notification.userNickname,
                             style: const TextStyle(
                               color: AppColors.white,
-                              fontSize: 14,
+                              fontSize: AppFontSizes.bodyMd,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -65,7 +66,7 @@ class NotificationItem extends StatelessWidget {
                           text: notification.message,
                           style: const TextStyle(
                             color: AppColors.whiteSecondary,
-                            fontSize: 14,
+                            fontSize: AppFontSizes.bodyMd,
                           ),
                         ),
                       ],
@@ -76,7 +77,7 @@ class NotificationItem extends StatelessWidget {
                     FormatUtils.timeAgo(notification.createdAt),
                     style: const TextStyle(
                       color: AppColors.whiteDisabled,
-                      fontSize: 12,
+                      fontSize: AppFontSizes.caption,
                     ),
                   ),
                 ],

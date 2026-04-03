@@ -26,11 +26,9 @@ Future<User> currentUser(Ref ref) async {
   final savedProfileImage = storage.getProfileImageUrl();
 
   // 실제 데이터 기반 숫자 계산
-  final feedState =
-      ref.watch(feedNotifierProvider).valueOrNull;
+  final feedState = ref.watch(feedNotifierProvider).valueOrNull;
   final followingCount = feedState?.followedUserIds.length ?? 0;
-  final likeCount =
-      feedState?.videos.where((v) => v.isLiked).length ?? 0;
+  final likeCount = feedState?.videos.where((v) => v.isLiked).length ?? 0;
   // 팔로워는 Mock (기본 8명 유저)
   const followerCount = 8;
 
@@ -104,9 +102,7 @@ List<Video> myVideos(Ref ref) {
   final deviceId = ref.watch(deviceIdServiceProvider).getDeviceId();
   final feedAsync = ref.watch(feedNotifierProvider);
   return feedAsync.maybeWhen(
-    data: (state) => state.videos
-        .where((v) => v.userId == deviceId)
-        .toList(),
+    data: (state) => state.videos.where((v) => v.userId == deviceId).toList(),
     orElse: () => [],
   );
 }
@@ -116,9 +112,7 @@ List<PostImage> myPostImages(Ref ref) {
   final deviceId = ref.watch(deviceIdServiceProvider).getDeviceId();
   final imagesAsync = ref.watch(postImageListNotifierProvider);
   return imagesAsync.maybeWhen(
-    data: (images) => images
-        .where((img) => img.userId == deviceId)
-        .toList(),
+    data: (images) => images.where((img) => img.userId == deviceId).toList(),
     orElse: () => [],
   );
 }

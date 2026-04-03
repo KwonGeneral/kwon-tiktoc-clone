@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
+import 'package:kwon_tiktoc_clone/app/theme/app_font_sizes.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
@@ -56,10 +57,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
     return (_virtualPageCount ~/ 2) - ((_virtualPageCount ~/ 2) % videoCount);
   }
 
-  PageController _getPageController(
-    int videoCount, {
-    int initialIndex = 0,
-  }) {
+  PageController _getPageController(int videoCount, {int initialIndex = 0}) {
     if (_pageController == null) {
       final midStart = _midStartForCount(videoCount) + initialIndex;
       _pageController = PageController(initialPage: midStart);
@@ -107,8 +105,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
           // PageController 재생성 후 VideoPlayerManager 초기화
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            final currentState =
-                ref.read(feedNotifierProvider).valueOrNull;
+            final currentState = ref.read(feedNotifierProvider).valueOrNull;
             if (currentState != null && currentState.videos.isNotEmpty) {
               ref
                   .read(videoPlayerManagerProvider.notifier)
@@ -151,10 +148,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               ref
                   .read(videoPlayerManagerProvider.notifier)
-                  .initializeForIndex(
-                    feedState.currentIndex,
-                    feedState.videos,
-                  );
+                  .initializeForIndex(feedState.currentIndex, feedState.videos);
             });
           }
 
@@ -182,12 +176,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
               ),
 
               // 상단 탭바 (팔로잉 | 추천) — 고정
-              const Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: TopTabBar(),
-              ),
+              const Positioned(top: 0, left: 0, right: 0, child: TopTabBar()),
 
               // 추가 로딩 인디케이터
               if (feedState.isLoadingMore)
@@ -231,7 +220,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                           AppStrings.feedLoadMoreError,
                           style: TextStyle(
                             color: AppColors.white,
-                            fontSize: 13,
+                            fontSize: AppFontSizes.body,
                           ),
                         ),
                       ),
@@ -288,7 +277,10 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                   ),
                   child: const Text(
                     AppStrings.feedRetry,
-                    style: TextStyle(color: AppColors.white, fontSize: 14),
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: AppFontSizes.bodyMd,
+                    ),
                   ),
                 ),
               ),

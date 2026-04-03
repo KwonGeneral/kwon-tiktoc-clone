@@ -21,8 +21,36 @@ class VideoCard extends ConsumerStatefulWidget {
   ConsumerState<VideoCard> createState() => _VideoCardState();
 }
 
-class _VideoCardState extends ConsumerState<VideoCard> {
+class _VideoCardState extends ConsumerState<VideoCard>
+    with SingleTickerProviderStateMixin {
   bool _showLikeAnimation = false;
+  late final AnimationController _commentAnimController;
+  late final Animation<double> _commentSlideAnimation;
+  bool _showCommentView = false;
+  bool _animScheduled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _commentAnimController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _commentSlideAnimation = CurvedAnimation(
+      parent: _commentAnimController,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+    _commentAnimController.addListener(() {
+      if (mounted) setState(() {});
+    });
+    _commentAnimController.addStatusListener((status) {
+      _animScheduled = false;
+      if (status == AnimationStatus.dismissed && mounted) {
+        setState(() => _showCommentView = false);
+      }
+    });
+  }
 
   void _handleDoubleTap() {
     if (!widget.video.isLiked) {
@@ -32,12 +60,36 @@ class _VideoCardState extends ConsumerState<VideoCard> {
   }
 
   @override
+  void dispose() {
+    _commentAnimController.dispose();
+    super.dispose();
+  }
+
+  void _openCommentAnim() {
+    setState(() => _showCommentView = true);
+    _commentAnimController.forward();
+  }
+
+  void _closeCommentAnim() {
+    _commentAnimController.reverse();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final controllers = ref.watch(videoPlayerManagerProvider);
     final controller = controllers[widget.index];
     final commentState = ref.watch(commentNotifierProvider);
     final isCommentOpen =
         commentState.isOpen && commentState.videoId == widget.video.id;
+
+    // 댓글 열기/닫기 애니메이션 트리거 (중복 스케줄 방지)
+    if (isCommentOpen && !_showCommentView && !_animScheduled) {
+      _animScheduled = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _openCommentAnim());
+    } else if (!isCommentOpen && _showCommentView && !_animScheduled) {
+      _animScheduled = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _closeCommentAnim());
+    }
 
     return GestureDetector(
       onTap: () {
@@ -49,20 +101,26 @@ class _VideoCardState extends ConsumerState<VideoCard> {
       onDoubleTap: isCommentOpen ? null : _handleDoubleTap,
       child: Container(
         color: AppColors.black,
-        child: isCommentOpen
+        child: _showCommentView
             ? _buildWithComments(controller)
             : _buildContent(controller),
       ),
     );
   }
 
-  /// 댓글창이 열렸을 때: 영상 축소 + 댓글
+  /// 댓글창이 열렸을 때: 영상 축소 + 댓글 (슬라이드 애니메이션)
   Widget _buildWithComments(VideoPlayerController? controller) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final videoHeight = screenHeight * 0.38;
+    final commentHeight = screenHeight - videoHeight;
+    final progress = _commentSlideAnimation.value;
+    final currentVideoHeight = screenHeight - (commentHeight * progress);
+
     return Column(
       children: [
-        // 축소된 영상 (상단 약 40%)
+        // 영상 (전체 → 38%로 축소)
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.38,
+          height: currentVideoHeight,
           child: Stack(
             children: [
               if (controller != null && controller.value.isInitialized)
@@ -79,31 +137,49 @@ class _VideoCardState extends ConsumerState<VideoCard> {
               else
                 _buildLoading(),
               // 닫기 버튼
-              Positioned(
-                top: MediaQuery.of(context).padding.top + 8,
-                right: 12,
-                child: GestureDetector(
-                  onTap: () =>
-                      ref.read(commentNotifierProvider.notifier).close(),
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: AppColors.black.withValues(alpha: 0.5),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.close,
-                      color: AppColors.white,
-                      size: 20,
+              if (progress > 0.3)
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 8,
+                  right: 12,
+                  child: Opacity(
+                    opacity: ((progress - 0.3) / 0.7).clamp(0.0, 1.0),
+                    child: GestureDetector(
+                      onTap: () =>
+                          ref.read(commentNotifierProvider.notifier).close(),
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: AppColors.black.withValues(alpha: 0.5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.close,
+                          color: AppColors.white,
+                          size: 20,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
-        // 댓글 영역 (하단 약 60%)
-        Expanded(child: CommentInlineView(videoId: widget.video.id)),
+        // 댓글 영역 (하단에서 슬라이드 업)
+        SizedBox(
+          height: commentHeight * progress,
+          child: progress > 0.1
+              ? ClipRect(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    heightFactor: 1.0,
+                    child: SizedBox(
+                      height: commentHeight,
+                      child: CommentInlineView(videoId: widget.video.id),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
       ],
     );
   }

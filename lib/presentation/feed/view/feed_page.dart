@@ -90,17 +90,31 @@ class _FeedPageState extends ConsumerState<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 외부에서 currentIndex가 변경되면 PageController 점프
+    // 외부에서 currentIndex 또는 영상 목록이 변경되면 PageController 갱신
     ref.listen(feedNotifierProvider, (prev, next) {
-      final prevIndex = prev?.valueOrNull?.currentIndex;
-      final nextIndex = next.valueOrNull?.currentIndex;
-      final videoCount = next.valueOrNull?.displayVideos.length ?? 0;
-      if (prevIndex != null &&
-          nextIndex != null &&
-          prevIndex != nextIndex &&
-          videoCount > 0) {
+      final prevState = prev?.valueOrNull;
+      final nextState = next.valueOrNull;
+      if (prevState == null || nextState == null) return;
+
+      final prevCount = prevState.displayVideos.length;
+      final nextCount = nextState.displayVideos.length;
+      final nextIndex = nextState.currentIndex;
+
+      // 영상 삭제 등으로 목록 크기가 변경된 경우 PageController 재생성
+      if (prevCount != nextCount && nextCount > 0) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          _jumpToIndex(nextIndex, videoCount);
+          _pageController?.dispose();
+          _pageController = null;
+          _currentTab = null;
+          if (mounted) setState(() {});
+        });
+        return;
+      }
+
+      final prevIndex = prevState.currentIndex;
+      if (prevIndex != nextIndex && nextCount > 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _jumpToIndex(nextIndex, nextCount);
         });
       }
     });

@@ -45,10 +45,12 @@ class PublishNotifier extends _$PublishNotifier {
         description: description,
         title: description,
         userId: deviceId,
-        username: deviceId,
+        username: profileNickname.isNotEmpty
+            ? profileNickname
+            : deviceId.length >= 8 ? deviceId.substring(0, 8) : deviceId,
         nickname: profileNickname.isNotEmpty
             ? profileNickname
-            : deviceId.substring(0, 8),
+            : deviceId.length >= 8 ? deviceId.substring(0, 8) : deviceId,
         avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
         onProgress: (progress) {
           state = state.copyWith(progress: progress);

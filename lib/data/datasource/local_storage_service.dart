@@ -13,6 +13,8 @@ class LocalStorageService implements LocalStorageRepository {
   static const _profileBioKey = 'profile_bio';
   static const _notificationEnabledKey = 'notification_enabled';
   static const _profileImageUrlKey = 'profile_image_url';
+  static const _lastVideoIndexKey = 'last_video_index';
+  static const _lastVideoThumbnailUrlKey = 'last_video_thumbnail_url';
 
   final SharedPreferences _prefs;
 
@@ -116,5 +118,25 @@ class LocalStorageService implements LocalStorageRepository {
   @override
   Future<void> saveProfileImageUrl(String url) {
     return _prefs.setString(_profileImageUrlKey, url);
+  }
+
+  @override
+  int getLastVideoIndex() {
+    return _prefs.getInt(_lastVideoIndexKey) ?? 0;
+  }
+
+  @override
+  Future<void> saveLastVideoIndex(int index) {
+    return _prefs.setInt(_lastVideoIndexKey, index);
+  }
+
+  @override
+  String getLastVideoThumbnailUrl() {
+    return _prefs.getString(_lastVideoThumbnailUrlKey) ?? '';
+  }
+
+  @override
+  Future<void> saveLastVideoThumbnailUrl(String url) {
+    return _prefs.setString(_lastVideoThumbnailUrlKey, url);
   }
 }

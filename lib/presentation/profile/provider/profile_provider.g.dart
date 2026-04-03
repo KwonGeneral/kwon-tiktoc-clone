@@ -271,7 +271,7 @@ final profileEditNotifierProvider =
 typedef _$ProfileEditNotifier =
     AutoDisposeNotifier<({String nickname, String bio})>;
 String _$notificationSettingNotifierHash() =>
-    r'2db4f005da3a042b2248ba69450e3f046861492d';
+    r'e82a4d13af65ed0b128f23a0ae92b0106526f89b';
 
 /// See also [NotificationSettingNotifier].
 @ProviderFor(NotificationSettingNotifier)

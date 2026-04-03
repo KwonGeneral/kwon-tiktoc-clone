@@ -113,6 +113,8 @@ abstract final class AppStrings {
   static const notificationsSystem = '시스템 알림';
   static const notificationsRecommendedAccounts = '추천 계정';
   static const notificationsEmpty = '아직 알림이 없습니다';
+  static const notificationsFilterEmpty = '알림이 없습니다';
+  static const notificationsShowAll = '전체 보기';
 
   // 프로필 이미지
   static const profileImageTitle = '프로필 사진 변경';

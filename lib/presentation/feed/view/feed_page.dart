@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kwon_tiktoc_clone/app/theme/app_colors.dart';
 import 'package:kwon_tiktoc_clone/core/constants/app_strings.dart';
+import 'package:kwon_tiktoc_clone/core/di/providers.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/comment_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_provider.dart';
 import 'package:kwon_tiktoc_clone/presentation/feed/provider/feed_state.dart';
@@ -42,11 +43,12 @@ class _FeedPageState extends ConsumerState<FeedPage> {
   void _tryInitialize() {
     if (_initialized) return;
     final feedState = ref.read(feedNotifierProvider).valueOrNull;
-    if (feedState != null && feedState.videos.isNotEmpty) {
+    if (feedState != null && feedState.displayVideos.isNotEmpty) {
       _initialized = true;
+      final startIndex = feedState.currentIndex;
       ref
           .read(videoPlayerManagerProvider.notifier)
-          .initializeForIndex(0, feedState.videos);
+          .initializeForIndex(startIndex, feedState.displayVideos);
     }
   }
 
@@ -124,7 +126,10 @@ class _FeedPageState extends ConsumerState<FeedPage> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               ref
                   .read(videoPlayerManagerProvider.notifier)
-                  .initializeForIndex(0, feedState.videos);
+                  .initializeForIndex(
+                    feedState.currentIndex,
+                    feedState.displayVideos,
+                  );
             });
           }
 
@@ -168,6 +173,14 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                     index: realIndex,
                   );
                 },
+              ),
+
+              // 상단 탭바 (팔로잉 | 추천) — 고정
+              const Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: TopTabBar(),
               ),
 
               // 추가 로딩 인디케이터
@@ -222,12 +235,29 @@ class _FeedPageState extends ConsumerState<FeedPage> {
             ],
           );
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.white,
-            strokeWidth: 2,
-          ),
-        ),
+        loading: () {
+          // 저장된 썸네일로 즉시 표시 (검정 → 썸네일 → 영상)
+          final savedThumbnail = ref
+              .read(localStorageRepositoryProvider)
+              .getLastVideoThumbnailUrl();
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              if (savedThumbnail.isNotEmpty)
+                Image.network(
+                  savedThumbnail,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                ),
+              const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.white,
+                  strokeWidth: 2,
+                ),
+              ),
+            ],
+          );
+        },
         error: (_, _) => Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,

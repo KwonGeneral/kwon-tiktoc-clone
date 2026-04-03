@@ -12,6 +12,9 @@ import 'package:kwon_tiktoc_clone/presentation/notifications/widget/notification
 import 'package:kwon_tiktoc_clone/presentation/notifications/widget/notification_item.dart';
 import 'package:kwon_tiktoc_clone/presentation/notifications/widget/recommended_account_tile.dart';
 
+/// 알림 필터 카테고리
+enum _NotificationFilter { all, followers, activity, system }
+
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
 
@@ -21,6 +24,32 @@ class NotificationsPage extends ConsumerStatefulWidget {
 
 class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   final Set<String> _dismissedAccountIds = {};
+  _NotificationFilter _filter = _NotificationFilter.all;
+
+  List<domain.Notification> _applyFilter(List<domain.Notification> all) {
+    return switch (_filter) {
+      _NotificationFilter.all => all,
+      _NotificationFilter.followers => all
+          .where((n) => n.type == domain.NotificationType.follow)
+          .toList(),
+      _NotificationFilter.activity => all
+          .where(
+            (n) =>
+                n.type == domain.NotificationType.like ||
+                n.type == domain.NotificationType.comment,
+          )
+          .toList(),
+      _NotificationFilter.system => all
+          .where((n) => n.type == domain.NotificationType.system)
+          .toList(),
+    };
+  }
+
+  void _selectFilter(_NotificationFilter filter) {
+    setState(() {
+      _filter = _filter == filter ? _NotificationFilter.all : filter;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +73,9 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: AppColors.white),
-            onPressed: () {},
+            onPressed: () {
+              // 검색 기능 (현재 미구현 — 탭 시 피드백)
+            },
           ),
         ],
       ),
@@ -58,50 +89,75 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             style: const TextStyle(color: AppColors.whiteSecondary),
           ),
         ),
-        data: (state) => ListView(
-          children: [
-            // 카테고리 섹션
-            _buildCategorySection(state.notifications),
+        data: (state) {
+          final filtered = _applyFilter(state.notifications);
 
-            const Divider(color: AppColors.divider, height: 1),
+          return ListView(
+            children: [
+              // 카테고리 섹션
+              _buildCategorySection(state.notifications),
 
-            // 추천 계정 헤더
-            _buildRecommendedHeader(),
+              const Divider(color: AppColors.divider, height: 1),
 
-            // 추천 계정 목록
-            ...state.recommendedUsers
-                .where((u) => !_dismissedAccountIds.contains(u.id))
-                .map(
-                  (user) => RecommendedAccountTile(
-                    user: user,
-                    isFollowed: followedUserIds.contains(user.id),
-                    onToggleFollow: () {
-                      ref
-                          .read(feedNotifierProvider.notifier)
-                          .toggleFollow(user.id);
-                    },
-                    onDismiss: () {
-                      setState(() => _dismissedAccountIds.add(user.id));
-                    },
-                    onTap: () {
-                      context.push(RoutePaths.userProfilePath(user.id));
-                    },
+              // 필터 활성화 시 헤더 표시
+              if (_filter != _NotificationFilter.all)
+                _buildFilterHeader(),
+
+              // 필터 미적용 시 추천 계정 표시
+              if (_filter == _NotificationFilter.all) ...[
+                // 추천 계정 헤더
+                _buildRecommendedHeader(),
+
+                // 추천 계정 목록
+                ...state.recommendedUsers
+                    .where((u) => !_dismissedAccountIds.contains(u.id))
+                    .map(
+                      (user) => RecommendedAccountTile(
+                        user: user,
+                        isFollowed: followedUserIds.contains(user.id),
+                        onToggleFollow: () {
+                          ref
+                              .read(feedNotifierProvider.notifier)
+                              .toggleFollow(user.id);
+                        },
+                        onDismiss: () {
+                          setState(() => _dismissedAccountIds.add(user.id));
+                        },
+                        onTap: () {
+                          context.push(RoutePaths.userProfilePath(user.id));
+                        },
+                      ),
+                    ),
+
+                const Divider(color: AppColors.divider, height: 1),
+              ],
+
+              // 개별 알림 목록
+              if (filtered.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40),
+                  child: Center(
+                    child: Text(
+                      AppStrings.notificationsFilterEmpty,
+                      style: TextStyle(
+                        color: AppColors.whiteDisabled,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                ...filtered.map(
+                  (notification) => NotificationItem(
+                    notification: notification,
+                    onTap: () => _handleNotificationTap(notification),
                   ),
                 ),
 
-            const Divider(color: AppColors.divider, height: 1),
-
-            // 개별 알림 목록
-            ...state.notifications.map(
-              (notification) => NotificationItem(
-                notification: notification,
-                onTap: () => _handleNotificationTap(notification),
-              ),
-            ),
-
-            const SizedBox(height: 100),
-          ],
-        ),
+              const SizedBox(height: 100),
+            ],
+          );
+        },
       ),
     );
   }
@@ -126,34 +182,73 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         NotificationCategoryTile(
           icon: Icons.person_add,
           iconColor: AppColors.white,
-          iconBackgroundColor: AppColors.secondary,
+          iconBackgroundColor: _filter == _NotificationFilter.followers
+              ? AppColors.secondary.withValues(alpha: 0.8)
+              : AppColors.secondary,
           title: AppStrings.notificationsNewFollowers,
           subtitle: AppStrings.notificationsNewFollowersSub,
           showBadge: followCount > 0,
-          onTap: () {},
+          onTap: () => _selectFilter(_NotificationFilter.followers),
         ),
         NotificationCategoryTile(
           icon: Icons.favorite,
           iconColor: AppColors.white,
-          iconBackgroundColor: AppColors.primary,
+          iconBackgroundColor: _filter == _NotificationFilter.activity
+              ? AppColors.primary.withValues(alpha: 0.8)
+              : AppColors.primary,
           title: AppStrings.notificationsActivity,
           subtitle: AppStrings.notificationsActivitySub,
           showBadge: activityCount > 0,
-          onTap: () {},
+          onTap: () => _selectFilter(_NotificationFilter.activity),
         ),
         if (hasSystem)
           NotificationCategoryTile(
             icon: Icons.security,
             iconColor: AppColors.white,
-            iconBackgroundColor: AppColors.gray,
+            iconBackgroundColor: _filter == _NotificationFilter.system
+                ? AppColors.gray.withValues(alpha: 0.8)
+                : AppColors.gray,
             title: AppStrings.notificationsSystem,
             subtitle: notifications
                 .firstWhere((n) => n.type == domain.NotificationType.system)
                 .message,
             showBadge: true,
-            onTap: () {},
+            onTap: () => _selectFilter(_NotificationFilter.system),
           ),
       ],
+    );
+  }
+
+  Widget _buildFilterHeader() {
+    final label = switch (_filter) {
+      _NotificationFilter.followers => AppStrings.notificationsNewFollowers,
+      _NotificationFilter.activity => AppStrings.notificationsActivity,
+      _NotificationFilter.system => AppStrings.notificationsSystem,
+      _NotificationFilter.all => '',
+    };
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppColors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Spacer(),
+          GestureDetector(
+            onTap: () => setState(() => _filter = _NotificationFilter.all),
+            child: const Text(
+              AppStrings.notificationsShowAll,
+              style: TextStyle(color: AppColors.whiteSecondary, fontSize: 13),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

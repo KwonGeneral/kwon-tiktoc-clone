@@ -61,12 +61,17 @@ class FeedNotifier extends _$FeedNotifier {
 
     final localVideos = _applyLocalStates(allVideos);
     final followedUserIds = _storage.getFollowedUserIds();
+    final savedIndex = _storage.getLastVideoIndex();
+    // 저장된 인덱스가 범위 내인지 확인
+    final restoredIndex =
+        savedIndex >= 0 && savedIndex < localVideos.length ? savedIndex : 0;
 
     return FeedState(
       videos: localVideos,
       currentPage: page,
       hasMore: false,
       followedUserIds: followedUserIds,
+      currentIndex: restoredIndex,
     );
   }
 
@@ -75,6 +80,14 @@ class FeedNotifier extends _$FeedNotifier {
     if (currentState == null) return;
 
     state = AsyncData(currentState.copyWith(currentIndex: index));
+    // 추천 탭일 때만 위치 저장 (팔로잉 탭은 필터 결과가 변할 수 있으므로 제외)
+    if (currentState.selectedTab == FeedTab.recommend) {
+      _storage.saveLastVideoIndex(index);
+      final displayVideos = currentState.displayVideos;
+      if (index < displayVideos.length) {
+        _storage.saveLastVideoThumbnailUrl(displayVideos[index].thumbnailUrl);
+      }
+    }
   }
 
   void selectTab(FeedTab tab) {

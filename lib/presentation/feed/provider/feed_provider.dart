@@ -25,11 +25,25 @@ class FeedNotifier extends _$FeedNotifier {
   List<Video> _applyLocalStates(List<Video> videos) {
     final likedIds = _storage.getLikedVideoIds();
     final bookmarkedIds = _storage.getBookmarkedVideoIds();
+    final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
+    final profileNickname = _storage.getProfileNickname();
+    final displayName = profileNickname.isNotEmpty
+        ? profileNickname
+        : deviceId.substring(0, 8);
 
     return videos.map((video) {
       final wasLiked = likedIds.contains(video.id);
       final wasBookmarked = bookmarkedIds.contains(video.id);
-      if (!wasLiked && !wasBookmarked) return video;
+
+      // 내가 게시한 영상의 유저명이 UUID인 경우 로컬 프로필 닉네임으로 교체
+      final isMyVideo = video.userId == deviceId;
+      final needsNameFix = isMyVideo && _looksLikeUuid(video.username);
+      final needsMusicFix = isMyVideo && video.musicName.contains(deviceId);
+
+      if (!wasLiked && !wasBookmarked && !needsNameFix && !needsMusicFix) {
+        return video;
+      }
+
       return video.copyWith(
         isLiked: wasLiked || video.isLiked,
         likeCount: wasLiked && !video.isLiked
@@ -39,8 +53,21 @@ class FeedNotifier extends _$FeedNotifier {
         bookmarkCount: wasBookmarked && !video.isBookmarked
             ? video.bookmarkCount + 1
             : video.bookmarkCount,
+        username: needsNameFix ? displayName : video.username,
+        nickname: needsNameFix ? displayName : video.nickname,
+        musicName: needsMusicFix
+            ? video.musicName.replaceAll(deviceId, displayName)
+            : video.musicName,
       );
     }).toList();
+  }
+
+  /// UUID v4 형태인지 간이 체크 (8-4-4-4-12 형식)
+  static bool _looksLikeUuid(String value) {
+    return RegExp(
+      r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
+      caseSensitive: false,
+    ).hasMatch(value);
   }
 
   Future<FeedState> _loadInitial() async {
@@ -222,14 +249,17 @@ class FeedNotifier extends _$FeedNotifier {
 
     final now = DateTime.now();
     final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
+    final nickname = _storage.getProfileNickname();
+    final displayName =
+        nickname.isNotEmpty ? nickname : deviceId.substring(0, 8);
     final newVideo = Video(
       id: 'uploaded_${now.millisecondsSinceEpoch}',
       userId: deviceId,
       videoUrl: videoUrl,
       description: description,
-      musicName: AppStrings.uploadedMusicName,
-      username: deviceId,
-      nickname: deviceId.substring(0, 8),
+      musicName: '${AppStrings.uploadedMusicName} - $displayName',
+      username: displayName,
+      nickname: displayName,
       createdAt: now,
     );
 
@@ -263,8 +293,24 @@ class FeedNotifier extends _$FeedNotifier {
     final repository = ref.read(videoRepositoryProvider);
 
     // Optimistic: 즉시 UI에서 제거
-    final updatedVideos = currentState.videos.where((v) => v.id != videoId).toList();
-    state = AsyncData(currentState.copyWith(videos: updatedVideos));
+    final updatedVideos =
+        currentState.videos.where((v) => v.id != videoId).toList();
+
+    // 삭제 후 currentIndex가 범위를 벗어나지 않도록 조정
+    final newDisplayCount = currentState.selectedTab == FeedTab.following
+        ? updatedVideos
+              .where(
+                (v) => currentState.followedUserIds.contains(v.userId),
+              )
+              .length
+        : updatedVideos.length;
+    final adjustedIndex = newDisplayCount > 0
+        ? currentState.currentIndex.clamp(0, newDisplayCount - 1)
+        : 0;
+
+    state = AsyncData(
+      currentState.copyWith(videos: updatedVideos, currentIndex: adjustedIndex),
+    );
 
     try {
       await repository.deleteVideo(videoId: videoId, userId: deviceId);

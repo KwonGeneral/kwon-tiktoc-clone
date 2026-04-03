@@ -45,7 +45,9 @@ class PublishNotifier extends _$PublishNotifier {
         description: description,
         title: description,
         userId: deviceId,
-        username: deviceId,
+        username: profileNickname.isNotEmpty
+            ? profileNickname
+            : deviceId.substring(0, 8),
         nickname: profileNickname.isNotEmpty
             ? profileNickname
             : deviceId.substring(0, 8),

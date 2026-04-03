@@ -35,9 +35,18 @@ class VideoPlayerManager extends _$VideoPlayerManager {
       final nextTab = nextState.selectedTab;
       final prevIndex = prev?.valueOrNull?.currentIndex;
       final nextIndex = nextState.currentIndex;
+      final prevVideoCount = prev?.valueOrNull?.displayVideos.length;
+      final nextVideoCount = nextState.displayVideos.length;
 
       // 탭 전환 시 모든 컨트롤러 dispose 후 재초기화
       if (prevTab != null && prevTab != nextTab) {
+        _disposeAll();
+        _onPageChanged(nextIndex, nextState.displayVideos);
+        return;
+      }
+
+      // 영상 삭제 등으로 목록 크기가 변경된 경우 재초기화
+      if (prevVideoCount != null && prevVideoCount != nextVideoCount) {
         _disposeAll();
         _onPageChanged(nextIndex, nextState.displayVideos);
         return;

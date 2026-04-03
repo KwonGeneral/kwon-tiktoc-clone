@@ -27,6 +27,7 @@ class _VideoCardState extends ConsumerState<VideoCard>
   late final AnimationController _commentAnimController;
   late final Animation<double> _commentSlideAnimation;
   bool _showCommentView = false;
+  bool _animScheduled = false;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _VideoCardState extends ConsumerState<VideoCard>
       if (mounted) setState(() {});
     });
     _commentAnimController.addStatusListener((status) {
+      _animScheduled = false;
       if (status == AnimationStatus.dismissed && mounted) {
         setState(() => _showCommentView = false);
       }
@@ -80,10 +82,12 @@ class _VideoCardState extends ConsumerState<VideoCard>
     final isCommentOpen =
         commentState.isOpen && commentState.videoId == widget.video.id;
 
-    // 댓글 열기/닫기 애니메이션 트리거
-    if (isCommentOpen && !_showCommentView) {
+    // 댓글 열기/닫기 애니메이션 트리거 (중복 스케줄 방지)
+    if (isCommentOpen && !_showCommentView && !_animScheduled) {
+      _animScheduled = true;
       WidgetsBinding.instance.addPostFrameCallback((_) => _openCommentAnim());
-    } else if (!isCommentOpen && _showCommentView) {
+    } else if (!isCommentOpen && _showCommentView && !_animScheduled) {
+      _animScheduled = true;
       WidgetsBinding.instance.addPostFrameCallback((_) => _closeCommentAnim());
     }
 

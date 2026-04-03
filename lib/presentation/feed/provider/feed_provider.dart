@@ -29,7 +29,7 @@ class FeedNotifier extends _$FeedNotifier {
     final profileNickname = _storage.getProfileNickname();
     final displayName = profileNickname.isNotEmpty
         ? profileNickname
-        : deviceId.substring(0, 8);
+        : deviceId.length >= 8 ? deviceId.substring(0, 8) : deviceId;
 
     return videos.map((video) {
       final wasLiked = likedIds.contains(video.id);
@@ -251,7 +251,7 @@ class FeedNotifier extends _$FeedNotifier {
     final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
     final nickname = _storage.getProfileNickname();
     final displayName =
-        nickname.isNotEmpty ? nickname : deviceId.substring(0, 8);
+        nickname.isNotEmpty ? nickname : deviceId.length >= 8 ? deviceId.substring(0, 8) : deviceId;
     final newVideo = Video(
       id: 'uploaded_${now.millisecondsSinceEpoch}',
       userId: deviceId,

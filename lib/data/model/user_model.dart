@@ -10,6 +10,7 @@ sealed class UserModel with _$UserModel {
   const factory UserModel({
     required String id,
     required String nickname,
+    @Default('') String username,
     @Default('') String avatarUrl,
     @Default('') String bio,
     @Default(false) bool isVerified,
@@ -26,6 +27,7 @@ sealed class UserModel with _$UserModel {
   factory UserModel.fromEntity(User entity) => UserModel(
     id: entity.id,
     nickname: entity.nickname,
+    username: entity.username,
     avatarUrl: entity.avatarUrl,
     bio: entity.bio,
     isVerified: entity.isVerified,
@@ -37,6 +39,7 @@ sealed class UserModel with _$UserModel {
   User toEntity() => User(
     id: id,
     nickname: nickname,
+    username: username,
     avatarUrl: avatarUrl,
     bio: bio,
     isVerified: isVerified,

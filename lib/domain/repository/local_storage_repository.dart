@@ -20,6 +20,9 @@ abstract class LocalStorageRepository {
   String getProfileNickname();
   Future<void> saveProfileNickname(String nickname);
 
+  String getProfileUsername();
+  Future<void> saveProfileUsername(String username);
+
   String getProfileBio();
   Future<void> saveProfileBio(String bio);
 

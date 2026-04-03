@@ -23,6 +23,18 @@ class PublishImagePage extends ConsumerStatefulWidget {
 class _PublishImagePageState extends ConsumerState<PublishImagePage> {
   final _captionController = TextEditingController();
   final _captionFocusNode = FocusNode();
+  bool _hasCaption = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _captionController.addListener(() {
+      final hasText = _captionController.text.trim().isNotEmpty;
+      if (hasText != _hasCaption) {
+        setState(() => _hasCaption = hasText);
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -120,33 +132,15 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
               icon: const Icon(Icons.arrow_back, color: AppColors.black),
               onPressed: () => context.pop(),
             ),
-            actions: [
-              if (publishState.status == PublishStatus.idle)
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: GestureDetector(
-                    onTap: _onPublish,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text(
-                        AppStrings.publishButton,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+            title: const Text(
+              AppStrings.publishTitle,
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            centerTitle: true,
           ),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -222,12 +216,16 @@ class _PublishImagePageState extends ConsumerState<PublishImagePage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: _onPublish,
+                      onPressed: _hasCaption ? _onPublish : null,
                       icon: const Icon(Icons.upload, size: 18),
                       label: const Text(AppStrings.publishButton),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
+                        disabledBackgroundColor:
+                            AppColors.primary.withValues(alpha: 0.5),
+                        disabledForegroundColor:
+                            Colors.white.withValues(alpha: 0.5),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4),

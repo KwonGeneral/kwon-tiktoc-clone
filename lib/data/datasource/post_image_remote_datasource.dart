@@ -60,6 +60,8 @@ class PostImageRemoteDataSource implements PostImageDataSource {
     required String filePath,
     required String caption,
     String? userId,
+    String? username,
+    String? nickname,
     String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
@@ -73,6 +75,12 @@ class PostImageRemoteDataSource implements PostImageDataSource {
 
     request.fields['caption'] = caption;
     request.fields['userId'] = userId ?? '';
+    if (username != null && username.isNotEmpty) {
+      request.fields['username'] = username;
+    }
+    if (nickname != null && nickname.isNotEmpty) {
+      request.fields['nickname'] = nickname;
+    }
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       request.fields['avatarUrl'] = avatarUrl;
     }

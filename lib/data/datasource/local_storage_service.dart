@@ -10,6 +10,7 @@ class LocalStorageService implements LocalStorageRepository {
   static const _dislikedCommentIdsKey = 'disliked_comment_ids';
   static const _userCommentsKey = 'user_comments';
   static const _profileNicknameKey = 'profile_nickname';
+  static const _profileUsernameKey = 'profile_username';
   static const _profileBioKey = 'profile_bio';
   static const _notificationEnabledKey = 'notification_enabled';
   static const _profileImageUrlKey = 'profile_image_url';
@@ -88,6 +89,16 @@ class LocalStorageService implements LocalStorageRepository {
   @override
   Future<void> saveProfileNickname(String nickname) {
     return _prefs.setString(_profileNicknameKey, nickname);
+  }
+
+  @override
+  String getProfileUsername() {
+    return _prefs.getString(_profileUsernameKey) ?? '';
+  }
+
+  @override
+  Future<void> saveProfileUsername(String username) {
+    return _prefs.setString(_profileUsernameKey, username);
   }
 
   @override

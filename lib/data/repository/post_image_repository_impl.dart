@@ -18,6 +18,8 @@ class PostImageRepositoryImpl implements PostImageRepository {
     required String filePath,
     required String caption,
     String? userId,
+    String? username,
+    String? nickname,
     String? avatarUrl,
     void Function(double progress)? onProgress,
   }) async {
@@ -25,6 +27,8 @@ class PostImageRepositoryImpl implements PostImageRepository {
       filePath: filePath,
       caption: caption,
       userId: userId,
+      username: username,
+      nickname: nickname,
       avatarUrl: avatarUrl,
       onProgress: onProgress,
     );

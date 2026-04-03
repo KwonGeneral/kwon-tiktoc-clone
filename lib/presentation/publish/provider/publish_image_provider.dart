@@ -30,6 +30,8 @@ class PublishImageNotifier extends _$PublishImageNotifier {
 
       final storage = ref.read(localStorageRepositoryProvider);
       final profileImageUrl = storage.getProfileImageUrl();
+      final profileNickname = storage.getProfileNickname();
+      final profileUsername = storage.getProfileUsername();
       final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
 
       // EXIF 방향 정규화 (세로 사진이 가로로 보이는 문제 해결)
@@ -41,6 +43,8 @@ class PublishImageNotifier extends _$PublishImageNotifier {
           filePath: normalizedPath,
           caption: caption,
           userId: deviceId,
+          username: profileUsername.isNotEmpty ? profileUsername : profileNickname,
+          nickname: profileNickname,
           avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
           onProgress: (progress) {
             state = state.copyWith(progress: progress);

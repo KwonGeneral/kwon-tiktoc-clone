@@ -37,6 +37,7 @@ class PublishNotifier extends _$PublishNotifier {
       final storage = ref.read(localStorageRepositoryProvider);
       final profileImageUrl = storage.getProfileImageUrl();
       final profileNickname = storage.getProfileNickname();
+      final profileUsername = storage.getProfileUsername();
       final deviceId = ref.read(deviceIdServiceProvider).getDeviceId();
 
       final repository = ref.read(videoRepositoryProvider);
@@ -45,12 +46,8 @@ class PublishNotifier extends _$PublishNotifier {
         description: description,
         title: description,
         userId: deviceId,
-        username: profileNickname.isNotEmpty
-            ? profileNickname
-            : deviceId.length >= 8 ? deviceId.substring(0, 8) : deviceId,
-        nickname: profileNickname.isNotEmpty
-            ? profileNickname
-            : deviceId.length >= 8 ? deviceId.substring(0, 8) : deviceId,
+        username: profileUsername.isNotEmpty ? profileUsername : profileNickname,
+        nickname: profileNickname,
         avatarUrl: profileImageUrl.isNotEmpty ? profileImageUrl : null,
         onProgress: (progress) {
           state = state.copyWith(progress: progress);

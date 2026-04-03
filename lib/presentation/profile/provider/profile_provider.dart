@@ -21,6 +21,7 @@ Future<User> currentUser(Ref ref) async {
   final user = await repository.getCurrentUser();
 
   final savedNickname = storage.getProfileNickname();
+  final savedUsername = storage.getProfileUsername();
   final savedBio = storage.getProfileBio();
   final savedProfileImage = storage.getProfileImageUrl();
 
@@ -35,6 +36,7 @@ Future<User> currentUser(Ref ref) async {
 
   return user.copyWith(
     nickname: savedNickname.isNotEmpty ? savedNickname : user.nickname,
+    username: savedUsername,
     bio: savedBio,
     avatarUrl: savedProfileImage.isNotEmpty
         ? savedProfileImage

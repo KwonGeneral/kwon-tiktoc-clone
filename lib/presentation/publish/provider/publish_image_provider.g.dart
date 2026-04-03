@@ -7,7 +7,7 @@ part of 'publish_image_provider.dart';
 // **************************************************************************
 
 String _$publishImageNotifierHash() =>
-    r'8b397953d4ab247c97301fe4ece111a7e4084aef';
+    r'845a150d116ac12e8fa38ea6e8eb4f56352b5373';
 
 /// See also [PublishImageNotifier].
 @ProviderFor(PublishImageNotifier)

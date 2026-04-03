@@ -20,7 +20,7 @@ class UserRepositoryImpl implements UserRepository {
   late final _mockUsers = <String, UserModel>{
     _deviceId: UserModel(
       id: _deviceId,
-      nickname: '나의계정',
+      nickname: '',
       isVerified: false,
       followingCount: 128,
       followerCount: 1542,

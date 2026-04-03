@@ -6,7 +6,7 @@ part of 'comment_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$commentNotifierHash() => r'36bfcb6150e235767390c2e3ceaa218b662df2f9';
+String _$commentNotifierHash() => r'75fcd2a0f5d54a7e299e97593b014c42196675d5';
 
 /// See also [CommentNotifier].
 @ProviderFor(CommentNotifier)

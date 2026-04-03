@@ -23,6 +23,18 @@ class PublishPage extends ConsumerStatefulWidget {
 class _PublishPageState extends ConsumerState<PublishPage> {
   final _descriptionController = TextEditingController();
   final _descriptionFocusNode = FocusNode();
+  bool _hasDescription = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _descriptionController.addListener(() {
+      final hasText = _descriptionController.text.trim().isNotEmpty;
+      if (hasText != _hasDescription) {
+        setState(() => _hasDescription = hasText);
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -146,13 +158,15 @@ class _PublishPageState extends ConsumerState<PublishPage> {
               icon: const Icon(Icons.arrow_back, color: AppColors.black),
               onPressed: () => context.pop(),
             ),
-            actions: [
-              if (publishState.status == PublishStatus.idle)
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: _PublishButton(onTap: _onPublish),
-                ),
-            ],
+            title: const Text(
+              AppStrings.publishTitle,
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            centerTitle: true,
           ),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -213,12 +227,16 @@ class _PublishPageState extends ConsumerState<PublishPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: _onPublish,
+                      onPressed: _hasDescription ? _onPublish : null,
                       icon: const Icon(Icons.upload, size: 18),
                       label: const Text(AppStrings.publishButton),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
+                        disabledBackgroundColor:
+                            AppColors.primary.withValues(alpha: 0.5),
+                        disabledForegroundColor:
+                            Colors.white.withValues(alpha: 0.5),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4),
@@ -236,34 +254,6 @@ class _PublishPageState extends ConsumerState<PublishPage> {
         if (publishState.status != PublishStatus.idle)
           PublishUploadOverlay(state: publishState, onRetry: _startUpload),
       ],
-    );
-  }
-}
-
-class _PublishButton extends StatelessWidget {
-  const _PublishButton({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: const Text(
-          AppStrings.publishButton,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
     );
   }
 }

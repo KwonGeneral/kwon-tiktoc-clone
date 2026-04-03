@@ -6,6 +6,8 @@ abstract interface class PostImageRepository {
     required String filePath,
     required String caption,
     String? userId,
+    String? username,
+    String? nickname,
     String? avatarUrl,
     void Function(double progress)? onProgress,
   });

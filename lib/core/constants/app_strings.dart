@@ -82,7 +82,7 @@ abstract final class AppStrings {
 
   // 게시
   static const publishTitle = '게시';
-  static const publishDescriptionHint = '설명을 추가하세요...';
+  static const publishDescriptionHint = '설명을 추가하세요... (필수)';
 
   static const publishHashtag = '# 해시태그';
   static const publishMention = '@ 멘션';
@@ -159,7 +159,7 @@ abstract final class AppStrings {
   static const publishImageSuccess = '이미지 업로드 완료!';
   static const publishImagePrivacyMessage =
       '이 이미지는 실제로 서버에 업로드됩니다. 개인정보가 포함되지 않았는지 확인해주세요.';
-  static const publishCaptionHint = '설명을 추가하세요...';
+  static const publishCaptionHint = '설명을 추가하세요... (필수)';
 
   // 이미지 상세
   static const imageDetailTitle = '게시물';

@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:kwon_tiktoc_clone/core/di/providers.dart';
+import 'package:kwon_tiktoc_clone/core/utils/random_nickname_generator.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/post_image.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/user.dart';
 import 'package:kwon_tiktoc_clone/domain/entity/video.dart';
@@ -20,9 +21,20 @@ Future<User> currentUser(Ref ref) async {
   final storage = ref.watch(localStorageRepositoryProvider);
   final user = await repository.getCurrentUser();
 
-  final savedNickname = storage.getProfileNickname();
+  var savedNickname = storage.getProfileNickname();
+  var savedUsername = storage.getProfileUsername();
   final savedBio = storage.getProfileBio();
   final savedProfileImage = storage.getProfileImageUrl();
+
+  // 최초 실행 시 랜덤 닉네임/username 자동 생성
+  if (savedNickname.isEmpty) {
+    savedNickname = RandomNicknameGenerator.generateNickname();
+    await storage.saveProfileNickname(savedNickname);
+  }
+  if (savedUsername.isEmpty) {
+    savedUsername = RandomNicknameGenerator.generateUsername();
+    await storage.saveProfileUsername(savedUsername);
+  }
 
   // 실제 데이터 기반 숫자 계산
   final feedState =
@@ -35,6 +47,7 @@ Future<User> currentUser(Ref ref) async {
 
   return user.copyWith(
     nickname: savedNickname.isNotEmpty ? savedNickname : user.nickname,
+    username: savedUsername,
     bio: savedBio,
     avatarUrl: savedProfileImage.isNotEmpty
         ? savedProfileImage

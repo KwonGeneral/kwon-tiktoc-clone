@@ -244,8 +244,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     context.push(RoutePaths.imageDetailPath(image.id), extra: image);
   }
 
-  void _showDeleteVideoDialog(Video video) {
-    showDialog<bool>(
+  Future<void> _showDeleteVideoDialog(Video video) async {
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.darkGray,
@@ -265,15 +265,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ),
         ],
       ),
-    ).then((confirmed) {
-      if (confirmed == true) {
-        ref.read(feedNotifierProvider.notifier).deleteVideo(video.id);
-      }
-    });
+    );
+    if (confirmed == true && mounted) {
+      ref.read(feedNotifierProvider.notifier).deleteVideo(video.id);
+    }
   }
 
-  void _showDeleteImageDialog(PostImage image) {
-    showDialog<bool>(
+  Future<void> _showDeleteImageDialog(PostImage image) async {
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.darkGray,
@@ -293,11 +292,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ),
         ],
       ),
-    ).then((confirmed) {
-      if (confirmed == true) {
-        ref.read(postImageListNotifierProvider.notifier).deleteImage(image.id);
-      }
-    });
+    );
+    if (confirmed == true && mounted) {
+      ref.read(postImageListNotifierProvider.notifier).deleteImage(image.id);
+    }
   }
 
   Widget _buildEmptyState({

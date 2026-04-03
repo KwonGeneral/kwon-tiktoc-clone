@@ -266,6 +266,11 @@ class FeedNotifier extends _$FeedNotifier {
     final updatedVideos = currentState.videos.where((v) => v.id != videoId).toList();
     state = AsyncData(currentState.copyWith(videos: updatedVideos));
 
-    await repository.deleteVideo(videoId: videoId, userId: deviceId);
+    try {
+      await repository.deleteVideo(videoId: videoId, userId: deviceId);
+    } catch (_) {
+      // 실패 시 롤백
+      state = AsyncData(currentState);
+    }
   }
 }

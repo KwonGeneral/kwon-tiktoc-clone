@@ -81,6 +81,11 @@ class PostImageListNotifier extends _$PostImageListNotifier {
     // Optimistic: 즉시 UI에서 제거
     state = AsyncData(currentImages.where((img) => img.id != imageId).toList());
 
-    await repository.deletePostImage(imageId: imageId, userId: deviceId);
+    try {
+      await repository.deletePostImage(imageId: imageId, userId: deviceId);
+    } catch (_) {
+      // 실패 시 롤백
+      state = AsyncData(currentImages);
+    }
   }
 }
